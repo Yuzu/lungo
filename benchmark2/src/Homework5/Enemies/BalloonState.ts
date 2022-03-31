@@ -24,7 +24,7 @@ export default abstract class BalloonState extends State {
 	 * and adjust the balloon gravity effects accordingly based on its color
 	 */
 	handleInput(event: GameEvent): void {
-		//console.log("PARENT");
+		console.log("PARENT");
 		if (event.type == HW5_Events.SUIT_COLOR_CHANGE) {
 			
 			let new_color = event.data.get("color");
@@ -59,7 +59,7 @@ export default abstract class BalloonState extends State {
 				let dx = Math.pow(this.owner.position.x - pos.x, 2);
 				let dy = Math.pow(this.owner.position.y - pos.y, 2);
 				console.log(Math.sqrt(dx + dy));
-				if (Math.sqrt(dx + dy) >= 15) {
+				if (Math.sqrt(dx + dy) >= 35) {
 					console.log("balloon is collidable again");
 					this.parent.reversed = false;
 				}
