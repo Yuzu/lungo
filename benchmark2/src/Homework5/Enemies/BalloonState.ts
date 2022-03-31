@@ -54,19 +54,18 @@ export default abstract class BalloonState extends State {
 			}
 		}
 		else if (event.type == HW5_Events.PLAYER_MOVE) {
-			if (this.gravity === 0) {
+			if (this.parent.reversed) {
 				let pos = event.data.get("position");
 				let dx = Math.pow(this.owner.position.x - pos.x, 2);
 				let dy = Math.pow(this.owner.position.y - pos.y, 2);
-
-				if (Math.sqrt(dx + dy) <= 320) {
-					
-					this.parent.speed = 200;
-				}
-				else {
-					this.parent.speed = 100;
+				console.log(Math.sqrt(dx + dy));
+				if (Math.sqrt(dx + dy) >= 15) {
+					console.log("balloon is collidable again");
+					this.parent.reversed = false;
 				}
 			}
+			
+			
 		}
 		
 	}

@@ -422,7 +422,7 @@ export default class GameLevel extends Scene {
      * of it in this class.
      * 
      */
-    protected handlePlayerBalloonCollision(player: AnimatedSprite, balloon: AnimatedSprite) {
+    protected async handlePlayerBalloonCollision(player: AnimatedSprite, balloon: AnimatedSprite) {
         if (balloon === undefined) {
             return;
         }
@@ -430,7 +430,7 @@ export default class GameLevel extends Scene {
         if (balloonAI.reversed === true) {
             return;
         }
-        
+        console.log("balloon reversed");
         balloonAI.reversed = true;
         let oldDirection = balloonAI.direction;
         balloonAI.direction = new Vec2(oldDirection.x * -1, oldDirection.y * -1);
