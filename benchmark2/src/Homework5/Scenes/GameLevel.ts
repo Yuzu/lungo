@@ -123,7 +123,7 @@ export default class GameLevel extends Scene {
                         
                         let node = this.sceneGraph.getNode(event.data.get("node"));
                         let other = this.sceneGraph.getNode(event.data.get("other"));
-
+                        
                         if(node === this.player){
                             // Node is player, other is balloon
                             this.handlePlayerBalloonCollision(<AnimatedSprite>node, <AnimatedSprite>other);
@@ -426,44 +426,16 @@ export default class GameLevel extends Scene {
         if (balloon === undefined) {
             return;
         }
-        
-        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "pop", loop: false, holdReference: false});
-        if ((<PlayerController>player.ai).suitColor == HW5_Color.RED) {
-            if ((<BalloonController>balloon.ai).color == HW5_Color.RED) {
-
-            }
-            else if ((<BalloonController>balloon.ai).color == HW5_Color.BLUE) {
-                this.incPlayerLife(-1);
-            }
-            else if ((<BalloonController>balloon.ai).color == HW5_Color.GREEN) {
-                this.incPlayerLife(-1);
-            }
-        }
-
-        else if ((<PlayerController>player.ai).suitColor == HW5_Color.BLUE) {
-            if ((<BalloonController>balloon.ai).color == HW5_Color.RED) {
-                this.incPlayerLife(-1);
-            }
-            else if ((<BalloonController>balloon.ai).color == HW5_Color.BLUE) {
-                
-            }
-            else if ((<BalloonController>balloon.ai).color == HW5_Color.GREEN) {
-                this.incPlayerLife(-1);
-            }
-        }
-        else if ((<PlayerController>player.ai).suitColor == HW5_Color.GREEN) {
-            if ((<BalloonController>balloon.ai).color == HW5_Color.RED) {
-                this.incPlayerLife(-1);
-            }
-            else if ((<BalloonController>balloon.ai).color == HW5_Color.BLUE) {
-                this.incPlayerLife(-1);
-            }
-            else if ((<BalloonController>balloon.ai).color == HW5_Color.GREEN) {
-                
-            }
+        let balloonAI = (<BalloonController>balloon.ai);
+        if (balloonAI.reversed === true) {
+            return;
         }
         
-        this.emitter.fireEvent(HW5_Events.BALLOON_POPPED, {"owner": balloon.id});
+        balloonAI.reversed = true;
+        let oldDirection = balloonAI.direction;
+        balloonAI.direction = new Vec2(oldDirection.x * -1, oldDirection.y * -1);
+        let oldVelocity = balloonAI.velocity;
+        balloonAI.velocity = new Vec2(oldVelocity.x * -1, oldVelocity.y * -1);
     }
 
     /**
