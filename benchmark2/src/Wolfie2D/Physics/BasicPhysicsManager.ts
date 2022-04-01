@@ -82,16 +82,24 @@ export default class BasicPhysicsManager extends PhysicsManager {
 				this.groupMap.set(group, 1 << i);
 
 				let collisionMask = 0;
-
+				console.log(group);
 				for(let j = 0; j < options.collisions[i].length; j++){
 					if(options.collisions[i][j]){
+						console.log("BEFORE: " + collisionMask);
 						collisionMask |= 1 << j;
+						console.log("AFTER: " + collisionMask);
+						console.log("1 shifted left by " + j);
+						console.log("OR'd with " + (1 << j));
 					}
 				}
 
 				this.collisionMasks[i] = collisionMask;
 			}
 		}
+		console.log(options);
+		console.log(this.groupNames);
+		console.log(this.groupMap);
+		console.log(this.collisionMasks);
 	}
 
 	// @override
@@ -139,7 +147,7 @@ export default class BasicPhysicsManager extends PhysicsManager {
 			node.onWall = false;
 			node.collidedWithTilemap = false;
 			node.isColliding = false;
-
+			
 			// If this node is not active, don't process it
 			if(!node.active){
 				continue;
@@ -220,14 +228,14 @@ export default class BasicPhysicsManager extends PhysicsManager {
 				const padding = node.collisionShape.halfSize;
 				const otherAABB = overlap.collider;
 
-
+				
 				const hit = otherAABB.intersectSegment(node.collisionShape.center, node._velocity, node.collisionShape.halfSize);
 
 				overlap.hit = hit;
 
 				if(hit !== null){
 					hits.push(hit);
-
+					
 					// We got a hit, resolve with the time inside of the hit
 					let tnearx = hit.nearTimes.x;
 					let tneary = hit.nearTimes.y;
@@ -240,7 +248,7 @@ export default class BasicPhysicsManager extends PhysicsManager {
 						tneary = 1.0;
 					}
 
-
+					
 					if(hit.nearTimes.x >= 0 && hit.nearTimes.x < 1){
 						// Any tilemap objects that made it here are collidable
 						if(overlap.type === "Tilemap" || overlap.other.isCollidable){
@@ -262,12 +270,35 @@ export default class BasicPhysicsManager extends PhysicsManager {
 			/*---------- INFORMATION/TRIGGER PHASE ----------*/
 			// Check if we ended up on the ground, ceiling or wall
 			// Also check for triggers
+			
 			for(let overlap of overlaps){
+				if (overlap.other.triggerEnters && overlap.other.triggerEnters.includes("ShieldHit")) {
+					//console.log(overlap);
+					//console.log(overlap.other.isTrigger);
+					//console.log(overlap.other.triggerMask & node.group);
+					//console.log(node.group);
+				}
+				if (overlap.other.group === 8) {
+					console.log("OUTSIDE");
+					console.log(overlap.other.isTrigger);
+					console.log(overlap.other.triggerMask & node.group);
+					console.log(overlap.other.triggerMask);
+					console.log(node.group);
+					//console.log(overlap.other.isTrigger);
+					//console.log(overlap.other.triggerMask);
+					//console.log(node.group);
+					//console.log(node);
+					//console.log(overlap.other);
+				}
 				// Check for a trigger. If we care about the trigger, react
 				if(overlap.other.isTrigger && (overlap.other.triggerMask & node.group)){
 					// Get the bit that this group is represented by
 					let index = Math.floor(Math.log2(node.group));
-
+					console.log(overlap.other.isTrigger);
+					console.log(overlap.other.triggerMask & node.group);
+					console.log(overlap.other.triggerMask);
+					console.log(node.group);
+					console.log("HERE");
 					// Extract the triggerEnter event name
 					this.emitter.fireEvent(overlap.other.triggerEnters[index], {
 						node: (<GameNode>node).id,

@@ -19,6 +19,7 @@ import { HW5_Color } from "../hw5_color";
 import { HW5_Events } from "../hw5_enums";
 import HW5_ParticleSystem from "../HW5_ParticleSystem";
 import PlayerController from "../Player/PlayerController";
+import ShieldController from "../Player/ShieldController";
 import MainMenu from "./MainMenu";
 
 // HOMEWORK 5 - TODO
@@ -33,6 +34,10 @@ export default class GameLevel extends Scene {
     protected playerSpawn: Vec2;
     protected player: AnimatedSprite;
     protected respawnTimer: Timer;
+    // Every level will also have the player's shield, which will be an animated sprite
+    protected shieldSpawn: Vec2;
+    protected shield: AnimatedSprite;
+
 
     // Labels for the UI
     protected static livesCount: number = 3;
@@ -72,6 +77,7 @@ export default class GameLevel extends Scene {
         this.initLayers();
         this.initViewport();
         this.initPlayer();
+        this.initShield();
         this.subscribeToEvents();
         this.addUI();
 
@@ -120,7 +126,7 @@ export default class GameLevel extends Scene {
 
                 case HW5_Events.PLAYER_HIT_BALLOON:
                     {   
-                        
+                        console.log("PLAYER HIT");
                         let node = this.sceneGraph.getNode(event.data.get("node"));
                         let other = this.sceneGraph.getNode(event.data.get("other"));
                         
@@ -130,6 +136,23 @@ export default class GameLevel extends Scene {
                         } else {
                             // Other is player, node is balloon
                             this.handlePlayerBalloonCollision(<AnimatedSprite>other,<AnimatedSprite>node);
+
+                        }
+                    }
+                    break;
+
+                case HW5_Events.SHIELD_HIT:
+                    {
+                        console.log("SHIELD HIT");
+                        let node = this.sceneGraph.getNode(event.data.get("node"));
+                        let other = this.sceneGraph.getNode(event.data.get("other"));
+                        
+                        if(node === this.shield){
+                            // Node is player, other is balloon
+                            this.handleShieldBalloonCollision(<AnimatedSprite>node, <AnimatedSprite>other);
+                        } else {
+                            // Other is player, node is balloon
+                            this.handleShieldBalloonCollision(<AnimatedSprite>other,<AnimatedSprite>node);
 
                         }
                     }
@@ -189,12 +212,13 @@ export default class GameLevel extends Scene {
                         if(this.nextLevel){
                             let sceneOptions = {
                                 physics: {
-                                    groupNames: ["ground", "player", "balloon"],
+                                    groupNames: ["ground", "player", "balloon", "shield"],
                                     collisions:
                                     [
-                                        [0, 1, 1],
-                                        [1, 0, 0],
-                                        [1, 0, 0]
+                                        [0, 1, 1, 0],
+                                        [1, 0, 1, 0],
+                                        [1, 1, 0, 1],
+                                        [0, 0, 1, 0]
                                     ]
                                 }
                             }
@@ -206,6 +230,7 @@ export default class GameLevel extends Scene {
                     {
                         this.respawnPlayer();
                     }
+
 
             }
         }
@@ -260,7 +285,8 @@ export default class GameLevel extends Scene {
             HW5_Events.PLAYER_ENTERED_LEVEL_END,
             HW5_Events.LEVEL_START,
             HW5_Events.LEVEL_END,
-            HW5_Events.PLAYER_KILLED
+            HW5_Events.PLAYER_KILLED,
+            HW5_Events.SHIELD_HIT
         ]);
     }
 
@@ -362,6 +388,26 @@ export default class GameLevel extends Scene {
         this.viewport.follow(this.player);
     }
 
+        /**
+     * Initializes the shield
+     */
+        protected initShield(): void {
+        // Add the shield
+        this.shield = this.add.animatedSprite("shield", "primary");
+        this.shield.scale.set(2, 2);
+        if(!this.shieldSpawn){
+            console.warn("Shield spawn was never set - setting spawn to (0, 0)");
+            this.shieldSpawn = Vec2.ZERO;
+        }
+        this.shield.position.copy(this.shieldSpawn);
+        this.shield.addPhysics(new AABB(Vec2.ZERO, new Vec2(14, 14)));
+        this.shield.colliderOffset.set(0, 2);
+        this.shield.addAI(ShieldController, {playerType: "platformer", tilemap: "Main", player: this.player});
+
+        this.shield.setGroup("shield");
+        this.shield.setTrigger("balloon", HW5_Events.SHIELD_HIT, null);
+    }
+
     /**
      * Initializes the level end area
      */
@@ -392,7 +438,6 @@ export default class GameLevel extends Scene {
         balloon.addPhysics();
         balloon.addAI(BalloonController, aiOptions);
         balloon.setGroup("balloon");
-
         balloon.setTrigger("player", HW5_Events.PLAYER_HIT_BALLOON, null);
     }
 
@@ -422,11 +467,28 @@ export default class GameLevel extends Scene {
      * of it in this class.
      * 
      */
-    protected async handlePlayerBalloonCollision(player: AnimatedSprite, balloon: AnimatedSprite) {
+    protected handlePlayerBalloonCollision(player: AnimatedSprite, balloon: AnimatedSprite) {
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "pop", loop: false, holdReference: false});
+        if(player === undefined || player === null) return;
+        if(balloon === undefined || balloon === null) return;
+        let pc = <PlayerController>player._ai;
+        let bc = <BalloonController>balloon._ai;
+        if(pc.suitColor != bc.color){
+            console.log("Decreasing life count!", GameLevel.livesCount - 1);
+            this.incPlayerLife(-1);
+        }
+        //Pop the balloon
+        this.emitter.fireEvent(HW5_Events.BALLOON_POPPED, {owner: balloon.id}); 
+    }
+
+    protected handleShieldBalloonCollision(player: AnimatedSprite, balloon: AnimatedSprite) {
         if (balloon === undefined) {
             return;
         }
         let balloonAI = (<BalloonController>balloon.ai);
+        if (balloonAI === undefined) {
+            return;
+        }
         if (balloonAI.reversed === true) {
             return;
         }

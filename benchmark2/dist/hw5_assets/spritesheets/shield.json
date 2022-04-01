@@ -1,0 +1,16 @@
+{
+    "name": "shield",
+    "spriteSheetImage": "shield.png",
+    "spriteWidth": 16,
+    "spriteHeight": 16,
+    "columns": 16,
+    "rows": 1,
+    "durationType": "time",
+    "animations": [
+        { 
+            "name": "IDLE",
+            "frames": [ {"index": 0, "duration": 540} ]
+        }
+
+    ]
+}

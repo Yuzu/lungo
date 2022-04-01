@@ -27,21 +27,42 @@ export default class MainMenu extends Scene {
 
         // Create a play button
         let playBtn = <Button>this.add.uiElement(UIElementType.BUTTON, "Main", {position: new Vec2(size.x, size.y), text: "Play Game"});
-        playBtn.backgroundColor = Color.TRANSPARENT;
+        playBtn.backgroundColor = Color.ORANGE;
         playBtn.borderColor = Color.WHITE;
         playBtn.borderRadius = 0;
         playBtn.setPadding(new Vec2(50, 10));
         playBtn.font = "PixelSimple";
+        playBtn.textColor = Color.YELLOW;
+
+        //Create a controls button
+        let controlsBtn = <Button>this.add.uiElement(UIElementType.BUTTON, "Main", {position: new Vec2(size.x, size.y + 100), text: "Controls"});
+        controlsBtn.backgroundColor = Color.ORANGE;
+        controlsBtn.borderColor = Color.WHITE;
+        controlsBtn.borderRadius = 0;
+        controlsBtn.setPadding(new Vec2(50, 10));
+        controlsBtn.font = "PixelSimple";
+        controlsBtn.textColor = Color.YELLOW;
+
+        //Create a help button
+        let helpBtn = <Button>this.add.uiElement(UIElementType.BUTTON, "Main", {position: new Vec2(size.x, size.y + 200), text: "Help"});
+        helpBtn.backgroundColor = Color.ORANGE;
+        helpBtn.borderColor = Color.WHITE;
+        helpBtn.borderRadius = 0;
+        helpBtn.setPadding(new Vec2(50, 10));
+        helpBtn.font = "PixelSimple";
+        helpBtn.textColor = Color.YELLOW;
+
 
         // When the play button is clicked, go to the next scene
         playBtn.onClick = () => {
             /*
                 Init the next scene with physics collisions:
 
-                          ground  player  balloon 
+                          ground  player  balloon shield
                 ground    No      --      -- 
                 player    Yes      No      --  
                 balloon   Yes      No      No  
+                shield    No       No      Yes
 
                 Each layer becomes a number. In this case, 4 bits matter for each
 
@@ -50,17 +71,18 @@ export default class MainMenu extends Scene {
                 balloon: self - 010, collisions - 000
             */
 
-            let sceneOptions = {
-                physics: {
-                    groupNames: ["ground", "player", "balloon"],
-                    collisions:
-                    [
-                        [0, 1, 1],
-                        [1, 0, 0],
-                        [1, 0, 0]
-                    ]
+                let sceneOptions = {
+                    physics: {
+                        groupNames: ["ground", "player", "balloon", "shield"],
+                        collisions:
+                        [
+                            [0, 1, 1, 0],
+                            [1, 0, 0, 0],
+                            [1, 0, 0, 0],
+                            [0, 0, 0, 0]
+                        ]
+                    }
                 }
-            }
             this.sceneManager.changeToScene(Level1, {}, sceneOptions);
         }
 

@@ -24,7 +24,6 @@ export default abstract class BalloonState extends State {
 	 * and adjust the balloon gravity effects accordingly based on its color
 	 */
 	handleInput(event: GameEvent): void {
-		console.log("PARENT");
 		if (event.type == HW5_Events.SUIT_COLOR_CHANGE) {
 			
 			let new_color = event.data.get("color");
