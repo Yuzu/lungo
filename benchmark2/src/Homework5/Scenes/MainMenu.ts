@@ -58,10 +58,11 @@ export default class MainMenu extends Scene {
             /*
                 Init the next scene with physics collisions:
 
-                          ground  player  balloon 
+                          ground  player  balloon shield
                 ground    No      --      -- 
                 player    Yes      No      --  
                 balloon   Yes      No      No  
+                shield    No       No      Yes
 
                 Each layer becomes a number. In this case, 4 bits matter for each
 
@@ -72,12 +73,13 @@ export default class MainMenu extends Scene {
 
             let sceneOptions = {
                 physics: {
-                    groupNames: ["ground", "player", "balloon"],
+                    groupNames: ["ground", "player", "balloon", "shield"],
                     collisions:
                     [
-                        [0, 1, 1],
-                        [1, 0, 0],
-                        [1, 0, 0]
+                        [0, 1, 1, 0],
+                        [1, 0, 0, 0],
+                        [1, 0, 0, 0],
+                        [0, 0, 0, 0]
                     ]
                 }
             }
