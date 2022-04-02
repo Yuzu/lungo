@@ -126,7 +126,7 @@ export default class GameLevel extends Scene {
 
                 case HW5_Events.PLAYER_HIT_BALLOON:
                     {   
-                        
+                        console.log("PLAYER HIT");
                         let node = this.sceneGraph.getNode(event.data.get("node"));
                         let other = this.sceneGraph.getNode(event.data.get("other"));
                         
@@ -210,12 +210,13 @@ export default class GameLevel extends Scene {
                         if(this.nextLevel){
                             let sceneOptions = {
                                 physics: {
-                                    groupNames: ["ground", "player", "balloon"],
+                                    groupNames: ["ground", "player", "balloon", "shield"],
                                     collisions:
                                     [
-                                        [0, 1, 1],
-                                        [1, 0, 0],
-                                        [1, 0, 0]
+                                        [0, 1, 1, 0],
+                                        [1, 0, 1, 0],
+                                        [1, 1, 0, 1],
+                                        [0, 0, 1, 0]
                                     ]
                                 }
                             }
@@ -402,6 +403,7 @@ export default class GameLevel extends Scene {
         this.shield.addAI(ShieldController, {playerType: "platformer", tilemap: "Main", player: this.player});
 
         this.shield.setGroup("shield");
+        this.shield.setTrigger("balloon", HW5_Events.SHIELD_HIT, null);
     }
 
     /**
@@ -436,7 +438,6 @@ export default class GameLevel extends Scene {
         balloon.addPhysics();
         balloon.addAI(BalloonController, aiOptions);
         balloon.setGroup("balloon");
-        balloon.setTrigger("shield", HW5_Events.SHIELD_HIT, null);
         balloon.setTrigger("player", HW5_Events.PLAYER_HIT_BALLOON, null);
     }
 
@@ -485,10 +486,13 @@ export default class GameLevel extends Scene {
             return;
         }
         let balloonAI = (<BalloonController>balloon.ai);
+        if (balloonAI === undefined) {
+            return;
+        }
         if (balloonAI.reversed === true) {
             return;
         }
-        
+        console.log("balloon reversed");
         balloonAI.reversed = true;
         let oldDirection = balloonAI.direction;
         balloonAI.direction = new Vec2(oldDirection.x * -1, oldDirection.y * -1);

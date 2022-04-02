@@ -37,53 +37,6 @@ export default class ZeroGravity extends BalloonState {
 		this.owner.move(this.parent.velocity.scaled(deltaT));
 	}
 
-	// overwrite handleInput to check for player position and update velocity accordingly.
-	handleInput(event: GameEvent): void {
-		//console.log("CHILD");
-		if (event.type == HW5_Events.SUIT_COLOR_CHANGE) {
-			let new_color = event.data.get("color");
-			if (this.parent.color == new_color){
-				this.finished(BalloonStates.SINKING);
-			}
-			else {
-				if (this.parent.color == HW5_Color.RED) {
-					if (new_color == HW5_Color.BLUE) {
-						this.finished(BalloonStates.ZEROGRAVITY);
-					} else {
-						this.finished(BalloonStates.RISING);
-					}
-				} else if (this.parent.color == HW5_Color.BLUE) {
-					if (new_color == HW5_Color.RED) {
-						this.finished(BalloonStates.ZEROGRAVITY);
-					} else {
-						this.finished(BalloonStates.RISING);
-					}
-				} else if (this.parent.color == HW5_Color.GREEN) {
-					if (new_color == HW5_Color.RED) {
-						this.finished(BalloonStates.RISING);
-					} else {
-						this.finished(BalloonStates.ZEROGRAVITY);
-					}
-				} 
-			}
-		}
-		else if (event.type == HW5_Events.PLAYER_MOVE) {
-			if (this.gravity === 0) {
-				let pos = event.data.get("position");
-				let dx = Math.pow(this.owner.position.x - pos.x, 2);
-				let dy = Math.pow(this.owner.position.y - pos.y, 2);
-
-				if (Math.sqrt(dx + dy) <= 320) {
-					
-					this.parent.speed = 200;
-				}
-				else {
-					this.parent.speed = 100;
-				}
-			}
-		}
-		
-	}
 
 	onExit(): Record<string, any> {
 		(<AnimatedSprite>this.owner).animation.stop();
