@@ -15,6 +15,7 @@ export default class Level1 extends GameLevel {
         // Load resources
         this.load.tilemap("level1", "hw5_assets/tilemaps/level1.json");
         this.load.spritesheet("player", "hw5_assets/spritesheets/spike.json");
+        this.load.spritesheet("shield", "hw5_assets/spritesheets/shield.json");
         this.load.spritesheet("red", "hw5_assets/spritesheets/redBalloon.json");
         this.load.spritesheet("blue", "hw5_assets/spritesheets/blueBalloon.json");
         this.load.audio("jump", "hw5_assets/sounds/jump.wav");
@@ -54,9 +55,10 @@ export default class Level1 extends GameLevel {
     startScene(): void {
         // Add the level 1 tilemap
         this.add.tilemap("level1", new Vec2(2, 2));
-        this.viewport.setBounds(0, 0, 64*32, 20*32);
+        this.viewport.setBounds(0, 0, 96*32, 32*32);
 
-        this.playerSpawn = new Vec2(5*32, 14*32);
+        this.playerSpawn = new Vec2(4*32, 26*32);
+        this.shieldSpawn = this.playerSpawn;
 
         // Set the total switches and balloons in the level
         this.totalSwitches = 4;
@@ -65,7 +67,7 @@ export default class Level1 extends GameLevel {
         // Do generic setup for a GameLevel
         super.startScene();
 
-        this.addLevelEnd(new Vec2(60, 13), new Vec2(5, 5));
+        this.addLevelEnd(new Vec2(91, 3), new Vec2(5, 8));
 
         this.nextLevel = Level2;
 

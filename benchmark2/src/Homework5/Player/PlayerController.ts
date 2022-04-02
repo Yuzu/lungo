@@ -135,12 +135,12 @@ export default class PlayerController extends StateMachineAI {
 
         if (this.owner.onGround) {
             // 8 indicates an "off" tile.
-            if (this.tilemap.getTileAtWorldPosition(new Vec2(this.owner.position.x, this.owner.position.y + 32)) === 8) {
-                let tileLocation = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + 32));
-                this.tilemap.setTileAtRowCol(tileLocation, 9);
+            // if (this.tilemap && this.tilemap.getTileAtWorldPosition(new Vec2(this.owner.position.x, this.owner.position.y + 32)) === 8) {
+            //     let tileLocation = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + 32));
+            //     this.tilemap.setTileAtRowCol(tileLocation, 9);
 
-                this.emitter.fireEvent(HW5_Events.PLAYER_HIT_SWITCH);
-            }
+            //     this.emitter.fireEvent(HW5_Events.PLAYER_HIT_SWITCH);
+            // }
         }
 		if(this.currentState instanceof Jump){
 			Debug.log("playerstate", "Player State: Jump");
