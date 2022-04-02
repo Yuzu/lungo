@@ -188,13 +188,11 @@ export default class GameLevel extends Scene {
                     
                 case HW5_Events.PLAYER_ENTERED_LEVEL_END:
                     {
-                        //Check if the player has pressed all the switches and popped all of the balloons
-                        if (this.switchesPressed >= this.totalSwitches && this.balloonsPopped >= this.totalBalloons){
-                            if(!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()){
-                                // The player has reached the end of the level
-                                this.levelEndTimer.start();
-                                this.levelEndLabel.tweens.play("slideIn");
-                            }
+                        //Check if the number of enemies is 0
+                        if(!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()){
+                            // The player has reached the end of the level
+                            this.levelEndTimer.start();
+                            this.levelEndLabel.tweens.play("slideIn");
                         }
                     }
                     break;
@@ -410,6 +408,8 @@ export default class GameLevel extends Scene {
      * Initializes the level end area
      */
     protected addLevelEnd(startingTile: Vec2, size: Vec2): void {
+        console.log(startingTile);
+        console.log(size);
         this.levelEndArea = <Rect>this.add.graphic(GraphicType.RECT, "primary", {position: startingTile.scale(32), size: size.scale(32)});
         this.levelEndArea.addPhysics(undefined, undefined, false, true);
         this.levelEndArea.setTrigger("player", HW5_Events.PLAYER_ENTERED_LEVEL_END, null);
