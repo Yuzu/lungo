@@ -8,13 +8,14 @@ import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import { HW5_Color } from "../hw5_color";
 import { HW5_Events } from "../hw5_enums";
 import Idle from "./ShieldStates/Idle";
-// import Idle from "./PlayerStates/Idle";
+import ShieldWall from "./ShieldStates/ShieldWall";
 
+//Subject to change
 export enum ShieldStates {
     IDLE = "idle",
     ROPE = "rope",
     BASH = "bash",
-	SHIELD_WALL = "shield wall",
+	SHIELD_WALL = "ShieldWall", //Must be the same as HW5 events enum
 	GROUND_SMASH = "ground smash",
     FRISBEE = "frisbee"
 }
@@ -31,6 +32,8 @@ export default class ShieldController extends StateMachineAI {
 
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
+        //Subscribe to our shield moves so we can update the state
+        this.receiver.subscribe(HW5_Events.SHIELD_WALL);
 
         this.player = options.player;
         this.initializePlatformer();
@@ -39,12 +42,20 @@ export default class ShieldController extends StateMachineAI {
     initializePlatformer(): void {
         let idle = new Idle(this, this.owner);
 		this.addState(ShieldStates.IDLE, idle);
+        let shieldWall = new ShieldWall(this, this.owner);
+        this.addState(ShieldStates.SHIELD_WALL, shieldWall);
         
         this.initialize(ShieldStates.IDLE, {player: this.player});
     }
 
     changeState(stateName: string): void {
-
+        console.log("Changing state to statename: ", stateName);
+        //If we're in ShieldWall, negate it and revert back to idle
+        if(stateName===ShieldStates.SHIELD_WALL){
+            if((this.stack.peek() instanceof ShieldWall)){
+                stateName = ShieldStates.IDLE;
+            }
+        }
         super.changeState(stateName);
     }
 
@@ -53,16 +64,10 @@ export default class ShieldController extends StateMachineAI {
     update(deltaT: number): void {
 		super.update(deltaT);
         //console.log(this.player.position);
-		// if(this.currentState instanceof Jump){
-		// 	Debug.log("shieldstate", "Shield State: IDLE");
-		// } else if (this.currentState instanceof Walk){
-		// 	Debug.log("shieldstate", "Shield State: ROPE");
-		// } else if (this.currentState instanceof Run){
-		// 	Debug.log("shieldstate", "Shield State: Run");
-		// } else if (this.currentState instanceof Idle){
-		// 	Debug.log("shieldstate", "Shield State: Idle");
-		// } else if(this.currentState instanceof Fall){
-        //     Debug.log("shieldstate", "Shield State: Fall");
-        // }
+		if(this.currentState instanceof Idle){
+			Debug.log("shieldstate", "Shield State: IDLE");
+		} else if (this.currentState instanceof ShieldWall){
+			Debug.log("shieldstate", "Shield State: Shield Wall");
+		}
 	}
 }

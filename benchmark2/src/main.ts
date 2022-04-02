@@ -14,7 +14,9 @@ import MainMenu from "./Homework5/Scenes/MainMenu";
             {name: "left", keys: ["a"]},
             {name: "right", keys: ["d"]},
             {name: "jump", keys: ["w", "space"]},
-            {name: "run", keys: ["shift"]}
+            {name: "run", keys: ["shift"]},
+            {name: "shield wall", keys: ["t"]}
+
         ],
         useWebGL: false,                        // Tell the game we want to use webgl
         showDebug: false                       // Whether to show debug messages. You can change this to true if you want

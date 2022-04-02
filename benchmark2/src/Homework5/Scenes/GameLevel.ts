@@ -58,6 +58,8 @@ export default class GameLevel extends Scene {
 
     // Cooldown timer for changing suits
     protected suitChangeTimer: Timer;
+    //Timers for new shield events
+    protected shieldWallTimer: Timer;
 
     // Total ballons and amount currently popped
     protected totalBalloons: number;
@@ -99,6 +101,9 @@ export default class GameLevel extends Scene {
 
         // 3 second cooldown for changing suits
         this.suitChangeTimer = new Timer(3000);
+
+        //2 second cooldown for SHIELD WALL
+        this.shieldWallTimer = new Timer(2000);
 
         // Start the black screen fade out
         this.levelTransitionScreen.tweens.play("fadeOut");
@@ -214,9 +219,9 @@ export default class GameLevel extends Scene {
                                     collisions:
                                     [
                                         [0, 1, 1, 0],
-                                        [1, 0, 1, 0],
-                                        [1, 1, 0, 1],
-                                        [0, 0, 1, 0]
+                                        [1, 0, 0, 1],
+                                        [1, 0, 0, 0],
+                                        [0, 1, 0, 0]
                                     ]
                                 }
                             }
@@ -250,6 +255,14 @@ export default class GameLevel extends Scene {
             if (Input.isKeyJustPressed("3")) {
                 this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.GREEN});
                 this.suitChangeTimer.start();
+            }
+        }
+        //Update our shield state by firing the event
+        //See main.ts for the controls
+        if(this.shieldWallTimer.isStopped()){
+            if(Input.isPressed("shield wall")){
+                this.emitter.fireEvent(HW5_Events.SHIELD_WALL, {shieldPosition: this.shield.position});
+                this.shieldWallTimer.start();
             }
         }
     }
