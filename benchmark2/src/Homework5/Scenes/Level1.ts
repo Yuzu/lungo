@@ -55,9 +55,9 @@ export default class Level1 extends GameLevel {
     startScene(): void {
         // Add the level 1 tilemap
         this.add.tilemap("level1", new Vec2(2, 2));
-        this.viewport.setBounds(0, 0, 64*32, 20*32);
+        this.viewport.setBounds(0, 0, 96*32, 32*32);
 
-        this.playerSpawn = new Vec2(5*32, 14*32);
+        this.playerSpawn = new Vec2(4*32, 26*32);
         this.shieldSpawn = this.playerSpawn;
 
         // Set the total switches and balloons in the level
