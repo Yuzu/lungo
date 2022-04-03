@@ -8,9 +8,12 @@ import ShieldState from "./ShieldState";
 
 export default class Idle extends ShieldState {
 	owner: AnimatedSprite;
-	player: GameNode;
 	onEnter(options: Record<string, any>): void {
-		this.player = options.player;
+		if(options !== undefined && options.player !== undefined){
+			this.player = options.player;
+		}
+		//The shield and the player can't collide in IDLE state
+		this.owner.isCollidable=false;
 	}
 
 

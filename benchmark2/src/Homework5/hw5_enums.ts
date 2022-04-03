@@ -9,5 +9,6 @@ export enum HW5_Events {
     LEVEL_END = "LevelEnd",
     PLAYER_KILLED = "PlayerKilled",
     SUIT_COLOR_CHANGE = "SuitColorChange",
-    SHIELD_HIT = "ShieldHit"
+    SHIELD_HIT = "ShieldHit",
+    SHIELD_WALL = "ShieldWall" //Must be the same as ShieldController.states.
 }

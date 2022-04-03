@@ -12,6 +12,7 @@ import ShieldController from "../ShieldController";
 export default abstract class ShieldState extends State {
 	owner: GameNode;
 	parent: ShieldController;
+	player: GameNode;
 
 	constructor(parent: StateMachine, owner: GameNode){
 		super(parent);
@@ -19,6 +20,10 @@ export default abstract class ShieldState extends State {
 	}
 
 	handleInput(event: GameEvent): void {
+		if (event.type == HW5_Events.SHIELD_WALL) {
+			console.log("Shield wall activated! Updating state.");
+			this.finished(event.type);
+		}
 	}
 
 
