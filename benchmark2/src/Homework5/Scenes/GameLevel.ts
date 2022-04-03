@@ -14,13 +14,15 @@ import Scene from "../../Wolfie2D/Scene/Scene";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import BalloonController from "../Enemies/BalloonController";
+import BalloonController from "../Enemies/Balloons/BalloonController";
 import { HW5_Color } from "../hw5_color";
 import { HW5_Events } from "../hw5_enums";
 import HW5_ParticleSystem from "../HW5_ParticleSystem";
 import PlayerController from "../Player/PlayerController";
 import ShieldController from "../Player/ShieldController";
 import MainMenu from "./MainMenu";
+
+import BasicEnemyController from "../Enemies/BasicEnemy/BasicEnemyController";
 
 // HOMEWORK 5 - TODO
 /**
@@ -454,6 +456,15 @@ export default class GameLevel extends Scene {
         balloon.setTrigger("player", HW5_Events.PLAYER_HIT_BALLOON, null);
     }
 
+    protected addEnemy(spriteKey: string, tilePos: Vec2, aiOptions: Record<string, any>): void {
+        let enemy = this.add.animatedSprite(spriteKey, "primary");
+        enemy.position.set(tilePos.x*32, tilePos.y*32);
+        enemy.scale.set(2, 2);
+        enemy.addPhysics();
+        enemy.unfreeze();
+        enemy.addAI(BasicEnemyController, aiOptions);
+        enemy.setGroup("enemy");
+    }
     // HOMEWORK 5 - TODO
     /**
      * You must implement this method.

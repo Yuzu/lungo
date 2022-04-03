@@ -1,11 +1,11 @@
-import GameNode from "../../Wolfie2D/Nodes/GameNode";
-import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
-import { HW5_Events } from "../hw5_enums";
+import GameNode from "../../../Wolfie2D/Nodes/GameNode";
+import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
+import StateMachineAI from "../../../Wolfie2D/AI/StateMachineAI";
+import { HW5_Events } from "../../hw5_enums";
 import Sinking from "./Sinking";
 import Rising from "./Rising";
 import ZeroGravity from "./ZeroGravity";
-import { HW5_Color } from "../hw5_color";
+import { HW5_Color } from "../../hw5_color";
 
 export enum BalloonStates {
 	SINKING = "sinking",

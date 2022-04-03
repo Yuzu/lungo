@@ -272,33 +272,11 @@ export default class BasicPhysicsManager extends PhysicsManager {
 			// Also check for triggers
 			
 			for(let overlap of overlaps){
-				if (overlap.other.triggerEnters && overlap.other.triggerEnters.includes("ShieldHit")) {
-					//console.log(overlap);
-					//console.log(overlap.other.isTrigger);
-					//console.log(overlap.other.triggerMask & node.group);
-					//console.log(node.group);
-				}
-				if (overlap.other.group === 8) {
-					console.log("OUTSIDE");
-					console.log(overlap.other.isTrigger);
-					console.log(overlap.other.triggerMask & node.group);
-					console.log(overlap.other.triggerMask);
-					console.log(node.group);
-					//console.log(overlap.other.isTrigger);
-					//console.log(overlap.other.triggerMask);
-					//console.log(node.group);
-					//console.log(node);
-					//console.log(overlap.other);
-				}
+
 				// Check for a trigger. If we care about the trigger, react
 				if(overlap.other.isTrigger && (overlap.other.triggerMask & node.group)){
 					// Get the bit that this group is represented by
 					let index = Math.floor(Math.log2(node.group));
-					console.log(overlap.other.isTrigger);
-					console.log(overlap.other.triggerMask & node.group);
-					console.log(overlap.other.triggerMask);
-					console.log(node.group);
-					console.log("HERE");
 					// Extract the triggerEnter event name
 					this.emitter.fireEvent(overlap.other.triggerEnters[index], {
 						node: (<GameNode>node).id,

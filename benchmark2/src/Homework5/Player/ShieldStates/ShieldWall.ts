@@ -25,6 +25,7 @@ export default class ShieldWall extends ShieldState {
 
 
 	update(deltaT: number): void {
+		this.owner.animation.playIfNotAlready("IDLE", true);
 	}
 
 	onExit(): Record<string, any> {

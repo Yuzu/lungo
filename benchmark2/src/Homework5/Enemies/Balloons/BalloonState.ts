@@ -1,11 +1,11 @@
-import State from "../../Wolfie2D/DataTypes/State/State";
-import StateMachine from "../../Wolfie2D/DataTypes/State/StateMachine";
-import GameEvent from "../../Wolfie2D/Events/GameEvent";
-import GameNode from "../../Wolfie2D/Nodes/GameNode";
-import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
-import MathUtils from "../../Wolfie2D/Utils/MathUtils";
-import { HW5_Color } from "../hw5_color";
-import { HW5_Events } from "../hw5_enums";
+import State from "../../../Wolfie2D/DataTypes/State/State";
+import StateMachine from "../../../Wolfie2D/DataTypes/State/StateMachine";
+import GameEvent from "../../../Wolfie2D/Events/GameEvent";
+import GameNode from "../../../Wolfie2D/Nodes/GameNode";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import MathUtils from "../../../Wolfie2D/Utils/MathUtils";
+import { HW5_Color } from "../../hw5_color";
+import { HW5_Events } from "../../hw5_enums";
 import BalloonController, { BalloonStates } from "./BalloonController";
 
 export default abstract class BalloonState extends State {
@@ -57,7 +57,7 @@ export default abstract class BalloonState extends State {
 				let pos = event.data.get("position");
 				let dx = Math.pow(this.owner.position.x - pos.x, 2);
 				let dy = Math.pow(this.owner.position.y - pos.y, 2);
-				console.log(Math.sqrt(dx + dy));
+				//console.log(Math.sqrt(dx + dy));
 				if (Math.sqrt(dx + dy) >= 35) {
 					console.log("balloon is collidable again");
 					this.parent.reversed = false;

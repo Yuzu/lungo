@@ -1,11 +1,10 @@
-import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import BalloonState from "./BalloonState";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 
-export default class Sinking extends BalloonState {
+export default class Rising extends BalloonState {
 	
 	onEnter(): void {
-        this.gravity = this.parent.gravity;
+        this.gravity = -this.parent.gravity;
 
 		(<AnimatedSprite>this.owner).animation.play("IDLE", true);
 	}
@@ -13,7 +12,7 @@ export default class Sinking extends BalloonState {
 	update(deltaT: number): void {
 		super.update(deltaT);
 
-        this.parent.velocity.x = this.parent.direction.x * this.parent.speed;
+		this.parent.velocity.x = this.parent.direction.x * this.parent.speed;
 
 		this.owner.move(this.parent.velocity.scaled(deltaT));
 	}

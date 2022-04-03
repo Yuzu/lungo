@@ -18,6 +18,7 @@ export default class Level1 extends GameLevel {
         this.load.spritesheet("shield", "hw5_assets/spritesheets/shield.json");
         this.load.spritesheet("red", "hw5_assets/spritesheets/redBalloon.json");
         this.load.spritesheet("blue", "hw5_assets/spritesheets/blueBalloon.json");
+        this.load.spritesheet("basicEnemy", "hw5_assets/spritesheets/basicEnemy.json");
         this.load.audio("jump", "hw5_assets/sounds/jump.wav");
         this.load.audio("switch", "hw5_assets/sounds/switch.wav");
         this.load.audio("player_death", "hw5_assets/sounds/player_death.wav");
@@ -79,6 +80,10 @@ export default class Level1 extends GameLevel {
         for(let pos of [new Vec2(20, 3), new Vec2(41,4), new Vec2(3, 4)]){
             this.addBalloon("blue", pos, {color: HW5_Color.BLUE});
         }
+
+        // Add enemies
+        this.addEnemy("basicEnemy", new Vec2(29, 29), {});
+
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
     }
 
