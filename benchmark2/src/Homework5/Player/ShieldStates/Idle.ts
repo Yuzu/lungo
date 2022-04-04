@@ -21,6 +21,7 @@ export default class Idle extends ShieldState {
 		let mousePosition = Input.getGlobalMousePosition();
         if(this.player !== undefined && this.player.position !== undefined){
             let angleRadians = Math.atan2(mousePosition.y - this.player.position.y, mousePosition.x - this.player.position.x);
+			this.owner.rotation = -angleRadians;
             let r = 50;
             let x = r*Math.cos(angleRadians) + this.player.position.x;
             let y = r*Math.sin(angleRadians) + this.player.position.y;
