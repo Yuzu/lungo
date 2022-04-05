@@ -60,6 +60,12 @@ export default class GameLevel extends Scene {
     protected suitChangeTimer: Timer;
     //Timers for new shield events
     protected shieldWallTimer: Timer;
+    protected shieldTrampolineTimer: Timer;
+
+    //We manage a boolean that keeps track of whether or not shieldJump is valid
+    //As shield-player collisions can happen multiple times, but we only want it to 
+    // happen once
+    protected shieldJump: Boolean;
 
     // Total ballons and amount currently popped
     protected totalBalloons: number;
@@ -104,6 +110,9 @@ export default class GameLevel extends Scene {
 
         //2 second cooldown for SHIELD WALL
         this.shieldWallTimer = new Timer(2000);
+        
+        //6 second cooldown for SHIELD TRAMPOLINE
+        this.shieldTrampolineTimer = new Timer(6000);
 
         // Start the black screen fade out
         this.levelTransitionScreen.tweens.play("fadeOut");
@@ -162,6 +171,23 @@ export default class GameLevel extends Scene {
                         }
                     }
                     break;
+                case HW5_Events.SHIELD_TRAMPOLINE_JUMP:
+                {
+                    console.log("SHIELD TRAMPOLINE JUMP");
+                    let node = this.sceneGraph.getNode(event.data.get("node"));
+                    let other = this.sceneGraph.getNode(event.data.get("other"));
+                    
+                    if(node === this.shield){
+                        
+                        // Node is player, other is shield
+                        this.handlePlayerShieldTrampolineJump(<AnimatedSprite>other, <AnimatedSprite>node);
+                    } else {
+                        // Other is player, node is shield
+                        this.handlePlayerShieldTrampolineJump(<AnimatedSprite>node, <AnimatedSprite>other);
+
+                    }
+                }
+                break;
 
                 case HW5_Events.BALLOON_POPPED:
                     {
@@ -261,10 +287,19 @@ export default class GameLevel extends Scene {
         //See main.ts for the controls
         if(this.shieldWallTimer.isStopped()){
             if(Input.isPressed("shield wall")){
-                this.emitter.fireEvent(HW5_Events.SHIELD_WALL, {shieldPosition: this.shield.position});
+                this.shieldJump = false;
+                this.emitter.fireEvent(HW5_Events.SHIELD_WALL);
                 this.shieldWallTimer.start();
             }
         }
+        if(this.shieldTrampolineTimer.isStopped()){
+            if(Input.isPressed("shield trampoline")){
+                this.emitter.fireEvent(HW5_Events.SHIELD_TRAMPOLINE);
+                this.shieldTrampolineTimer.start();
+                this.shieldJump = true;
+            }
+        }
+
     }
 
     /**
@@ -297,7 +332,8 @@ export default class GameLevel extends Scene {
             HW5_Events.LEVEL_START,
             HW5_Events.LEVEL_END,
             HW5_Events.PLAYER_KILLED,
-            HW5_Events.SHIELD_HIT
+            HW5_Events.SHIELD_HIT,
+            HW5_Events.SHIELD_TRAMPOLINE_JUMP
         ]);
     }
 
@@ -417,6 +453,7 @@ export default class GameLevel extends Scene {
 
         this.shield.setGroup("shield");
         this.shield.setTrigger("balloon", HW5_Events.SHIELD_HIT, null);
+        this.shield.setTrigger("player", HW5_Events.SHIELD_TRAMPOLINE_JUMP, null);
     }
 
     /**
@@ -512,6 +549,31 @@ export default class GameLevel extends Scene {
         let oldVelocity = balloonAI.velocity;
         balloonAI.velocity = new Vec2(oldVelocity.x * -1, oldVelocity.y * -1);
     }
+
+    //This might be incorrect, since we're not account for deltaT, but I think it should be fine
+    // Unless the player is extremely laggy.
+    protected handlePlayerShieldTrampolineJump(player: AnimatedSprite, shield: AnimatedSprite) {
+        if(!this.shieldJump){
+            return;
+        }
+        else{
+            this.shieldJump = false;
+        }
+        //this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "pop", loop: false, holdReference: false});
+        if(player === undefined || player === null) return;
+        let playerAI = <PlayerController>player.ai;
+        let shieldAI = <PlayerController>shield.ai;
+
+        console.log(shieldAI);
+        if (playerAI === undefined || shieldAI === undefined) {
+            return;
+        }
+        playerAI.velocity = new Vec2(playerAI.velocity.x, -600);
+        //This will revert us back to the idle state
+        this.emitter.fireEvent(HW5_Events.SHIELD_TRAMPOLINE); 
+
+    }
+    
 
     /**
      * Increments the amount of life the player has

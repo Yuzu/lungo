@@ -24,6 +24,10 @@ export default abstract class ShieldState extends State {
 			console.log("Shield wall activated! Updating state.");
 			this.finished(event.type);
 		}
+		else if (event.type == HW5_Events.SHIELD_TRAMPOLINE) {
+			console.log("Shield wall activated! Updating state.");
+			this.finished(event.type);
+		}
 	}
 
 

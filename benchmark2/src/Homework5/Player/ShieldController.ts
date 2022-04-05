@@ -8,6 +8,7 @@ import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import { HW5_Color } from "../hw5_color";
 import { HW5_Events } from "../hw5_enums";
 import Idle from "./ShieldStates/Idle";
+import ShieldTrampoline from "./ShieldStates/ShieldTrampoline";
 import ShieldWall from "./ShieldStates/ShieldWall";
 
 //Subject to change
@@ -17,7 +18,8 @@ export enum ShieldStates {
     BASH = "bash",
 	SHIELD_WALL = "ShieldWall", //Must be the same as HW5 events enum
 	GROUND_SMASH = "ground smash",
-    FRISBEE = "frisbee"
+    FRISBEE = "frisbee",
+    SHIELD_TRAMPOLINE="ShieldTrampoline"
 }
 
 export default class ShieldController extends StateMachineAI {
@@ -25,6 +27,7 @@ export default class ShieldController extends StateMachineAI {
     tilemap: OrthogonalTilemap;
     suitColor: HW5_Color;
     player:GameNode;
+    state:string;
 
 
     initializeAI(owner: GameNode, options: Record<string, any>){
@@ -34,6 +37,7 @@ export default class ShieldController extends StateMachineAI {
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         //Subscribe to our shield moves so we can update the state
         this.receiver.subscribe(HW5_Events.SHIELD_WALL);
+        this.receiver.subscribe(HW5_Events.SHIELD_TRAMPOLINE);
 
         this.player = options.player;
         this.initializePlatformer();
@@ -44,18 +48,28 @@ export default class ShieldController extends StateMachineAI {
 		this.addState(ShieldStates.IDLE, idle);
         let shieldWall = new ShieldWall(this, this.owner);
         this.addState(ShieldStates.SHIELD_WALL, shieldWall);
+        let shieldTrampoline = new ShieldTrampoline(this, this.owner);
+        this.addState(ShieldStates.SHIELD_TRAMPOLINE, shieldTrampoline);
         
         this.initialize(ShieldStates.IDLE, {player: this.player});
     }
 
     changeState(stateName: string): void {
         console.log("Changing state to statename: ", stateName);
-        //If we're in ShieldWall, negate it and revert back to idle
-        if(stateName===ShieldStates.SHIELD_WALL){
-            if((this.stack.peek() instanceof ShieldWall)){
+        //If we're in ShieldWall or ShieldTrampoline, negate it and revert back to idle
+        if(stateName===ShieldStates.SHIELD_WALL || stateName===ShieldStates.SHIELD_TRAMPOLINE){
+            if((this.stack.peek() instanceof ShieldWall || this.stack.peek() instanceof ShieldTrampoline)){
                 stateName = ShieldStates.IDLE;
             }
         }
+
+        //If we're in ShieldTrampoline, negate it and revert back to idle
+        // if(stateName===ShieldStates.SHIELD_TRAMPOLINE){
+        //     if((this.stack.peek() instanceof ShieldTrampoline)){
+        //         stateName = ShieldStates.IDLE;
+        //     }
+        // }
+        this.state=stateName;
         super.changeState(stateName);
     }
 

@@ -10,5 +10,7 @@ export enum HW5_Events {
     PLAYER_KILLED = "PlayerKilled",
     SUIT_COLOR_CHANGE = "SuitColorChange",
     SHIELD_HIT = "ShieldHit",
-    SHIELD_WALL = "ShieldWall" //Must be the same as ShieldController.states.
+    SHIELD_WALL = "ShieldWall", //Must be the same as ShieldController.states.
+    SHIELD_TRAMPOLINE = "ShieldTrampoline",
+    SHIELD_TRAMPOLINE_JUMP = "ShieldTrampolineJump"
 }
