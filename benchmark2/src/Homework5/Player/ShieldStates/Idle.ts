@@ -26,7 +26,10 @@ export default class Idle extends ShieldState {
             let y = r*Math.sin(angleRadians) + this.player.position.y;
             this.owner.position = new Vec2(x, y);
         }
-		this.owner.animation.playIfNotAlready("IDLE", true);
+		if (!this.owner.animation.isPlaying("REFLECT")) {
+			this.owner.animation.playIfNotAlready("IDLE", true);
+		}
+		
 	}
 
 	onExit(): Record<string, any> {

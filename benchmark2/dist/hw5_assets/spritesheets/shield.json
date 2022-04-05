@@ -4,13 +4,16 @@
     "spriteWidth": 16,
     "spriteHeight": 16,
     "columns": 16,
-    "rows": 1,
+    "rows": 16,
     "durationType": "time",
     "animations": [
         { 
             "name": "IDLE",
             "frames": [ {"index": 0, "duration": 540} ]
+        },
+        {
+        	"name": "REFLECT",
+        	"frames": [ {"index": 16 , "duration": 15}, {"index": 17 , "duration": 15},{"index": 18 , "duration": 15},{"index": 19 , "duration": 15},{"index": 20 , "duration": 15},{"index": 21 , "duration": 15},{"index": 22 , "duration": 15}]
         }
-
     ]
 }

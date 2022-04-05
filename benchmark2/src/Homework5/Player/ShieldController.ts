@@ -37,6 +37,8 @@ export default class ShieldController extends StateMachineAI {
 
         this.player = options.player;
         this.initializePlatformer();
+        
+        
     }
 
     initializePlatformer(): void {

@@ -505,7 +505,7 @@ export default class GameLevel extends Scene {
         this.emitter.fireEvent(HW5_Events.BALLOON_POPPED, {owner: balloon.id}); 
     }
 
-    protected handleShieldBalloonCollision(player: AnimatedSprite, balloon: AnimatedSprite) {
+    protected handleShieldBalloonCollision(shield: AnimatedSprite, balloon: AnimatedSprite) {
         if (balloon === undefined) {
             return;
         }
@@ -516,6 +516,8 @@ export default class GameLevel extends Scene {
         if (balloonAI.reversed === true) {
             return;
         }
+
+        shield.animation.playIfNotAlready("REFLECT", false, "IDLE");
         console.log("balloon reversed");
         balloonAI.reversed = true;
         let oldDirection = balloonAI.direction;
