@@ -82,6 +82,7 @@ export default class BasicPhysicsManager extends PhysicsManager {
 				this.groupMap.set(group, 1 << i);
 
 				let collisionMask = 0;
+
 				for(let j = 0; j < options.collisions[i].length; j++){
 					if(options.collisions[i][j]){
 						collisionMask |= 1 << j;
@@ -138,7 +139,7 @@ export default class BasicPhysicsManager extends PhysicsManager {
 			node.onWall = false;
 			node.collidedWithTilemap = false;
 			node.isColliding = false;
-			
+
 			// If this node is not active, don't process it
 			if(!node.active){
 				continue;
@@ -219,14 +220,14 @@ export default class BasicPhysicsManager extends PhysicsManager {
 				const padding = node.collisionShape.halfSize;
 				const otherAABB = overlap.collider;
 
-				
+
 				const hit = otherAABB.intersectSegment(node.collisionShape.center, node._velocity, node.collisionShape.halfSize);
 
 				overlap.hit = hit;
 
 				if(hit !== null){
 					hits.push(hit);
-					
+
 					// We got a hit, resolve with the time inside of the hit
 					let tnearx = hit.nearTimes.x;
 					let tneary = hit.nearTimes.y;
@@ -239,7 +240,7 @@ export default class BasicPhysicsManager extends PhysicsManager {
 						tneary = 1.0;
 					}
 
-					
+
 					if(hit.nearTimes.x >= 0 && hit.nearTimes.x < 1){
 						// Any tilemap objects that made it here are collidable
 						if(overlap.type === "Tilemap" || overlap.other.isCollidable){
@@ -261,13 +262,12 @@ export default class BasicPhysicsManager extends PhysicsManager {
 			/*---------- INFORMATION/TRIGGER PHASE ----------*/
 			// Check if we ended up on the ground, ceiling or wall
 			// Also check for triggers
-			
 			for(let overlap of overlaps){
-
 				// Check for a trigger. If we care about the trigger, react
-				if(overlap.other.isTrigger && (overlap.other.triggerMask & node.group)){
+				if(overlap.other.isTrigger && (overlap.other.triggerMask & node.group) && node.group != -1){
 					// Get the bit that this group is represented by
 					let index = Math.floor(Math.log2(node.group));
+
 					// Extract the triggerEnter event name
 					this.emitter.fireEvent(overlap.other.triggerEnters[index], {
 						node: (<GameNode>node).id,

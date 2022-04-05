@@ -19,6 +19,7 @@ export default class SceneOptions {
         } else {
             sOpt.physics = options.physics;
         }
+
         return sOpt;
     }
 }
