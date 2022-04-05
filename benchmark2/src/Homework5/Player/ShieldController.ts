@@ -27,6 +27,7 @@ export default class ShieldController extends StateMachineAI {
     tilemap: OrthogonalTilemap;
     suitColor: HW5_Color;
     player:GameNode;
+    state:string;
 
 
     initializeAI(owner: GameNode, options: Record<string, any>){
@@ -55,19 +56,20 @@ export default class ShieldController extends StateMachineAI {
 
     changeState(stateName: string): void {
         console.log("Changing state to statename: ", stateName);
-        //If we're in ShieldWall, negate it and revert back to idle
-        if(stateName===ShieldStates.SHIELD_WALL){
-            if((this.stack.peek() instanceof ShieldWall)){
+        //If we're in ShieldWall or ShieldTrampoline, negate it and revert back to idle
+        if(stateName===ShieldStates.SHIELD_WALL || stateName===ShieldStates.SHIELD_TRAMPOLINE){
+            if((this.stack.peek() instanceof ShieldWall || this.stack.peek() instanceof ShieldTrampoline)){
                 stateName = ShieldStates.IDLE;
             }
         }
 
         //If we're in ShieldTrampoline, negate it and revert back to idle
-        if(stateName===ShieldStates.SHIELD_TRAMPOLINE){
-            if((this.stack.peek() instanceof ShieldTrampoline)){
-                stateName = ShieldStates.IDLE;
-            }
-        }
+        // if(stateName===ShieldStates.SHIELD_TRAMPOLINE){
+        //     if((this.stack.peek() instanceof ShieldTrampoline)){
+        //         stateName = ShieldStates.IDLE;
+        //     }
+        // }
+        this.state=stateName;
         super.changeState(stateName);
     }
 

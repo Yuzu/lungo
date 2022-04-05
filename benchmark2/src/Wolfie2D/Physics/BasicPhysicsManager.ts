@@ -82,24 +82,24 @@ export default class BasicPhysicsManager extends PhysicsManager {
 				this.groupMap.set(group, 1 << i);
 
 				let collisionMask = 0;
-				console.log(group);
+				//console.log(group);
 				for(let j = 0; j < options.collisions[i].length; j++){
 					if(options.collisions[i][j]){
-						console.log("BEFORE: " + collisionMask);
+						//console.log("BEFORE: " + collisionMask);
 						collisionMask |= 1 << j;
-						console.log("AFTER: " + collisionMask);
-						console.log("1 shifted left by " + j);
-						console.log("OR'd with " + (1 << j));
+						//console.log("AFTER: " + collisionMask);
+						//console.log("1 shifted left by " + j);
+						//console.log("OR'd with " + (1 << j));
 					}
 				}
 
 				this.collisionMasks[i] = collisionMask;
 			}
 		}
-		console.log(options);
-		console.log(this.groupNames);
-		console.log(this.groupMap);
-		console.log(this.collisionMasks);
+		//console.log(options);
+		//console.log(this.groupNames);
+		//console.log(this.groupMap);
+		//console.log(this.collisionMasks);
 	}
 
 	// @override
@@ -279,11 +279,11 @@ export default class BasicPhysicsManager extends PhysicsManager {
 					//console.log(node.group);
 				}
 				if (overlap.other.group === 8) {
-					console.log("OUTSIDE");
-					console.log(overlap.other.isTrigger);
-					console.log(overlap.other.triggerMask & node.group);
-					console.log(overlap.other.triggerMask);
-					console.log(node.group);
+					//console.log("OUTSIDE");
+					//console.log(overlap.other.isTrigger);
+					//console.log(overlap.other.triggerMask & node.group);
+					//console.log(overlap.other.triggerMask);
+					//console.log(node.group);
 					//console.log(overlap.other.isTrigger);
 					//console.log(overlap.other.triggerMask);
 					//console.log(node.group);
@@ -294,11 +294,11 @@ export default class BasicPhysicsManager extends PhysicsManager {
 				if(overlap.other.isTrigger && (overlap.other.triggerMask & node.group)){
 					// Get the bit that this group is represented by
 					let index = Math.floor(Math.log2(node.group));
-					console.log(overlap.other.isTrigger);
-					console.log(overlap.other.triggerMask & node.group);
-					console.log(overlap.other.triggerMask);
-					console.log(node.group);
-					console.log("HERE");
+					//console.log(overlap.other.isTrigger);
+					//console.log(overlap.other.triggerMask & node.group);
+					//console.log(overlap.other.triggerMask);
+					//console.log(node.group);
+					//console.log("HERE");
 					// Extract the triggerEnter event name
 					this.emitter.fireEvent(overlap.other.triggerEnters[index], {
 						node: (<GameNode>node).id,
