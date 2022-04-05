@@ -83,9 +83,11 @@ export default class BasicPhysicsManager extends PhysicsManager {
 
 				let collisionMask = 0;
 
+
 				for(let j = 0; j < options.collisions[i].length; j++){
 					if(options.collisions[i][j]){
 						collisionMask |= 1 << j;
+
 					}
 				}
 
