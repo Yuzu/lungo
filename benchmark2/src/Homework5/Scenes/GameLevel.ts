@@ -287,7 +287,8 @@ export default class GameLevel extends Scene {
         //See main.ts for the controls
         if(this.shieldWallTimer.isStopped()){
             if(Input.isPressed("shield wall")){
-                this.emitter.fireEvent(HW5_Events.SHIELD_WALL, {shieldPosition: this.shield.position});
+                this.shieldJump = false;
+                this.emitter.fireEvent(HW5_Events.SHIELD_WALL);
                 this.shieldWallTimer.start();
             }
         }
