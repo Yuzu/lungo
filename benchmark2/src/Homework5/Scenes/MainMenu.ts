@@ -43,7 +43,7 @@ export default class MainMenu extends Scene {
         this.addParallaxLayer("bg", new Vec2(0.5, 1), -1);
         let bg = this.add.sprite("background", "splashScreen");
         bg.position.set(center.x, center.y);
-
+        
         const prompt = <Label>this.add.uiElement(UIElementType.LABEL, "splashScreen", {position: new Vec2(center.x, center.y+300), text: "Click Anywhere To Continue"});
         prompt.font = "Verdana";
         prompt.textColor = Color.WHITE;

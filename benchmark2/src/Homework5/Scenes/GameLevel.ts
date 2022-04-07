@@ -149,6 +149,7 @@ export default class GameLevel extends Scene {
 
                 if (this.pauseMenu.isHidden()) {
                     this.pauseMenu.setHidden(false);
+                    
                 }
 
                 this.enemyList.forEach((enemy) => {
@@ -436,19 +437,70 @@ export default class GameLevel extends Scene {
 
         const title = <Label>this.add.uiElement(UIElementType.LABEL, "pause", {position: new Vec2(center.x, center.y - 200), text: "Paused"});
         title.font = "Verdana";
-        title.textColor = Color.WHITE;
+        title.backgroundColor = Color.ORANGE;
+        title.borderColor = Color.WHITE;
+        title.borderRadius = 0;
+        title.textColor = Color.YELLOW;
+        title.alpha = 0.2;
         title.fontSize = 120;
 
-        // Add play button, and give it an event to emit on press
-        const resumeButton = <Button>this.add.uiElement(UIElementType.BUTTON, "pause", {position: new Vec2(center.x, center.y - 100), text: "Resume"});
+        // Add resume button, and give it an event to emit on press
+        const resumeButton = <Button>this.add.uiElement(UIElementType.BUTTON, "pause", {position: new Vec2(center.x, center.y - 125), text: "Resume"});
         resumeButton.backgroundColor = Color.ORANGE;
         resumeButton.borderColor = Color.WHITE;
         resumeButton.borderRadius = 0;
         resumeButton.setPadding(new Vec2(50, 10));
         resumeButton.font = "PixelSimple";
         resumeButton.textColor = Color.YELLOW;
-        resumeButton.onClickEventId = "levelSelect";
+        resumeButton.onClick = () => {
+            console.log("un-paused");
 
+            if (!this.pauseMenu.isHidden()) {
+                this.pauseMenu.setHidden(true);
+            }
+            this.enemyList.forEach((enemy) => {
+                enemy.unfreeze();
+                enemy.enablePhysics();
+                enemy.aiActive = true;
+            });
+
+            this.projectileList.forEach((projectile) => {
+                projectile.unfreeze();
+                projectile.enablePhysics();
+                projectile.aiActive = true;
+            });
+
+            this.shield.unfreeze();
+            this.shield.enablePhysics();
+            this.shield.aiActive = true;
+
+            this.player.unfreeze();
+            this.player.enablePhysics();
+            this.player.aiActive = true;
+
+            this.isPaused = false;
+        }
+        console.log(resumeButton);
+
+
+         // Add resume button, and give it an event to emit on press
+         const returnToMainMenuButton = <Button>this.add.uiElement(UIElementType.BUTTON, "pause", {position: new Vec2(center.x, center.y - 75), text: "Return to Main Menu"});
+         returnToMainMenuButton.backgroundColor = Color.ORANGE;
+         returnToMainMenuButton.borderColor = Color.WHITE;
+         returnToMainMenuButton.borderRadius = 0;
+         returnToMainMenuButton.setPadding(new Vec2(50, 10));
+         returnToMainMenuButton.font = "PixelSimple";
+         returnToMainMenuButton.textColor = Color.YELLOW;
+         returnToMainMenuButton.onClick = () => {
+            console.log("returning to main menu");
+            
+            if (!this.pauseMenu.isHidden()) {
+                this.pauseMenu.setHidden(true);
+            }
+            this.viewport.setZoomLevel(1);
+            this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
+            this.sceneManager.changeToScene(MainMenu, {});
+         }
 
         // Add a tween to move the label on screen
         this.levelEndLabel.tweens.add("slideIn", {
