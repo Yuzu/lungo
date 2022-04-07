@@ -89,6 +89,9 @@ export default class GameLevel extends Scene {
 
     protected pauseMenu: Layer;
 
+    protected levelTimer: number;
+    protected elapsedTime: number;
+
     startScene(): void {
         this.balloonsPopped = 0;
         this.switchesPressed = 0;
@@ -135,6 +138,14 @@ export default class GameLevel extends Scene {
         // Initially disable player movement
         Input.disableInput();
         this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.RED});
+
+        this.elapsedTime = 0;
+
+        this.levelTimer = setInterval(() => {
+            this.elapsedTime += 1;
+            this.switchLabel.text = "Time Elapsed: " + Math.floor(this.elapsedTime / 60) + ":" + ((this.elapsedTime % 60) < 10 ? "0" + (this.elapsedTime % 60) : this.elapsedTime % 60);
+        }, 1000);
+
     }
 
 
@@ -213,6 +224,7 @@ export default class GameLevel extends Scene {
                         // Hit a switch block, so update the label and count
                         this.switchesPressed++;
                         this.switchLabel.text = "Switches Left: " + (this.totalSwitches - this.switchesPressed)
+
                         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "switch", loop: false, holdReference: false});
                     }
                     break;
@@ -274,7 +286,7 @@ export default class GameLevel extends Scene {
                         
                         // An balloon collided with the player, destroy it and use the particle system
                         this.balloonsPopped++;
-                        this.balloonLabel.text = "Balloons Left: " + (this.totalBalloons - this.balloonsPopped);
+                        //this.balloonLabel.text = "Balloons Left: " + (this.totalBalloons - this.balloonsPopped);
                         let node = this.sceneGraph.getNode(event.data.get("owner"));
                         
                         node.destroy();
@@ -288,6 +300,33 @@ export default class GameLevel extends Scene {
                             // The player has reached the end of the level
                             this.levelEndTimer.start();
                             this.levelEndLabel.tweens.play("slideIn");
+                            
+
+                            // Everything about this feels so wrong... But it works...
+                            // We can also check localStorage for these completion times to determine whether a level has been completed or not.
+                            let currentLevelNum;
+                            if (this.nextLevel) {
+                                currentLevelNum = (parseInt(this.nextLevel.name.split("Level")[1]) - 1);
+                            }
+                            else {
+                                // this is the last level
+                                currentLevelNum = 6;
+                            }
+                            console.log("Completed Level" + currentLevelNum + " with " + this.elapsedTime + " seconds.");
+                            let currentBest = localStorage.getItem("level" + currentLevelNum + "_best");
+                            if (currentBest) {
+                                if (currentBest > this.elapsedTime.toString()) {
+                                    localStorage.setItem("level" + currentLevelNum + "_best", this.elapsedTime.toString());
+                                    console.log("New best time!");
+                                }
+                            }
+                            else {
+                                // best by default
+                                localStorage.setItem("level" + currentLevelNum + "_best", this.elapsedTime.toString());
+                                console.log("First clear!");
+                            }
+                            
+                            clearInterval(this.levelTimer);
                         }
                     }
                     break;
@@ -407,11 +446,11 @@ export default class GameLevel extends Scene {
      */
     protected addUI(){
         // In-game labels
-        this.balloonLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(80, 30), text: "Balloons Left: " + (this.totalBalloons - this.balloonsPopped)});
+        this.balloonLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(80, 30), text: "Current Best Time: N/A"});
         this.balloonLabel.textColor = Color.BLACK
         this.balloonLabel.font = "PixelSimple";
 
-        this.switchLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(80, 50), text: "Switches Left: " + (this.totalSwitches - this.switchesPressed)});
+        this.switchLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(80, 50), text: "Time Elapsed: " + this.elapsedTime / 60 + ":" + this.elapsedTime % 60});
         this.switchLabel.textColor = Color.BLACK;
         this.switchLabel.font = "PixelSimple";
 
@@ -493,7 +532,7 @@ export default class GameLevel extends Scene {
          returnToMainMenuButton.textColor = Color.YELLOW;
          returnToMainMenuButton.onClick = () => {
             console.log("returning to main menu");
-            
+            clearInterval(this.levelTimer);
             if (!this.pauseMenu.isHidden()) {
                 this.pauseMenu.setHidden(true);
             }
@@ -750,6 +789,7 @@ export default class GameLevel extends Scene {
      * Returns the player to spawn
      */
     protected respawnPlayer(): void {
+        clearInterval(this.levelTimer);
         GameLevel.livesCount = 3;
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
         this.sceneManager.changeToScene(MainMenu, {});

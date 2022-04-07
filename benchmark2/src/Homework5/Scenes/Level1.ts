@@ -88,6 +88,12 @@ export default class Level1 extends GameLevel {
         this.addEnemy("basicEnemy", new Vec2(29, 29), {});
 
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
+        
+        let currentBest = localStorage.getItem("level1_best");
+        if (currentBest) {
+            let currentBest_int = parseInt(currentBest);
+            this.balloonLabel.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
+        }
     }
 
     updateScene(deltaT: number): void {
