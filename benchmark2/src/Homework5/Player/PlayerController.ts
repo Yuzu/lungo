@@ -11,8 +11,9 @@ import Fall from "./PlayerStates/Fall";
 import Idle from "./PlayerStates/Idle";
 import InAir from "./PlayerStates/InAir";
 import Jump from "./PlayerStates/Jump";
-import Run from "./PlayerStates/Run";
+import Skate from "./PlayerStates/Skate";
 import Walk from "./PlayerStates/Walk";
+
 
 export enum PlayerType {
     PLATFORMER = "platformer",
@@ -22,7 +23,7 @@ export enum PlayerType {
 export enum PlayerStates {
     IDLE = "idle",
     WALK = "walk",
-	RUN = "run",
+	SKATE = "skate",
 	JUMP = "jump",
     FALL = "fall",
 	PREVIOUS = "previous"
@@ -36,6 +37,7 @@ export default class PlayerController extends StateMachineAI {
     MAX_SPEED: number = 300;
     tilemap: OrthogonalTilemap;
     suitColor: HW5_Color;
+    shield: GameNode;
 
     // HOMEWORK 5 - TODO
     /**
@@ -57,6 +59,8 @@ export default class PlayerController extends StateMachineAI {
         this.suitColor = options.color;
 
         this.receiver.subscribe(HW5_Events.SUIT_COLOR_CHANGE);
+
+        this.shield = undefined;
 
         owner.tweens.add("flip", {
             startDelay: 0,
@@ -99,14 +103,15 @@ export default class PlayerController extends StateMachineAI {
 		this.addState(PlayerStates.IDLE, idle);
 		let walk = new Walk(this, this.owner);
 		this.addState(PlayerStates.WALK, walk);
-		let run = new Run(this, this.owner);
-		this.addState(PlayerStates.RUN, run);
+		let skate = new Skate(this, this.owner);
+		this.addState(PlayerStates.SKATE, skate);
 		let jump = new Jump(this, this.owner);
         this.addState(PlayerStates.JUMP, jump);
         let fall = new Fall(this, this.owner);
         this.addState(PlayerStates.FALL, fall);
         
-        this.initialize(PlayerStates.IDLE);
+        this.initialize(PlayerStates.IDLE, {shield: this.shield});
+
     }
 
     changeState(stateName: string): void {
@@ -146,8 +151,8 @@ export default class PlayerController extends StateMachineAI {
 			Debug.log("playerstate", "Player State: Jump");
 		} else if (this.currentState instanceof Walk){
 			Debug.log("playerstate", "Player State: Walk");
-		} else if (this.currentState instanceof Run){
-			Debug.log("playerstate", "Player State: Run");
+		} else if (this.currentState instanceof Skate){
+			Debug.log("playerstate", "Player State: Skate");
 		} else if (this.currentState instanceof Idle){
 			Debug.log("playerstate", "Player State: Idle");
 		} else if(this.currentState instanceof Fall){

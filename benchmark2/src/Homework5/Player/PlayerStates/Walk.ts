@@ -31,8 +31,8 @@ export default class Walk extends OnGround {
 		if(dir.isZero()){
 			this.finished(PlayerStates.IDLE);
 		} else {
-			if(Input.isPressed("run")){
-				this.finished(PlayerStates.RUN);
+			if(Input.isPressed("skate")){
+				this.finished(PlayerStates.SKATE);
 			}
 		}
 

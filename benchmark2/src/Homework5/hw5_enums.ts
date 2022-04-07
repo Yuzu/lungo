@@ -16,7 +16,9 @@ export enum HW5_Events {
     ENEMY_KILLED = "EnemyKilled",
     ENEMY_AGGROS = "EnemyAggros",
     ENEMY_RESETS_AGGRO = "EnemyResetsAggro",
-    ENEMY_FIRES = "EnemyFires"
+    ENEMY_FIRES = "EnemyFires",
     SHIELD_TRAMPOLINE = "ShieldTrampoline",
-    SHIELD_TRAMPOLINE_JUMP = "ShieldTrampolineJump"
+    SHIELD_TRAMPOLINE_JUMP = "ShieldTrampolineJump",
+    GAME_PAUSED = "GamePaused",
+    GAME_UNPAUSED = "GameUnpaused"
 }

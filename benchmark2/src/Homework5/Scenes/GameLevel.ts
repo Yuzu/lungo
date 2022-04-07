@@ -24,6 +24,10 @@ import MainMenu from "./MainMenu";
 
 import BasicEnemyController from "../Enemies/BasicEnemy/BasicEnemyController";
 
+import Layer from "../../Wolfie2D/Scene/Layer";
+import Button from "../../Wolfie2D/Nodes/UIElements/Button";
+
+
 // HOMEWORK 5 - TODO
 /**
  * Add in some level music.
@@ -79,6 +83,12 @@ export default class GameLevel extends Scene {
     protected switchLabel: Label;
     protected switchesPressed: number;
 
+    protected isPaused: Boolean;
+    protected projectileList: Array<AnimatedSprite>;
+    protected enemyList: Array<AnimatedSprite>;
+
+    protected pauseMenu: Layer;
+
     startScene(): void {
         this.balloonsPopped = 0;
         this.switchesPressed = 0;
@@ -91,6 +101,9 @@ export default class GameLevel extends Scene {
         this.subscribeToEvents();
         this.addUI();
 
+        this.isPaused = false;
+        this.projectileList = [];
+        this.enemyList = [];
         // Initialize the timers
         this.respawnTimer = new Timer(1000, () => {
             if(GameLevel.livesCount === 0){
@@ -126,6 +139,69 @@ export default class GameLevel extends Scene {
 
 
     updateScene(deltaT: number){
+
+        
+        if (Input.isKeyJustPressed("escape")) {
+            
+            if (!this.isPaused) {
+                // pause
+                console.log("paused");
+
+                if (this.pauseMenu.isHidden()) {
+                    this.pauseMenu.setHidden(false);
+                }
+
+                this.enemyList.forEach((enemy) => {
+                    enemy.freeze();
+                    enemy.disablePhysics();
+                    enemy.aiActive = false;
+                });
+
+                this.projectileList.forEach((projectile) => {
+                    projectile.freeze();
+                    projectile.disablePhysics();
+                    projectile.aiActive = false;
+                });
+
+                this.shield.freeze();
+                this.shield.disablePhysics();
+                this.shield.aiActive = false;
+
+                this.player.freeze();
+                this.player.disablePhysics();
+                this.player.aiActive = false;
+            }
+            else {
+                // un-pause
+                console.log("un-paused");
+
+                if (!this.pauseMenu.isHidden()) {
+                    this.pauseMenu.setHidden(true);
+                }
+                this.enemyList.forEach((enemy) => {
+                    enemy.unfreeze();
+                    enemy.enablePhysics();
+                    enemy.aiActive = true;
+                });
+
+                this.projectileList.forEach((projectile) => {
+                    projectile.unfreeze();
+                    projectile.enablePhysics();
+                    projectile.aiActive = true;
+                });
+
+                this.shield.unfreeze();
+                this.shield.enablePhysics();
+                this.shield.aiActive = true;
+
+                this.player.unfreeze();
+                this.player.enablePhysics();
+                this.player.aiActive = true;
+            }
+
+            this.isPaused = !this.isPaused;
+        }
+
         // Handle events and update the UI if needed
         while(this.receiver.hasNextEvent()){
             let event = this.receiver.getNextEvent();
@@ -270,6 +346,7 @@ export default class GameLevel extends Scene {
                 this.suitChangeTimer.start();
             }
         }
+
         //Update our shield state by firing the event
         //See main.ts for the controls
         if(this.shieldWallTimer.isStopped()){
@@ -349,6 +426,29 @@ export default class GameLevel extends Scene {
         this.levelEndLabel.textColor = Color.WHITE;
         this.levelEndLabel.fontSize = 48;
         this.levelEndLabel.font = "PixelSimple";
+
+        const center = new Vec2(290, 350);
+
+
+        // Pause Menu
+        this.pauseMenu = this.addUILayer("pause");
+        this.pauseMenu.setHidden(true);
+
+        const title = <Label>this.add.uiElement(UIElementType.LABEL, "pause", {position: new Vec2(center.x, center.y - 200), text: "Paused"});
+        title.font = "Verdana";
+        title.textColor = Color.WHITE;
+        title.fontSize = 120;
+
+        // Add play button, and give it an event to emit on press
+        const resumeButton = <Button>this.add.uiElement(UIElementType.BUTTON, "pause", {position: new Vec2(center.x, center.y - 100), text: "Resume"});
+        resumeButton.backgroundColor = Color.ORANGE;
+        resumeButton.borderColor = Color.WHITE;
+        resumeButton.borderRadius = 0;
+        resumeButton.setPadding(new Vec2(50, 10));
+        resumeButton.font = "PixelSimple";
+        resumeButton.textColor = Color.YELLOW;
+        resumeButton.onClickEventId = "levelSelect";
+
 
         // Add a tween to move the label on screen
         this.levelEndLabel.tweens.add("slideIn", {
@@ -476,6 +576,8 @@ export default class GameLevel extends Scene {
         balloon.addAI(BalloonController, aiOptions);
         balloon.setGroup("balloon");
         balloon.setTrigger("player", HW5_Events.PLAYER_HIT_BALLOON, null);
+
+        this.projectileList.push(balloon);
     }
 
     protected addEnemy(spriteKey: string, tilePos: Vec2, aiOptions: Record<string, any>): void {
@@ -486,6 +588,8 @@ export default class GameLevel extends Scene {
         enemy.unfreeze();
         enemy.addAI(BasicEnemyController, aiOptions);
         enemy.setGroup("enemy");
+
+        this.enemyList.push(enemy);
     }
     // HOMEWORK 5 - TODO
     /**

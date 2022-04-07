@@ -4,11 +4,13 @@ import { HW5_Color } from "../../hw5_color";
 import { HW5_Events } from "../../hw5_enums";
 import { PlayerStates } from "../PlayerController";
 import OnGround from "./OnGround";
+import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 
-export default class Run extends OnGround {
+export default class Skate extends OnGround {
 	owner: AnimatedSprite;
 
 	onEnter(options: Record<string, any>): void {
+		console.log(options);
 		this.parent.speed = this.parent.MAX_SPEED;
 	}
 
@@ -26,16 +28,17 @@ export default class Run extends OnGround {
 
 	update(deltaT: number): void {
 		super.update(deltaT);
-
+		return;
 		let dir = this.getInputDirection();
 
 		if(dir.isZero()){
 			this.finished(PlayerStates.IDLE);
 		} else {
-			if(!Input.isPressed("run")){
+			if(!Input.isPressed("skate")){
 				this.finished(PlayerStates.WALK);
 			}
 		}
+
 
 		this.parent.velocity.x = dir.x * this.parent.speed
 

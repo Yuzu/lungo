@@ -30,8 +30,8 @@ export default class Idle extends OnGround {
 		let dir = this.getInputDirection();
 
 		if(!dir.isZero() && dir.y === 0){
-			if(Input.isPressed("run")){
-				this.finished(PlayerStates.RUN);
+			if(Input.isPressed("skate")){
+				this.finished(PlayerStates.SKATE);
 			} else {
 				this.finished(PlayerStates.WALK);
 			}

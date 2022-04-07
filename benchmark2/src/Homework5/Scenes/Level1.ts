@@ -16,7 +16,6 @@ export default class Level1 extends GameLevel {
         this.load.tilemap("level1", "hw5_assets/tilemaps/level1.json");
         this.load.spritesheet("player", "hw5_assets/spritesheets/spike.json");
         this.load.spritesheet("shield", "hw5_assets/spritesheets/shield.json");
-        console.log(this.load.getSpritesheet("shield"));
         this.load.spritesheet("red", "hw5_assets/spritesheets/redBalloon.json");
         this.load.spritesheet("blue", "hw5_assets/spritesheets/blueBalloon.json");
         this.load.spritesheet("basicEnemy", "hw5_assets/spritesheets/basicEnemy.json");
