@@ -173,22 +173,7 @@ export default class GameLevel extends Scene {
                         this.balloonsPopped++;
                         this.balloonLabel.text = "Balloons Left: " + (this.totalBalloons - this.balloonsPopped);
                         let node = this.sceneGraph.getNode(event.data.get("owner"));
-
-                        // Set mass based on color
-                        let particleMass = 0;
-                        if ((<BalloonController>node._ai).color == HW5_Color.RED) {
-                            particleMass = 1;
-                            this.system.changeColor(new Color(255, 0, 0));
-                        }
-                        else if ((<BalloonController>node._ai).color == HW5_Color.GREEN) {
-                            particleMass = 2;
-                            this.system.changeColor(new Color(0, 255, 0));
-                        }
-                        else {
-                            particleMass = 3;
-                            this.system.changeColor(new Color(0, 0, 255));
-                        }
-                        this.system.startSystem(2000, particleMass, node.position.clone());
+                        
                         node.destroy();
                     }
                     break;
