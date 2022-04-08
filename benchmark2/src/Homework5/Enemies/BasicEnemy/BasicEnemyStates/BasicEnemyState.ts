@@ -21,9 +21,10 @@ export default abstract class BasicEnemyState extends State {
         this.canFire = true;
 	}
 	update(deltaT: number): void {
-
+		//console.log(this.canFire);
 		if (this.firingTimer.hasRun() && !this.canFire){
 			this.canFire = true;
+			this.firingTimer.reset();
 		}
 		this.parent.velocity.y += this.gravity*deltaT;
 	}

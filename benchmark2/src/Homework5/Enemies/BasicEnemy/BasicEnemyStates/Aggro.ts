@@ -8,7 +8,7 @@ import OrthogonalTilemap from "../../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTil
 import Vec2 from "../../../../Wolfie2D/DataTypes/Vec2";
 import AABB from "../../../../Wolfie2D/DataTypes/Shapes/AABB";
 
-export default class Idle extends BasicEnemyState {
+export default class Aggro extends BasicEnemyState {
     owner: AnimatedSprite;
 
     onEnter(options: Record<string, any>): void {}
@@ -16,6 +16,14 @@ export default class Idle extends BasicEnemyState {
 	update(deltaT: number): void {
 		super.update(deltaT);
 
+        //check to see if the enemy is able to fire
+        //console.log(this.firingTimer);
+        if(this.canFire){
+            this.emitter.fireEvent(HW5_Events.ENEMY_FIRES, {position: this.owner.position});
+            console.log("pew pew");
+            this.canFire = false;
+            this.firingTimer.start();
+        }
         this.parent.velocity.x = 0;
 
 		this.owner.move(this.parent.velocity.scaled(deltaT));
@@ -57,18 +65,14 @@ export default class Idle extends BasicEnemyState {
     
                         if (hit !== null && selfPos.distanceSqTo(hit.pos) < selfPos.distanceSqTo(enemyPos)) {
                             // We hit a wall, we can't see the player
-                            console.log("I don't see you :(");
-                            return;
+                            console.log("I don't see you :( (in aggro)");
+                            this.finished(BasicEnemyStates.IDLE);
                         }
                     }
                 }
             }
-            console.log("I SEE YOU");
-            //change state to aggro state
-            this.finished(BasicEnemyStates.AGGRO);
-            console.log(this.owner);
-
-
+            console.log("I SEE YOU (in aggro)");
+            return;
         }
 	}
 

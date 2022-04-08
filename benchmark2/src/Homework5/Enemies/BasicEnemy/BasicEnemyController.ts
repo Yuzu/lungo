@@ -11,7 +11,7 @@ import Idle from "./BasicEnemyStates/Idle";
 export enum BasicEnemyStates {
     IDLE = "idle",
     PATROL = "patrol",
-    FIRING = "firing"
+    AGGRO = "aggro"
 }
 
 export default class BasicEnemyController extends StateMachineAI {
