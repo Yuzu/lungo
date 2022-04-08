@@ -3,7 +3,7 @@ import AnimatedSprite from "../../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import { BasicEnemyStates } from "../BasicEnemyController";
 import BasicEnemyState from "./BasicEnemyState";
 import GameEvent from "../../../../Wolfie2D/Events/GameEvent";
-import { HW5_Events } from "../../../hw5_enums";
+import { Lungo_Events } from "../../../Lungo_enums";
 import OrthogonalTilemap from "../../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import Vec2 from "../../../../Wolfie2D/DataTypes/Vec2";
 import AABB from "../../../../Wolfie2D/DataTypes/Shapes/AABB";
@@ -23,7 +23,7 @@ export default class Aggro extends BasicEnemyState {
 	}
 
     handleInput(event: GameEvent): void {
-        if (event.type == HW5_Events.PLAYER_MOVE) {
+        if (event.type == Lungo_Events.PLAYER_MOVE) {
             // Determine if the enemy has a line of sight to the player, and if so, start shooting.
             let selfPos = this.owner.position;
             let enemyPos = event.data.get("position");
@@ -70,7 +70,7 @@ export default class Aggro extends BasicEnemyState {
             if(this.canFire){
                 // determine the velocity and direction this bullet needs to go to hit the player.
                 console.log(selfPos);
-                this.emitter.fireEvent(HW5_Events.ENEMY_FIRES,
+                this.emitter.fireEvent(Lungo_Events.ENEMY_FIRES,
                                     {
                                     selfPos: new Vec2(selfPos.x, selfPos.y), 
                                     enemyPos: new Vec2(enemyPos.x, enemyPos.y),

@@ -4,8 +4,8 @@ import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import GameNode from "../../../Wolfie2D/Nodes/GameNode";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import MathUtils from "../../../Wolfie2D/Utils/MathUtils";
-import { HW5_Color } from "../../hw5_color";
-import { HW5_Events } from "../../hw5_enums";
+import { Lungo_Color } from "../../Lungo_color";
+import { Lungo_Events } from "../../Lungo_enums";
 import BalloonController, { BalloonStates } from "./BalloonController";
 
 export default abstract class BalloonState extends State {
@@ -19,13 +19,9 @@ export default abstract class BalloonState extends State {
 		this.owner = owner;
 	}
 
-	/**
-	 * Here is where the states are defined for handling balloon gravity effects. We recieve a player suit change event 
-	 * and adjust the balloon gravity effects accordingly based on its color
-	 */
 	handleInput(event: GameEvent): void {
 
-		if (event.type == HW5_Events.PLAYER_MOVE) {
+		if (event.type == Lungo_Events.PLAYER_MOVE) {
 			if (this.parent.reversed) {
 				let pos = event.data.get("position");
 				let dx = Math.pow(this.owner.position.x - pos.x, 2);

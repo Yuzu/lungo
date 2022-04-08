@@ -5,8 +5,8 @@ import GameNode, { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import { HW5_Color } from "../hw5_color";
-import { HW5_Events } from "../hw5_enums";
+import { Lungo_Color } from "../Lungo_color";
+import { Lungo_Events } from "../Lungo_enums";
 import Idle from "./ShieldStates/Idle";
 import ShieldTrampoline from "./ShieldStates/ShieldTrampoline";
 import ShieldWall from "./ShieldStates/ShieldWall";
@@ -17,7 +17,7 @@ export enum ShieldStates {
     IDLE = "idle",
     ROPE = "rope",
     BASH = "bash",
-	SHIELD_WALL = "ShieldWall", //Must be the same as HW5 events enum
+	SHIELD_WALL = "ShieldWall", //Must be the same as Lungo events enum
     FRISBEE = "frisbee",
     SHIELD_TRAMPOLINE="ShieldTrampoline"
 }
@@ -35,8 +35,8 @@ export default class ShieldController extends StateMachineAI {
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         //Subscribe to our shield moves so we can update the state
-        this.receiver.subscribe(HW5_Events.SHIELD_WALL);
-        this.receiver.subscribe(HW5_Events.SHIELD_TRAMPOLINE);
+        this.receiver.subscribe(Lungo_Events.SHIELD_WALL);
+        this.receiver.subscribe(Lungo_Events.SHIELD_TRAMPOLINE);
 
         this.player = options.player;
         this.initializePlatformer();

@@ -5,7 +5,7 @@ import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import Input from "../../../Wolfie2D/Input/Input";
 import GameNode from "../../../Wolfie2D/Nodes/GameNode";
 import Timer from "../../../Wolfie2D/Timing/Timer";
-import { HW5_Events } from "../../hw5_enums";
+import { Lungo_Events } from "../../Lungo_enums";
 import PlayerController from "../PlayerController";
 
 
@@ -35,15 +35,11 @@ export default abstract class PlayerState extends State {
 		return direction;
 	}
 
-	updateAnimation() {
-
-	}
 
 	update(deltaT: number): void {
 		// Do gravity
-		this.updateAnimation();
 		if (this.positionTimer.isStopped()){
-			this.emitter.fireEvent(HW5_Events.PLAYER_MOVE, {position: this.owner.position.clone()});
+			this.emitter.fireEvent(Lungo_Events.PLAYER_MOVE, {position: this.owner.position.clone()});
 			this.positionTimer.start();
 		}
 		this.parent.velocity.y += this.gravity*deltaT;

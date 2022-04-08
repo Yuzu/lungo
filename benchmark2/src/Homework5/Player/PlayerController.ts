@@ -5,8 +5,8 @@ import GameNode, { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import { HW5_Color } from "../hw5_color";
-import { HW5_Events } from "../hw5_enums";
+import { Lungo_Color } from "../Lungo_color";
+import { Lungo_Events } from "../Lungo_enums";
 import Fall from "./PlayerStates/Fall";
 import Idle from "./PlayerStates/Idle";
 import InAir from "./PlayerStates/InAir";
@@ -64,7 +64,7 @@ export default class PlayerController extends StateMachineAI {
         owner.tweens.add("death", {
             startDelay: 0,
             duration: 3000,
-            onEnd: HW5_Events.PLAYER_KILLED,
+            onEnd: Lungo_Events.PLAYER_KILLED,
             effects: [
                 {
                     property: "rotation",
@@ -130,7 +130,7 @@ export default class PlayerController extends StateMachineAI {
             //     let tileLocation = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + 32));
             //     this.tilemap.setTileAtRowCol(tileLocation, 9);
 
-            //     this.emitter.fireEvent(HW5_Events.PLAYER_HIT_SWITCH);
+            //     this.emitter.fireEvent(Lungo_Events.PLAYER_HIT_SWITCH);
             // }
         }
 		if(this.currentState instanceof Jump){

@@ -6,7 +6,7 @@ import Receiver from "../../../Wolfie2D/Events/Receiver";
 import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import MathUtils from "../../../Wolfie2D/Utils/MathUtils";
-import { HW5_Events } from "../../hw5_enums";
+import { Lungo_Events } from "../../Lungo_enums";
 import GameNode from "../../../Wolfie2D/Nodes/GameNode";
 
 /**

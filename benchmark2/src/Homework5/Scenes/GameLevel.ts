@@ -15,9 +15,9 @@ import Timer from "../../Wolfie2D/Timing/Timer";
 import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import BalloonController from "../Enemies/Balloons/BalloonController";
-import { HW5_Color } from "../hw5_color";
-import { HW5_Events } from "../hw5_enums";
-import HW5_ParticleSystem from "../HW5_ParticleSystem";
+import { Lungo_Color } from "../Lungo_color";
+import { Lungo_Events } from "../Lungo_enums";
+import Lungo_ParticleSystem from "../Lungo_ParticleSystem";
 import PlayerController from "../Player/PlayerController";
 import ShieldController from "../Player/ShieldController";
 import MainMenu from "./MainMenu";
@@ -62,7 +62,7 @@ export default class GameLevel extends Scene {
     protected levelTransitionScreen: Rect;
     
     // Custom particle sysyem
-    protected system: HW5_ParticleSystem;
+    protected system: Lungo_ParticleSystem;
 
 
     //Timers for new shield events
@@ -223,7 +223,7 @@ export default class GameLevel extends Scene {
             let event = this.receiver.getNextEvent();
             
             switch(event.type){
-                case HW5_Events.PLAYER_HIT_SWITCH:
+                case Lungo_Events.PLAYER_HIT_SWITCH:
                     {
                         // Hit a switch block, so update the label and count
                         this.switchesPressed++;
@@ -233,7 +233,7 @@ export default class GameLevel extends Scene {
                     }
                     break;
 
-                case HW5_Events.PLAYER_HIT_BALLOON:
+                case Lungo_Events.PLAYER_HIT_BALLOON:
                     {   
                         console.log("PLAYER HIT");
                         let node = this.sceneGraph.getNode(event.data.get("node"));
@@ -250,7 +250,7 @@ export default class GameLevel extends Scene {
                     }
                     break;
 
-                case HW5_Events.SHIELD_HIT:
+                case Lungo_Events.SHIELD_HIT:
                     {
                         console.log("SHIELD HIT");
                         let node = this.sceneGraph.getNode(event.data.get("node"));
@@ -266,7 +266,7 @@ export default class GameLevel extends Scene {
                         }
                     }
                     break;
-                case HW5_Events.SHIELD_TRAMPOLINE_JUMP:
+                case Lungo_Events.SHIELD_TRAMPOLINE_JUMP:
                 {
                     console.log("SHIELD TRAMPOLINE JUMP");
                     let node = this.sceneGraph.getNode(event.data.get("node"));
@@ -284,7 +284,7 @@ export default class GameLevel extends Scene {
                 }
                 break;
 
-                case HW5_Events.BALLOON_POPPED:
+                case Lungo_Events.BALLOON_POPPED:
                     {
                         
                         
@@ -296,7 +296,7 @@ export default class GameLevel extends Scene {
                     }
                     break;
                     
-                case HW5_Events.PLAYER_ENTERED_LEVEL_END:
+                case Lungo_Events.PLAYER_ENTERED_LEVEL_END:
                     {
                         //Check if the number of enemies is 0
                         if(!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()){
@@ -334,14 +334,14 @@ export default class GameLevel extends Scene {
                     }
                     break;
 
-                case HW5_Events.LEVEL_START:
+                case Lungo_Events.LEVEL_START:
                     {
                         // Re-enable controls
                         Input.enableInput();
                     }
                     break;
                 
-                case HW5_Events.LEVEL_END:
+                case Lungo_Events.LEVEL_END:
                     {
                         // Go to the next level
                         if(this.nextLevel){
@@ -361,12 +361,12 @@ export default class GameLevel extends Scene {
                         }
                     }
                     break;
-                case HW5_Events.PLAYER_KILLED:
+                case Lungo_Events.PLAYER_KILLED:
                     {
                         this.respawnPlayer();
                     }
                     break;
-                case HW5_Events.ENEMY_FIRES:
+                case Lungo_Events.ENEMY_FIRES:
                     {
                         let selfPos = event.data.get("selfPos");
                         let enemyPos = event.data.get("enemyPos");
@@ -383,13 +383,13 @@ export default class GameLevel extends Scene {
         if(this.shieldWallTimer.isStopped()){
             if(Input.isPressed("shield wall")){
                 this.shieldJump = false;
-                this.emitter.fireEvent(HW5_Events.SHIELD_WALL);
+                this.emitter.fireEvent(Lungo_Events.SHIELD_WALL);
                 this.shieldWallTimer.start();
             }
         }
         if(this.shieldTrampolineTimer.isStopped()){
             if(Input.isPressed("shield trampoline")){
-                this.emitter.fireEvent(HW5_Events.SHIELD_TRAMPOLINE);
+                this.emitter.fireEvent(Lungo_Events.SHIELD_TRAMPOLINE);
                 this.shieldTrampolineTimer.start();
                 this.shieldJump = true;
             }
@@ -420,16 +420,16 @@ export default class GameLevel extends Scene {
      */
     protected subscribeToEvents(){
         this.receiver.subscribe([
-            HW5_Events.PLAYER_HIT_SWITCH,
-            HW5_Events.PLAYER_HIT_BALLOON,
-            HW5_Events.BALLOON_POPPED,
-            HW5_Events.PLAYER_ENTERED_LEVEL_END,
-            HW5_Events.LEVEL_START,
-            HW5_Events.LEVEL_END,
-            HW5_Events.PLAYER_KILLED,
-            HW5_Events.SHIELD_HIT,
-            HW5_Events.SHIELD_TRAMPOLINE_JUMP,
-            HW5_Events.ENEMY_FIRES
+            Lungo_Events.PLAYER_HIT_SWITCH,
+            Lungo_Events.PLAYER_HIT_BALLOON,
+            Lungo_Events.BALLOON_POPPED,
+            Lungo_Events.PLAYER_ENTERED_LEVEL_END,
+            Lungo_Events.LEVEL_START,
+            Lungo_Events.LEVEL_END,
+            Lungo_Events.PLAYER_KILLED,
+            Lungo_Events.SHIELD_HIT,
+            Lungo_Events.SHIELD_TRAMPOLINE_JUMP,
+            Lungo_Events.ENEMY_FIRES
         ]);
     }
 
@@ -560,7 +560,7 @@ export default class GameLevel extends Scene {
         });
 
         // Create our particle system and initialize the pool
-        this.system = new HW5_ParticleSystem(100, new Vec2((5 * 32), (10 * 32)), 2000, 3, 1, 100);
+        this.system = new Lungo_ParticleSystem(100, new Vec2((5 * 32), (10 * 32)), 2000, 3, 1, 100);
         this.system.initializePool(this, "primary");
 
         this.levelTransitionScreen = <Rect>this.add.graphic(GraphicType.RECT, "UI", {position: new Vec2(300, 200), size: new Vec2(600, 400)});
@@ -578,7 +578,7 @@ export default class GameLevel extends Scene {
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
             ],
-            onEnd: HW5_Events.LEVEL_END
+            onEnd: Lungo_Events.LEVEL_END
         });
 
         this.levelTransitionScreen.tweens.add("fadeOut", {
@@ -592,7 +592,7 @@ export default class GameLevel extends Scene {
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
             ],
-            onEnd: HW5_Events.LEVEL_START
+            onEnd: Lungo_Events.LEVEL_START
         });
     }
 
@@ -610,7 +610,7 @@ export default class GameLevel extends Scene {
         this.player.position.copy(this.playerSpawn);
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(14, 14)));
         this.player.colliderOffset.set(0, 2);
-        this.player.addAI(PlayerController, {playerType: "platformer", tilemap: "Main", color: HW5_Color.RED});
+        this.player.addAI(PlayerController, {playerType: "platformer", tilemap: "Main", color: Lungo_Color.RED});
 
         this.player.setGroup("player");
 
@@ -634,8 +634,8 @@ export default class GameLevel extends Scene {
         this.shield.addAI(ShieldController, {playerType: "platformer", tilemap: "Main", player: this.player});
 
         this.shield.setGroup("shield");
-        this.shield.setTrigger("balloon", HW5_Events.SHIELD_HIT, null);
-        this.shield.setTrigger("player", HW5_Events.SHIELD_TRAMPOLINE_JUMP, null);
+        this.shield.setTrigger("balloon", Lungo_Events.SHIELD_HIT, null);
+        this.shield.setTrigger("player", Lungo_Events.SHIELD_TRAMPOLINE_JUMP, null);
     }
 
     /**
@@ -646,7 +646,7 @@ export default class GameLevel extends Scene {
         console.log(size);
         this.levelEndArea = <Rect>this.add.graphic(GraphicType.RECT, "primary", {position: startingTile.scale(32), size: size.scale(32)});
         this.levelEndArea.addPhysics(undefined, undefined, false, true);
-        this.levelEndArea.setTrigger("player", HW5_Events.PLAYER_ENTERED_LEVEL_END, null);
+        this.levelEndArea.setTrigger("player", Lungo_Events.PLAYER_ENTERED_LEVEL_END, null);
         this.levelEndArea.color = new Color(0, 0, 0, 0);
     }
 
@@ -670,7 +670,7 @@ export default class GameLevel extends Scene {
         balloon.addPhysics();
         balloon.addAI(BalloonController, aiOptions);
         balloon.setGroup("balloon");
-        balloon.setTrigger("player", HW5_Events.PLAYER_HIT_BALLOON, null);
+        balloon.setTrigger("player", Lungo_Events.PLAYER_HIT_BALLOON, null);
 
         this.projectileList.push(balloon);
     }
@@ -710,7 +710,7 @@ export default class GameLevel extends Scene {
         this.incPlayerLife(-1);
 
         //Pop the balloon
-        this.emitter.fireEvent(HW5_Events.BALLOON_POPPED, {owner: balloon.id}); 
+        this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
     }
 
     protected handleShieldBalloonCollision(shield: AnimatedSprite, balloon: AnimatedSprite) {
@@ -754,7 +754,7 @@ export default class GameLevel extends Scene {
         }
         playerAI.velocity = new Vec2(playerAI.velocity.x, -600);
         //This will revert us back to the idle state
-        this.emitter.fireEvent(HW5_Events.SHIELD_TRAMPOLINE); 
+        this.emitter.fireEvent(Lungo_Events.SHIELD_TRAMPOLINE); 
 
     }
     

@@ -1,8 +1,8 @@
 import GameNode from "../../../Wolfie2D/Nodes/GameNode";
 import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 import StateMachineAI from "../../../Wolfie2D/AI/StateMachineAI";
-import { HW5_Events } from "../../hw5_enums";
-import { HW5_Color } from "../../hw5_color";
+import { Lungo_Events } from "../../Lungo_enums";
+import { Lungo_Color } from "../../Lungo_color";
 import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Debug from "../../../Wolfie2D/Debug/Debug";
@@ -22,7 +22,6 @@ export default class BasicEnemyController extends StateMachineAI {
 	MIN_SPEED: number = 200;
     MAX_SPEED: number = 300;
     tilemap: OrthogonalTilemap;
-    suitColor: HW5_Color;
 
     firingCooldown: number;
     projectileStartSpeed: number;
@@ -34,7 +33,7 @@ export default class BasicEnemyController extends StateMachineAI {
         this.initializePlatformer();
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
-        this.receiver.subscribe(HW5_Events.PLAYER_MOVE);
+        this.receiver.subscribe(Lungo_Events.PLAYER_MOVE);
         
         this.firingCooldown = options.firingCooldown;
         this.projectileStartSpeed = options.projectileStartSpeed;
@@ -43,7 +42,7 @@ export default class BasicEnemyController extends StateMachineAI {
         owner.tweens.add("death", {
             startDelay: 0,
             duration: 3000,
-            onEnd: HW5_Events.PLAYER_KILLED,
+            onEnd: Lungo_Events.PLAYER_KILLED,
             effects: [
                 {
                     property: "rotation",

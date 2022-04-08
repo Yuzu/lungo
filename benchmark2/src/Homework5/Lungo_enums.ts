@@ -1,4 +1,4 @@
-export enum HW5_Events {
+export enum Lungo_Events {
     PLAYER_MOVE = "PlayerMove",
     PLAYER_JUMP = "PlayerJump",
     PLAYER_HIT_SWITCH = "PlayerHitSwitch",

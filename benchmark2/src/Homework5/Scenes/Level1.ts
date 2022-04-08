@@ -1,7 +1,7 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Debug from "../../Wolfie2D/Debug/Debug";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import { HW5_Color } from "../hw5_color";
+import { Lungo_Color } from "../Lungo_color";
 import GameLevel from "./GameLevel";
 import Level2 from "./Level2";
 
@@ -15,19 +15,19 @@ export default class Level1 extends GameLevel {
      */
     loadScene(): void {
         // Load resources
-        this.load.tilemap("level1", "hw5_assets/tilemaps/level1.json");
-        this.load.spritesheet("player", "hw5_assets/spritesheets/lungo.json");
-        this.load.spritesheet("shield", "hw5_assets/spritesheets/shield.json");
-        this.load.spritesheet("red", "hw5_assets/spritesheets/redBalloon.json");
-        this.load.spritesheet("blue", "hw5_assets/spritesheets/blueBalloon.json");
-        this.load.spritesheet("basicEnemy", "hw5_assets/spritesheets/basicEnemy.json");
-        this.load.audio("jump", "hw5_assets/sounds/jump.wav");
-        this.load.audio("switch", "hw5_assets/sounds/switch.wav");
-        this.load.audio("player_death", "hw5_assets/sounds/player_death.wav");
-        this.load.audio("pop", "hw5_assets/sounds/pop.wav")
+        this.load.tilemap("level1", "lungo_assets/tilemaps/level1.json");
+        this.load.spritesheet("player", "lungo_assets/spritesheets/lungo.json");
+        this.load.spritesheet("shield", "lungo_assets/spritesheets/shield.json");
+        this.load.spritesheet("red", "lungo_assets/spritesheets/redBalloon.json");
+        this.load.spritesheet("blue", "lungo_assets/spritesheets/blueBalloon.json");
+        this.load.spritesheet("basicEnemy", "lungo_assets/spritesheets/basicEnemy.json");
+        this.load.audio("jump", "lungo_assets/sounds/jump.wav");
+        this.load.audio("switch", "lungo_assets/sounds/switch.wav");
+        this.load.audio("player_death", "lungo_assets/sounds/player_death.wav");
+        this.load.audio("pop", "lungo_assets/sounds/pop.wav")
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
-        this.load.audio("level_music", "hw5_assets/music/menu.mp3");
+        this.load.audio("level_music", "lungo_assets/music/menu.mp3");
 
     }
 
@@ -78,11 +78,11 @@ export default class Level1 extends GameLevel {
 
         // Add balloons of various types, just red and blue for the first level
         for(let pos of [new Vec2(18, 8), new Vec2(25, 3), new Vec2(52, 5)]){
-            this.addBalloon("red", pos, {color: HW5_Color.RED});
+            this.addBalloon("red", pos, {color: Lungo_Color.RED});
         }
 
         for(let pos of [new Vec2(20, 3), new Vec2(41,4), new Vec2(3, 4)]){
-            this.addBalloon("blue", pos, {color: HW5_Color.BLUE});
+            this.addBalloon("red", pos, {color: Lungo_Color.RED});
         }
 
         // Add enemies

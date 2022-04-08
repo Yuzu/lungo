@@ -4,7 +4,7 @@ import Vec2 from "../../../../Wolfie2D/DataTypes/Vec2";
 import GameEvent from "../../../../Wolfie2D/Events/GameEvent";
 import GameNode from "../../../../Wolfie2D/Nodes/GameNode";
 import Timer from "../../../../Wolfie2D/Timing/Timer";
-import { HW5_Events } from "../../../hw5_enums";
+import { Lungo_Events } from "../../../Lungo_enums";
 import BasicEnemyController from "../BasicEnemyController";
 
 export default abstract class BasicEnemyState extends State {

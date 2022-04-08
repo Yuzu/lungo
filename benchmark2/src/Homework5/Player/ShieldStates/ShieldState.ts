@@ -5,7 +5,7 @@ import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import Input from "../../../Wolfie2D/Input/Input";
 import GameNode from "../../../Wolfie2D/Nodes/GameNode";
 import Timer from "../../../Wolfie2D/Timing/Timer";
-import { HW5_Events } from "../../hw5_enums";
+import { Lungo_Events } from "../../Lungo_enums";
 import ShieldController from "../ShieldController";
 
 
@@ -20,11 +20,11 @@ export default abstract class ShieldState extends State {
 	}
 
 	handleInput(event: GameEvent): void {
-		if (event.type == HW5_Events.SHIELD_WALL) {
+		if (event.type == Lungo_Events.SHIELD_WALL) {
 			console.log("Shield wall activated! Updating state.");
 			this.finished(event.type);
 		}
-		else if (event.type == HW5_Events.SHIELD_TRAMPOLINE) {
+		else if (event.type == Lungo_Events.SHIELD_TRAMPOLINE) {
 			console.log("Shield wall activated! Updating state.");
 			this.finished(event.type);
 		}
