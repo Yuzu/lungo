@@ -10,7 +10,6 @@ import { HW5_Events } from "../hw5_enums";
 import Idle from "./ShieldStates/Idle";
 import ShieldTrampoline from "./ShieldStates/ShieldTrampoline";
 import ShieldWall from "./ShieldStates/ShieldWall";
-import ShieldSkateboard from "./ShieldStates/ShieldSkateboard";
 import Input from "../../Wolfie2D/Input/Input";
 
 //Subject to change
@@ -19,7 +18,6 @@ export enum ShieldStates {
     ROPE = "rope",
     BASH = "bash",
 	SHIELD_WALL = "ShieldWall", //Must be the same as HW5 events enum
-	SKATEBOARD = "skateboard",
     FRISBEE = "frisbee",
     SHIELD_TRAMPOLINE="ShieldTrampoline"
 }
@@ -27,7 +25,6 @@ export enum ShieldStates {
 export default class ShieldController extends StateMachineAI {
     protected owner: GameNode;
     tilemap: OrthogonalTilemap;
-    suitColor: HW5_Color;
     player:GameNode;
     state:string;
 
@@ -54,8 +51,6 @@ export default class ShieldController extends StateMachineAI {
         this.addState(ShieldStates.SHIELD_WALL, shieldWall);
         let shieldTrampoline = new ShieldTrampoline(this, this.owner);
         this.addState(ShieldStates.SHIELD_TRAMPOLINE, shieldTrampoline);
-        let shieldSkateboard = new ShieldSkateboard(this, this.owner);
-        this.addState(ShieldStates.SKATEBOARD, shieldSkateboard);
 
         this.initialize(ShieldStates.IDLE, {player: this.player});
     }
@@ -84,10 +79,6 @@ export default class ShieldController extends StateMachineAI {
     update(deltaT: number): void {
 		super.update(deltaT);
         //console.log(this.player.position);
-
-        if(Input.isPressed("skate")){
-            this.initialize(ShieldStates.SKATEBOARD, {player: this.player});
-        }
 
 		if(this.currentState instanceof Idle){
 			Debug.log("shieldstate", "Shield State: IDLE");

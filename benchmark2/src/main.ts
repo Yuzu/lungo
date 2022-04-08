@@ -14,7 +14,7 @@ import MainMenu from "./Homework5/Scenes/MainMenu";
             {name: "left", keys: ["a"]},
             {name: "right", keys: ["d"]},
             {name: "jump", keys: ["w", "space"]},
-            {name: "skate", keys: ["shift"]},
+            {name: "run", keys: ["shift"]},
             {name: "shield wall", keys: ["t"]},
             {name: "shield trampoline", keys: ["f"]}
         ],

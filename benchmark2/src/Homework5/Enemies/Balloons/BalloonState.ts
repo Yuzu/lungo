@@ -24,35 +24,8 @@ export default abstract class BalloonState extends State {
 	 * and adjust the balloon gravity effects accordingly based on its color
 	 */
 	handleInput(event: GameEvent): void {
-		if (event.type == HW5_Events.SUIT_COLOR_CHANGE) {
-			
-			let new_color = event.data.get("color");
-			if (this.parent.color == new_color){
-				this.finished(BalloonStates.SINKING);
-			}
-			else {
-				if (this.parent.color == HW5_Color.RED) {
-					if (new_color == HW5_Color.BLUE) {
-						this.finished(BalloonStates.ZEROGRAVITY);
-					} else {
-						this.finished(BalloonStates.RISING);
-					}
-				} else if (this.parent.color == HW5_Color.BLUE) {
-					if (new_color == HW5_Color.RED) {
-						this.finished(BalloonStates.ZEROGRAVITY);
-					} else {
-						this.finished(BalloonStates.RISING);
-					}
-				} else if (this.parent.color == HW5_Color.GREEN) {
-					if (new_color == HW5_Color.RED) {
-						this.finished(BalloonStates.RISING);
-					} else {
-						this.finished(BalloonStates.ZEROGRAVITY);
-					}
-				} 
-			}
-		}
-		else if (event.type == HW5_Events.PLAYER_MOVE) {
+
+		if (event.type == HW5_Events.PLAYER_MOVE) {
 			if (this.parent.reversed) {
 				let pos = event.data.get("position");
 				let dx = Math.pow(this.owner.position.x - pos.x, 2);

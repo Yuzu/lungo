@@ -9,20 +9,9 @@ export default class Idle extends OnGround {
 
 	onEnter(options: Record<string, any>): void {
 		this.parent.speed = this.parent.MIN_SPEED;
+		this.owner.animation.playIfNotAlready("IDLE", true);
 	}
 
-	
-	updateSuit() {
-		if (this.parent.suitColor == HW5_Color.RED){ 
-			this.owner.animation.playIfNotAlready("RED_IDLE", true);
-		}
-		else if (this.parent.suitColor == HW5_Color.GREEN){
-			this.owner.animation.playIfNotAlready("GREEN_IDLE", true);
-		}
-		else if (this.parent.suitColor == HW5_Color.BLUE){
-			this.owner.animation.playIfNotAlready("BLUE_IDLE", true);
-		}
-	}
 
 	update(deltaT: number): void {
 		super.update(deltaT);
@@ -30,8 +19,8 @@ export default class Idle extends OnGround {
 		let dir = this.getInputDirection();
 
 		if(!dir.isZero() && dir.y === 0){
-			if(Input.isPressed("skate")){
-				this.finished(PlayerStates.SKATE);
+			if(Input.isPressed("run")){
+				this.finished(PlayerStates.RUN);
 			} else {
 				this.finished(PlayerStates.WALK);
 			}

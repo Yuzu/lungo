@@ -11,7 +11,7 @@ import Fall from "./PlayerStates/Fall";
 import Idle from "./PlayerStates/Idle";
 import InAir from "./PlayerStates/InAir";
 import Jump from "./PlayerStates/Jump";
-import Skate from "./PlayerStates/Skate";
+import Run from "./PlayerStates/Run";
 import Walk from "./PlayerStates/Walk";
 
 
@@ -23,7 +23,7 @@ export enum PlayerType {
 export enum PlayerStates {
     IDLE = "idle",
     WALK = "walk",
-	SKATE = "skate",
+	RUN = "run",
 	JUMP = "jump",
     FALL = "fall",
 	PREVIOUS = "previous"
@@ -36,29 +36,15 @@ export default class PlayerController extends StateMachineAI {
 	MIN_SPEED: number = 200;
     MAX_SPEED: number = 300;
     tilemap: OrthogonalTilemap;
-    suitColor: HW5_Color;
     shield: GameNode;
 
-    // HOMEWORK 5 - TODO
-    /**
-     * Implement a death animation for the player using tweens. The animation rotate the player around itself multiple times
-     * over the tween duration, as well as fading out the alpha value of the player. The tween should also make use of the
-     * onEnd field to send out a PLAYER_KILLED event.
-     * 
-     * Tweens MUST be used to create this new animation, although you can add to the spritesheet if you want to add some more detail.
-     * 
-     * Look at incPlayerLife() in GameLevel to see where this animation would be called.
-     */
+
     initializeAI(owner: GameNode, options: Record<string, any>){
         this.owner = owner;
 
         this.initializePlatformer();
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
-
-        this.suitColor = options.color;
-
-        this.receiver.subscribe(HW5_Events.SUIT_COLOR_CHANGE);
 
         this.shield = undefined;
 
@@ -103,8 +89,8 @@ export default class PlayerController extends StateMachineAI {
 		this.addState(PlayerStates.IDLE, idle);
 		let walk = new Walk(this, this.owner);
 		this.addState(PlayerStates.WALK, walk);
-		let skate = new Skate(this, this.owner);
-		this.addState(PlayerStates.SKATE, skate);
+		let run = new Run(this, this.owner);
+		this.addState(PlayerStates.RUN, run);
 		let jump = new Jump(this, this.owner);
         this.addState(PlayerStates.JUMP, jump);
         let fall = new Fall(this, this.owner);
@@ -151,8 +137,8 @@ export default class PlayerController extends StateMachineAI {
 			Debug.log("playerstate", "Player State: Jump");
 		} else if (this.currentState instanceof Walk){
 			Debug.log("playerstate", "Player State: Walk");
-		} else if (this.currentState instanceof Skate){
-			Debug.log("playerstate", "Player State: Skate");
+		} else if (this.currentState instanceof Run){
+			Debug.log("playerstate", "Player State: Run");
 		} else if (this.currentState instanceof Idle){
 			Debug.log("playerstate", "Player State: Idle");
 		} else if(this.currentState instanceof Fall){

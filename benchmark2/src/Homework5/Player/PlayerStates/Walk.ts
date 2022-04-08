@@ -10,29 +10,20 @@ export default class Walk extends OnGround {
 
 	onEnter(options: Record<string, any>): void {
 		this.parent.speed = this.parent.MIN_SPEED;
+		this.owner.animation.playIfNotAlready("WALK", true);
 	}
 
-	updateSuit() {
-		if (this.parent.suitColor == HW5_Color.RED){ 
-			this.owner.animation.playIfNotAlready("RED_WALK", true);
-		}
-		else if (this.parent.suitColor == HW5_Color.GREEN){
-			this.owner.animation.playIfNotAlready("GREEN_WALK", true);
-		}
-		else if (this.parent.suitColor == HW5_Color.BLUE){
-			this.owner.animation.playIfNotAlready("BLUE_WALK", true);
-		}
-	}
 
 	update(deltaT: number): void {
 		super.update(deltaT);
+		
 		let dir = this.getInputDirection();
 
 		if(dir.isZero()){
 			this.finished(PlayerStates.IDLE);
 		} else {
-			if(Input.isPressed("skate")){
-				this.finished(PlayerStates.SKATE);
+			if(Input.isPressed("run")){
+				this.finished(PlayerStates.RUN);
 			}
 		}
 

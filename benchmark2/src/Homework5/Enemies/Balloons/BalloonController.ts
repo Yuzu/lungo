@@ -27,7 +27,6 @@ export default class BalloonController extends StateMachineAI {
 		this.owner = owner;
 
 		this.receiver.subscribe(HW5_Events.PLAYER_MOVE);
-		this.receiver.subscribe(HW5_Events.SUIT_COLOR_CHANGE);
 
 		let sinking = new Sinking(this, owner);
 		this.addState(BalloonStates.SINKING, sinking);

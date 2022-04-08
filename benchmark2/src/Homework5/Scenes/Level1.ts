@@ -16,7 +16,7 @@ export default class Level1 extends GameLevel {
     loadScene(): void {
         // Load resources
         this.load.tilemap("level1", "hw5_assets/tilemaps/level1.json");
-        this.load.spritesheet("player", "hw5_assets/spritesheets/spike.json");
+        this.load.spritesheet("player", "hw5_assets/spritesheets/lungo.json");
         this.load.spritesheet("shield", "hw5_assets/spritesheets/shield.json");
         this.load.spritesheet("red", "hw5_assets/spritesheets/redBalloon.json");
         this.load.spritesheet("blue", "hw5_assets/spritesheets/blueBalloon.json");
@@ -93,8 +93,10 @@ export default class Level1 extends GameLevel {
         let currentBest = localStorage.getItem("level1_best");
         if (currentBest) {
             let currentBest_int = parseInt(currentBest);
-            this.balloonLabel.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
+            this.bestTime.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
         }
+
+        this.levelLabel.text = "Level: 1";
     }
 
     updateScene(deltaT: number): void {

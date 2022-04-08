@@ -64,8 +64,7 @@ export default class GameLevel extends Scene {
     // Custom particle sysyem
     protected system: HW5_ParticleSystem;
 
-    // Cooldown timer for changing suits
-    protected suitChangeTimer: Timer;
+
     //Timers for new shield events
     protected shieldWallTimer: Timer;
     protected shieldTrampolineTimer: Timer;
@@ -77,12 +76,12 @@ export default class GameLevel extends Scene {
 
     // Total ballons and amount currently popped
     protected totalBalloons: number;
-    protected balloonLabel: Label;
+
     protected balloonsPopped: number;
 
     // Total switches and amount currently pressed
     protected totalSwitches: number;
-    protected switchLabel: Label;
+    
     protected switchesPressed: number;
 
     protected isPaused: Boolean;
@@ -93,6 +92,12 @@ export default class GameLevel extends Scene {
 
     protected levelTimer: number;
     protected elapsedTime: number;
+
+    protected bestTime: Label;
+    protected timeLabel: Label;
+
+    protected levelLabel: Label;
+    protected enemyLabel: Label;
 
     startScene(): void {
         this.balloonsPopped = 0;
@@ -125,8 +130,6 @@ export default class GameLevel extends Scene {
             this.levelTransitionScreen.tweens.play("fadeIn");
         });
 
-        // 3 second cooldown for changing suits
-        this.suitChangeTimer = new Timer(3000);
 
         //2 second cooldown for SHIELD WALL
         this.shieldWallTimer = new Timer(2000);
@@ -139,13 +142,12 @@ export default class GameLevel extends Scene {
 
         // Initially disable player movement
         Input.disableInput();
-        this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.RED});
 
         this.elapsedTime = 0;
 
         this.levelTimer = setInterval(() => {
             this.elapsedTime += 1;
-            this.switchLabel.text = "Time Elapsed: " + Math.floor(this.elapsedTime / 60) + ":" + ((this.elapsedTime % 60) < 10 ? "0" + (this.elapsedTime % 60) : this.elapsedTime % 60);
+            this.timeLabel.text = "Time Elapsed: " + Math.floor(this.elapsedTime / 60) + ":" + ((this.elapsedTime % 60) < 10 ? "0" + (this.elapsedTime % 60) : this.elapsedTime % 60);
         }, 1000);
 
     }
@@ -225,7 +227,7 @@ export default class GameLevel extends Scene {
                     {
                         // Hit a switch block, so update the label and count
                         this.switchesPressed++;
-                        this.switchLabel.text = "Switches Left: " + (this.totalSwitches - this.switchesPressed)
+                        this.timeLabel.text = "Switches Left: " + (this.totalSwitches - this.switchesPressed)
 
                         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "switch", loop: false, holdReference: false});
                     }
@@ -288,7 +290,6 @@ export default class GameLevel extends Scene {
                         
                         // An balloon collided with the player, destroy it and use the particle system
                         this.balloonsPopped++;
-                        //this.balloonLabel.text = "Balloons Left: " + (this.totalBalloons - this.balloonsPopped);
                         let node = this.sceneGraph.getNode(event.data.get("owner"));
                         
                         node.destroy();
@@ -377,26 +378,6 @@ export default class GameLevel extends Scene {
             }
         }
 
-        /**
-         * Pressing 1 switches our suit to RED
-         * Pressing 2 switches our suit to BLUE
-         * Pressing 3 switches our suit to GREEN
-         */
-        if (this.suitChangeTimer.isStopped()) {
-            if (Input.isKeyJustPressed("1")) {
-                this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.RED});
-                this.suitChangeTimer.start();
-            }
-            if (Input.isKeyJustPressed("2")) {
-                this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.BLUE});
-                this.suitChangeTimer.start();
-            }
-            if (Input.isKeyJustPressed("3")) {
-                this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.GREEN});
-                this.suitChangeTimer.start();
-            }
-        }
-
         //Update our shield state by firing the event
         //See main.ts for the controls
         if(this.shieldWallTimer.isStopped()){
@@ -456,19 +437,31 @@ export default class GameLevel extends Scene {
      * Adds in any necessary UI to the game
      */
     protected addUI(){
+
         // In-game labels
-        this.balloonLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(80, 30), text: "Current Best Time: N/A"});
-        this.balloonLabel.textColor = Color.BLACK
-        this.balloonLabel.font = "PixelSimple";
+        this.bestTime = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(500, 30), text: "Current Best Time: N/A"});
+        this.bestTime.textColor = Color.BLACK
+        this.bestTime.font = "PixelSimple";
 
-        this.switchLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(80, 50), text: "Time Elapsed: " + this.elapsedTime / 60 + ":" + this.elapsedTime % 60});
-        this.switchLabel.textColor = Color.BLACK;
-        this.switchLabel.font = "PixelSimple";
+        this.timeLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(500, 50), text: "Time Elapsed: " + this.elapsedTime / 60 + ":" + this.elapsedTime % 60});
+        this.timeLabel.textColor = Color.BLACK;
+        this.timeLabel.font = "PixelSimple";
 
-        this.livesCountLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(500, 30), text: "Lives: " + GameLevel.livesCount});
+  
+
+        this.levelLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(50, 30), text:"Level: "});
+        this.levelLabel.textColor = Color.BLACK;
+        this.levelLabel.font = "PixelSimple";
+
+        this.livesCountLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(50, 50), text: "Lives: " + GameLevel.livesCount});
         this.livesCountLabel.textColor = Color.BLACK;
         this.livesCountLabel.font = "PixelSimple";
 
+        // TODO - fix this
+        this.enemyLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(50, 70), text: "Enemies Left: "});
+
+        this.enemyLabel.textColor = Color.BLACK;
+        this.enemyLabel.font = "PixelSimple";
         // End of level label (start off screen)
         this.levelEndLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(-300, 200), text: "Level Complete"});
         this.levelEndLabel.size.set(1200, 60);
@@ -705,42 +698,17 @@ export default class GameLevel extends Scene {
 
         this.projectileList.push(projectile);
     }
-    // HOMEWORK 5 - TODO
-    /**
-     * You must implement this method.
-     * There are 3 types of collisions:
-     * 
-     * 1) Collisions with red balloons
-     * 
-     * 2) Collisions with blue balloons
-     * 
-     * 3) Collisions with green balloons
-     *  
-     * When the player collides with a balloon, you should check the suit color and the balloon color, 
-     * and if they are not the same, damage the player. Otherwise the player is unharmed.
-     * 
-     * In either case you'll also need to pop the balloon and set up elements for the particle system, 
-     * specifically changing the particle system color to the color of the balloon being popped. You'll also
-     * have to use the balloon popping sound you've created and play it here as well.
-     * 
-     * Note that node destruction is handled for you.
-     * 
-     * For those who are curious, there is actually a node.destroy() method.
-     * You no longer have to make the nodes invisible and pretend they don't exist.
-     * You don't have to use this yourself, but you can see examples
-     * of it in this class.
-     * 
-     */
+
     protected handlePlayerBalloonCollision(player: AnimatedSprite, balloon: AnimatedSprite) {
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "pop", loop: false, holdReference: false});
         if(player === undefined || player === null) return;
         if(balloon === undefined || balloon === null) return;
         let pc = <PlayerController>player._ai;
         let bc = <BalloonController>balloon._ai;
-        if(pc.suitColor != bc.color){
-            console.log("Decreasing life count!", GameLevel.livesCount - 1);
-            this.incPlayerLife(-1);
-        }
+
+        console.log("Decreasing life count!", GameLevel.livesCount - 1);
+        this.incPlayerLife(-1);
+
         //Pop the balloon
         this.emitter.fireEvent(HW5_Events.BALLOON_POPPED, {owner: balloon.id}); 
     }

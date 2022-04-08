@@ -4,41 +4,27 @@ import { HW5_Color } from "../../hw5_color";
 import { HW5_Events } from "../../hw5_enums";
 import { PlayerStates } from "../PlayerController";
 import OnGround from "./OnGround";
-import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 
-export default class Skate extends OnGround {
+export default class Run extends OnGround {
 	owner: AnimatedSprite;
 
 	onEnter(options: Record<string, any>): void {
-		console.log(options);
 		this.parent.speed = this.parent.MAX_SPEED;
-	}
-
-	updateSuit() {
-		if (this.parent.suitColor == HW5_Color.RED){ 
-			this.owner.animation.playIfNotAlready("RED_WALK", true);
-		}
-		else if (this.parent.suitColor == HW5_Color.GREEN){
-			this.owner.animation.playIfNotAlready("GREEN_WALK", true);
-		}
-		else if (this.parent.suitColor == HW5_Color.BLUE){
-			this.owner.animation.playIfNotAlready("BLUE_WALK", true);
-		}
+        this.owner.animation.playIfNotAlready("WALK", true);
 	}
 
 	update(deltaT: number): void {
 		super.update(deltaT);
-		return;
+        
 		let dir = this.getInputDirection();
 
 		if(dir.isZero()){
 			this.finished(PlayerStates.IDLE);
 		} else {
-			if(!Input.isPressed("skate")){
+			if(!Input.isPressed("run")){
 				this.finished(PlayerStates.WALK);
 			}
 		}
-
 
 		this.parent.velocity.x = dir.x * this.parent.speed
 

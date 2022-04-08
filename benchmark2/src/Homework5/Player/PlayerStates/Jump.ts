@@ -12,19 +12,10 @@ export default class Jump extends InAir {
 
 	onEnter(options: Record<string, any>): void {
 		this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "jump", loop: false, holdReference: false});
+		this.owner.animation.playIfNotAlready("JUMP", false);
 	}
 
-	updateSuit() {
-		if (this.parent.suitColor == HW5_Color.RED){ 
-			this.owner.animation.play("RED_JUMP", true);
-		}
-		else if (this.parent.suitColor == HW5_Color.GREEN){
-			this.owner.animation.play("GREEN_JUMP", true);
-		}
-		else if (this.parent.suitColor == HW5_Color.BLUE){
-			this.owner.animation.play("BLUE_JUMP", true);
-		}
-	}
+
 
 	update(deltaT: number): void {
 		super.update(deltaT);

@@ -22,11 +22,7 @@ export default abstract class PlayerState extends State {
 		this.positionTimer.start();
 	}
 
-	// Change the suit color on receiving a suit color change event
 	handleInput(event: GameEvent): void {
-		if (event.type == HW5_Events.SUIT_COLOR_CHANGE) {
-			this.parent.suitColor = event.data.get("color");
-		}
 	}
 
 	/** 
@@ -39,16 +35,13 @@ export default abstract class PlayerState extends State {
 		return direction;
 	}
 
-	/**This function is left to be overrided by any of the classes that extend this base class. That way, each
-	 * class can swap their animations accordingly.
-	*/
-	updateSuit() {
-		
+	updateAnimation() {
+
 	}
 
 	update(deltaT: number): void {
 		// Do gravity
-		this.updateSuit();
+		this.updateAnimation();
 		if (this.positionTimer.isStopped()){
 			this.emitter.fireEvent(HW5_Events.PLAYER_MOVE, {position: this.owner.position.clone()});
 			this.positionTimer.start();
