@@ -5,19 +5,19 @@ import GameNode, { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import { HW5_Color } from "../hw5_color";
-import { HW5_Events } from "../hw5_enums";
+import { Lungo_Color } from "../Lungo_color";
+import { Lungo_Events } from "../Lungo_enums";
 import Idle from "./ShieldStates/Idle";
 import ShieldTrampoline from "./ShieldStates/ShieldTrampoline";
 import ShieldWall from "./ShieldStates/ShieldWall";
+import Input from "../../Wolfie2D/Input/Input";
 
 //Subject to change
 export enum ShieldStates {
     IDLE = "idle",
     ROPE = "rope",
     BASH = "bash",
-	SHIELD_WALL = "ShieldWall", //Must be the same as HW5 events enum
-	GROUND_SMASH = "ground smash",
+	SHIELD_WALL = "ShieldWall", //Must be the same as Lungo events enum
     FRISBEE = "frisbee",
     SHIELD_TRAMPOLINE="ShieldTrampoline"
 }
@@ -25,7 +25,6 @@ export enum ShieldStates {
 export default class ShieldController extends StateMachineAI {
     protected owner: GameNode;
     tilemap: OrthogonalTilemap;
-    suitColor: HW5_Color;
     player:GameNode;
     state:string;
 
@@ -36,11 +35,13 @@ export default class ShieldController extends StateMachineAI {
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         //Subscribe to our shield moves so we can update the state
-        this.receiver.subscribe(HW5_Events.SHIELD_WALL);
-        this.receiver.subscribe(HW5_Events.SHIELD_TRAMPOLINE);
+        this.receiver.subscribe(Lungo_Events.SHIELD_WALL);
+        this.receiver.subscribe(Lungo_Events.SHIELD_TRAMPOLINE);
 
         this.player = options.player;
         this.initializePlatformer();
+        
+        
     }
 
     initializePlatformer(): void {
@@ -50,7 +51,7 @@ export default class ShieldController extends StateMachineAI {
         this.addState(ShieldStates.SHIELD_WALL, shieldWall);
         let shieldTrampoline = new ShieldTrampoline(this, this.owner);
         this.addState(ShieldStates.SHIELD_TRAMPOLINE, shieldTrampoline);
-        
+
         this.initialize(ShieldStates.IDLE, {player: this.player});
     }
 
@@ -78,6 +79,7 @@ export default class ShieldController extends StateMachineAI {
     update(deltaT: number): void {
 		super.update(deltaT);
         //console.log(this.player.position);
+
 		if(this.currentState instanceof Idle){
 			Debug.log("shieldstate", "Shield State: IDLE");
 		} else if (this.currentState instanceof ShieldWall){

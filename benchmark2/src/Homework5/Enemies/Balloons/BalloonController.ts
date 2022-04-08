@@ -1,11 +1,11 @@
-import GameNode from "../../Wolfie2D/Nodes/GameNode";
-import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
-import { HW5_Events } from "../hw5_enums";
+import GameNode from "../../../Wolfie2D/Nodes/GameNode";
+import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
+import StateMachineAI from "../../../Wolfie2D/AI/StateMachineAI";
+import { Lungo_Events } from "../../Lungo_enums";
 import Sinking from "./Sinking";
 import Rising from "./Rising";
 import ZeroGravity from "./ZeroGravity";
-import { HW5_Color } from "../hw5_color";
+import { Lungo_Color } from "../../Lungo_color";
 
 export enum BalloonStates {
 	SINKING = "sinking",
@@ -20,14 +20,13 @@ export default class BalloonController extends StateMachineAI {
 	speed: number = 100;
 	ySpeed: number = 700;
 	gravity: number = 1000;
-	color: HW5_Color;
+	color: Lungo_Color;
 	reversed: boolean = false;
 
 	initializeAI(owner: GameNode, options: Record<string, any>){
 		this.owner = owner;
 
-		this.receiver.subscribe(HW5_Events.PLAYER_MOVE);
-		this.receiver.subscribe(HW5_Events.SUIT_COLOR_CHANGE);
+		this.receiver.subscribe(Lungo_Events.PLAYER_MOVE);
 
 		let sinking = new Sinking(this, owner);
 		this.addState(BalloonStates.SINKING, sinking);

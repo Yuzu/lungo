@@ -14,13 +14,21 @@ import Scene from "../../Wolfie2D/Scene/Scene";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import BalloonController from "../Enemies/BalloonController";
-import { HW5_Color } from "../hw5_color";
-import { HW5_Events } from "../hw5_enums";
-import HW5_ParticleSystem from "../HW5_ParticleSystem";
+import BalloonController from "../Enemies/Balloons/BalloonController";
+import { Lungo_Color } from "../Lungo_color";
+import { Lungo_Events } from "../Lungo_enums";
+import Lungo_ParticleSystem from "../Lungo_ParticleSystem";
 import PlayerController from "../Player/PlayerController";
 import ShieldController from "../Player/ShieldController";
 import MainMenu from "./MainMenu";
+
+import BasicEnemyController from "../Enemies/BasicEnemy/BasicEnemyController";
+
+import BulletAI from "../Enemies/Projectiles/BulletAI";
+
+import Layer from "../../Wolfie2D/Scene/Layer";
+import Button from "../../Wolfie2D/Nodes/UIElements/Button";
+
 
 // HOMEWORK 5 - TODO
 /**
@@ -54,10 +62,9 @@ export default class GameLevel extends Scene {
     protected levelTransitionScreen: Rect;
     
     // Custom particle sysyem
-    protected system: HW5_ParticleSystem;
+    protected system: Lungo_ParticleSystem;
 
-    // Cooldown timer for changing suits
-    protected suitChangeTimer: Timer;
+
     //Timers for new shield events
     protected shieldWallTimer: Timer;
     protected shieldTrampolineTimer: Timer;
@@ -69,13 +76,28 @@ export default class GameLevel extends Scene {
 
     // Total ballons and amount currently popped
     protected totalBalloons: number;
-    protected balloonLabel: Label;
+
     protected balloonsPopped: number;
 
     // Total switches and amount currently pressed
     protected totalSwitches: number;
-    protected switchLabel: Label;
+    
     protected switchesPressed: number;
+
+    protected isPaused: Boolean;
+    protected projectileList: Array<AnimatedSprite>;
+    protected enemyList: Array<AnimatedSprite>;
+
+    protected pauseMenu: Layer;
+
+    protected levelTimer: number;
+    protected elapsedTime: number;
+
+    protected bestTime: Label;
+    protected timeLabel: Label;
+
+    protected levelLabel: Label;
+    protected enemyLabel: Label;
 
     startScene(): void {
         this.balloonsPopped = 0;
@@ -89,6 +111,9 @@ export default class GameLevel extends Scene {
         this.subscribeToEvents();
         this.addUI();
 
+        this.isPaused = false;
+        this.projectileList = [];
+        this.enemyList = [];
         // Initialize the timers
         this.respawnTimer = new Timer(1000, () => {
             if(GameLevel.livesCount === 0){
@@ -105,8 +130,6 @@ export default class GameLevel extends Scene {
             this.levelTransitionScreen.tweens.play("fadeIn");
         });
 
-        // 3 second cooldown for changing suits
-        this.suitChangeTimer = new Timer(3000);
 
         //2 second cooldown for SHIELD WALL
         this.shieldWallTimer = new Timer(2000);
@@ -119,26 +142,98 @@ export default class GameLevel extends Scene {
 
         // Initially disable player movement
         Input.disableInput();
-        this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.RED});
+
+        this.elapsedTime = 0;
+
+        this.levelTimer = setInterval(() => {
+            this.elapsedTime += 1;
+            this.timeLabel.text = "Time Elapsed: " + Math.floor(this.elapsedTime / 60) + ":" + ((this.elapsedTime % 60) < 10 ? "0" + (this.elapsedTime % 60) : this.elapsedTime % 60);
+        }, 1000);
+
     }
 
 
     updateScene(deltaT: number){
+
+        
+        if (Input.isKeyJustPressed("escape")) {
+            
+            if (!this.isPaused) {
+                // pause
+                console.log("paused");
+
+                if (this.pauseMenu.isHidden()) {
+                    this.pauseMenu.setHidden(false);
+                    
+                }
+
+                this.enemyList.forEach((enemy) => {
+                    enemy.freeze();
+                    enemy.disablePhysics();
+                    enemy.aiActive = false;
+                });
+
+                this.projectileList.forEach((projectile) => {
+                    projectile.freeze();
+                    projectile.disablePhysics();
+                    projectile.aiActive = false;
+                });
+
+                this.shield.freeze();
+                this.shield.disablePhysics();
+                this.shield.aiActive = false;
+
+                this.player.freeze();
+                this.player.disablePhysics();
+                this.player.aiActive = false;
+            }
+            else {
+                // un-pause
+                console.log("un-paused");
+
+                if (!this.pauseMenu.isHidden()) {
+                    this.pauseMenu.setHidden(true);
+                }
+                this.enemyList.forEach((enemy) => {
+                    enemy.unfreeze();
+                    enemy.enablePhysics();
+                    enemy.aiActive = true;
+                });
+
+                this.projectileList.forEach((projectile) => {
+                    projectile.unfreeze();
+                    projectile.enablePhysics();
+                    projectile.aiActive = true;
+                });
+
+                this.shield.unfreeze();
+                this.shield.enablePhysics();
+                this.shield.aiActive = true;
+
+                this.player.unfreeze();
+                this.player.enablePhysics();
+                this.player.aiActive = true;
+            }
+
+            this.isPaused = !this.isPaused;
+        }
+
         // Handle events and update the UI if needed
         while(this.receiver.hasNextEvent()){
             let event = this.receiver.getNextEvent();
             
             switch(event.type){
-                case HW5_Events.PLAYER_HIT_SWITCH:
+                case Lungo_Events.PLAYER_HIT_SWITCH:
                     {
                         // Hit a switch block, so update the label and count
                         this.switchesPressed++;
-                        this.switchLabel.text = "Switches Left: " + (this.totalSwitches - this.switchesPressed)
+                        this.timeLabel.text = "Switches Left: " + (this.totalSwitches - this.switchesPressed)
+
                         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "switch", loop: false, holdReference: false});
                     }
                     break;
 
-                case HW5_Events.PLAYER_HIT_BALLOON:
+                case Lungo_Events.PLAYER_HIT_BALLOON:
                     {   
                         console.log("PLAYER HIT");
                         let node = this.sceneGraph.getNode(event.data.get("node"));
@@ -155,7 +250,7 @@ export default class GameLevel extends Scene {
                     }
                     break;
 
-                case HW5_Events.SHIELD_HIT:
+                case Lungo_Events.SHIELD_HIT:
                     {
                         console.log("SHIELD HIT");
                         let node = this.sceneGraph.getNode(event.data.get("node"));
@@ -171,7 +266,7 @@ export default class GameLevel extends Scene {
                         }
                     }
                     break;
-                case HW5_Events.SHIELD_TRAMPOLINE_JUMP:
+                case Lungo_Events.SHIELD_TRAMPOLINE_JUMP:
                 {
                     console.log("SHIELD TRAMPOLINE JUMP");
                     let node = this.sceneGraph.getNode(event.data.get("node"));
@@ -189,53 +284,64 @@ export default class GameLevel extends Scene {
                 }
                 break;
 
-                case HW5_Events.BALLOON_POPPED:
+                case Lungo_Events.BALLOON_POPPED:
                     {
                         
                         
                         // An balloon collided with the player, destroy it and use the particle system
                         this.balloonsPopped++;
-                        this.balloonLabel.text = "Balloons Left: " + (this.totalBalloons - this.balloonsPopped);
                         let node = this.sceneGraph.getNode(event.data.get("owner"));
-
-                        // Set mass based on color
-                        let particleMass = 0;
-                        if ((<BalloonController>node._ai).color == HW5_Color.RED) {
-                            particleMass = 1;
-                            this.system.changeColor(new Color(255, 0, 0));
-                        }
-                        else if ((<BalloonController>node._ai).color == HW5_Color.GREEN) {
-                            particleMass = 2;
-                            this.system.changeColor(new Color(0, 255, 0));
-                        }
-                        else {
-                            particleMass = 3;
-                            this.system.changeColor(new Color(0, 0, 255));
-                        }
-                        this.system.startSystem(2000, particleMass, node.position.clone());
+                        
                         node.destroy();
                     }
                     break;
                     
-                case HW5_Events.PLAYER_ENTERED_LEVEL_END:
+                case Lungo_Events.PLAYER_ENTERED_LEVEL_END:
                     {
                         //Check if the number of enemies is 0
                         if(!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()){
                             // The player has reached the end of the level
                             this.levelEndTimer.start();
                             this.levelEndLabel.tweens.play("slideIn");
+                            
+
+                            // Everything about this feels so wrong... But it works...
+                            // We can also check localStorage for these completion times to determine whether a level has been completed or not.
+                            let currentLevelNum;
+                            if (this.nextLevel) {
+                                currentLevelNum = (parseInt(this.nextLevel.name.split("Level")[1]) - 1);
+                            }
+                            else {
+                                // this is the last level
+                                currentLevelNum = 6;
+                            }
+                            console.log("Completed Level" + currentLevelNum + " with " + this.elapsedTime + " seconds.");
+                            let currentBest = localStorage.getItem("level" + currentLevelNum + "_best");
+                            if (currentBest) {
+                                if (currentBest > this.elapsedTime.toString()) {
+                                    localStorage.setItem("level" + currentLevelNum + "_best", this.elapsedTime.toString());
+                                    console.log("New best time!");
+                                }
+                            }
+                            else {
+                                // best by default
+                                localStorage.setItem("level" + currentLevelNum + "_best", this.elapsedTime.toString());
+                                console.log("First clear!");
+                            }
+                            
+                            clearInterval(this.levelTimer);
                         }
                     }
                     break;
 
-                case HW5_Events.LEVEL_START:
+                case Lungo_Events.LEVEL_START:
                     {
                         // Re-enable controls
                         Input.enableInput();
                     }
                     break;
                 
-                case HW5_Events.LEVEL_END:
+                case Lungo_Events.LEVEL_END:
                     {
                         // Go to the next level
                         if(this.nextLevel){
@@ -255,46 +361,35 @@ export default class GameLevel extends Scene {
                         }
                     }
                     break;
-                case HW5_Events.PLAYER_KILLED:
+                case Lungo_Events.PLAYER_KILLED:
                     {
                         this.respawnPlayer();
                     }
-
-
+                    break;
+                case Lungo_Events.ENEMY_FIRES:
+                    {
+                        let selfPos = event.data.get("selfPos");
+                        let enemyPos = event.data.get("enemyPos");
+                        let startSpeed = event.data.get("startSpeed");
+                        let weight = event.data.get("weight");
+                        this.addProjectile("blue", selfPos, {enemyPos: enemyPos, startSpeed: startSpeed, weight: weight});
+                    }
+                    break;
             }
         }
 
-        /**
-         * Pressing 1 switches our suit to RED
-         * Pressing 2 switches our suit to BLUE
-         * Pressing 3 switches our suit to GREEN
-         */
-        if (this.suitChangeTimer.isStopped()) {
-            if (Input.isKeyJustPressed("1")) {
-                this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.RED});
-                this.suitChangeTimer.start();
-            }
-            if (Input.isKeyJustPressed("2")) {
-                this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.BLUE});
-                this.suitChangeTimer.start();
-            }
-            if (Input.isKeyJustPressed("3")) {
-                this.emitter.fireEvent(HW5_Events.SUIT_COLOR_CHANGE, {color: HW5_Color.GREEN});
-                this.suitChangeTimer.start();
-            }
-        }
         //Update our shield state by firing the event
         //See main.ts for the controls
         if(this.shieldWallTimer.isStopped()){
             if(Input.isPressed("shield wall")){
                 this.shieldJump = false;
-                this.emitter.fireEvent(HW5_Events.SHIELD_WALL);
+                this.emitter.fireEvent(Lungo_Events.SHIELD_WALL);
                 this.shieldWallTimer.start();
             }
         }
         if(this.shieldTrampolineTimer.isStopped()){
             if(Input.isPressed("shield trampoline")){
-                this.emitter.fireEvent(HW5_Events.SHIELD_TRAMPOLINE);
+                this.emitter.fireEvent(Lungo_Events.SHIELD_TRAMPOLINE);
                 this.shieldTrampolineTimer.start();
                 this.shieldJump = true;
             }
@@ -325,15 +420,16 @@ export default class GameLevel extends Scene {
      */
     protected subscribeToEvents(){
         this.receiver.subscribe([
-            HW5_Events.PLAYER_HIT_SWITCH,
-            HW5_Events.PLAYER_HIT_BALLOON,
-            HW5_Events.BALLOON_POPPED,
-            HW5_Events.PLAYER_ENTERED_LEVEL_END,
-            HW5_Events.LEVEL_START,
-            HW5_Events.LEVEL_END,
-            HW5_Events.PLAYER_KILLED,
-            HW5_Events.SHIELD_HIT,
-            HW5_Events.SHIELD_TRAMPOLINE_JUMP
+            Lungo_Events.PLAYER_HIT_SWITCH,
+            Lungo_Events.PLAYER_HIT_BALLOON,
+            Lungo_Events.BALLOON_POPPED,
+            Lungo_Events.PLAYER_ENTERED_LEVEL_END,
+            Lungo_Events.LEVEL_START,
+            Lungo_Events.LEVEL_END,
+            Lungo_Events.PLAYER_KILLED,
+            Lungo_Events.SHIELD_HIT,
+            Lungo_Events.SHIELD_TRAMPOLINE_JUMP,
+            Lungo_Events.ENEMY_FIRES
         ]);
     }
 
@@ -341,19 +437,31 @@ export default class GameLevel extends Scene {
      * Adds in any necessary UI to the game
      */
     protected addUI(){
+
         // In-game labels
-        this.balloonLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(80, 30), text: "Balloons Left: " + (this.totalBalloons - this.balloonsPopped)});
-        this.balloonLabel.textColor = Color.BLACK
-        this.balloonLabel.font = "PixelSimple";
+        this.bestTime = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(500, 30), text: "Current Best Time: N/A"});
+        this.bestTime.textColor = Color.BLACK
+        this.bestTime.font = "PixelSimple";
 
-        this.switchLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(80, 50), text: "Switches Left: " + (this.totalSwitches - this.switchesPressed)});
-        this.switchLabel.textColor = Color.BLACK;
-        this.switchLabel.font = "PixelSimple";
+        this.timeLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(500, 50), text: "Time Elapsed: " + this.elapsedTime / 60 + ":" + this.elapsedTime % 60});
+        this.timeLabel.textColor = Color.BLACK;
+        this.timeLabel.font = "PixelSimple";
 
-        this.livesCountLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(500, 30), text: "Lives: " + GameLevel.livesCount});
+  
+
+        this.levelLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(50, 30), text:"Level: "});
+        this.levelLabel.textColor = Color.BLACK;
+        this.levelLabel.font = "PixelSimple";
+
+        this.livesCountLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(50, 50), text: "Lives: " + GameLevel.livesCount});
         this.livesCountLabel.textColor = Color.BLACK;
         this.livesCountLabel.font = "PixelSimple";
 
+        // TODO - fix this
+        this.enemyLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(50, 70), text: "Enemies Left: "});
+
+        this.enemyLabel.textColor = Color.BLACK;
+        this.enemyLabel.font = "PixelSimple";
         // End of level label (start off screen)
         this.levelEndLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(-300, 200), text: "Level Complete"});
         this.levelEndLabel.size.set(1200, 60);
@@ -362,6 +470,80 @@ export default class GameLevel extends Scene {
         this.levelEndLabel.textColor = Color.WHITE;
         this.levelEndLabel.fontSize = 48;
         this.levelEndLabel.font = "PixelSimple";
+
+        const center = new Vec2(290, 350);
+
+
+        // Pause Menu
+        this.pauseMenu = this.addUILayer("pause");
+        this.pauseMenu.setHidden(true);
+
+        const title = <Label>this.add.uiElement(UIElementType.LABEL, "pause", {position: new Vec2(center.x, center.y - 200), text: "Paused"});
+        title.font = "Verdana";
+        title.backgroundColor = Color.ORANGE;
+        title.borderColor = Color.WHITE;
+        title.borderRadius = 0;
+        title.textColor = Color.YELLOW;
+        title.alpha = 0.2;
+        title.fontSize = 120;
+
+        // Add resume button, and give it an event to emit on press
+        const resumeButton = <Button>this.add.uiElement(UIElementType.BUTTON, "pause", {position: new Vec2(center.x, center.y - 125), text: "Resume"});
+        resumeButton.backgroundColor = Color.ORANGE;
+        resumeButton.borderColor = Color.WHITE;
+        resumeButton.borderRadius = 0;
+        resumeButton.setPadding(new Vec2(50, 10));
+        resumeButton.font = "PixelSimple";
+        resumeButton.textColor = Color.YELLOW;
+        resumeButton.onClick = () => {
+            console.log("un-paused");
+
+            if (!this.pauseMenu.isHidden()) {
+                this.pauseMenu.setHidden(true);
+            }
+            this.enemyList.forEach((enemy) => {
+                enemy.unfreeze();
+                enemy.enablePhysics();
+                enemy.aiActive = true;
+            });
+
+            this.projectileList.forEach((projectile) => {
+                projectile.unfreeze();
+                projectile.enablePhysics(); 
+                projectile.aiActive = true;
+            });
+
+            this.shield.unfreeze();
+            this.shield.enablePhysics();
+            this.shield.aiActive = true;
+
+            this.player.unfreeze();
+            this.player.enablePhysics();
+            this.player.aiActive = true;
+
+            this.isPaused = false;
+        }
+        console.log(resumeButton);
+
+
+         // Add resume button, and give it an event to emit on press
+         const returnToMainMenuButton = <Button>this.add.uiElement(UIElementType.BUTTON, "pause", {position: new Vec2(center.x, center.y - 75), text: "Return to Main Menu"});
+         returnToMainMenuButton.backgroundColor = Color.ORANGE;
+         returnToMainMenuButton.borderColor = Color.WHITE;
+         returnToMainMenuButton.borderRadius = 0;
+         returnToMainMenuButton.setPadding(new Vec2(50, 10));
+         returnToMainMenuButton.font = "PixelSimple";
+         returnToMainMenuButton.textColor = Color.YELLOW;
+         returnToMainMenuButton.onClick = () => {
+            console.log("returning to main menu");
+            clearInterval(this.levelTimer);
+            if (!this.pauseMenu.isHidden()) {
+                this.pauseMenu.setHidden(true);
+            }
+            this.viewport.setZoomLevel(1);
+            this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
+            this.sceneManager.changeToScene(MainMenu, {});
+         }
 
         // Add a tween to move the label on screen
         this.levelEndLabel.tweens.add("slideIn", {
@@ -378,7 +560,7 @@ export default class GameLevel extends Scene {
         });
 
         // Create our particle system and initialize the pool
-        this.system = new HW5_ParticleSystem(100, new Vec2((5 * 32), (10 * 32)), 2000, 3, 1, 100);
+        this.system = new Lungo_ParticleSystem(100, new Vec2((5 * 32), (10 * 32)), 2000, 3, 1, 100);
         this.system.initializePool(this, "primary");
 
         this.levelTransitionScreen = <Rect>this.add.graphic(GraphicType.RECT, "UI", {position: new Vec2(300, 200), size: new Vec2(600, 400)});
@@ -396,7 +578,7 @@ export default class GameLevel extends Scene {
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
             ],
-            onEnd: HW5_Events.LEVEL_END
+            onEnd: Lungo_Events.LEVEL_END
         });
 
         this.levelTransitionScreen.tweens.add("fadeOut", {
@@ -410,7 +592,7 @@ export default class GameLevel extends Scene {
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
             ],
-            onEnd: HW5_Events.LEVEL_START
+            onEnd: Lungo_Events.LEVEL_START
         });
     }
 
@@ -428,7 +610,7 @@ export default class GameLevel extends Scene {
         this.player.position.copy(this.playerSpawn);
         this.player.addPhysics(new AABB(Vec2.ZERO, new Vec2(14, 14)));
         this.player.colliderOffset.set(0, 2);
-        this.player.addAI(PlayerController, {playerType: "platformer", tilemap: "Main", color: HW5_Color.RED});
+        this.player.addAI(PlayerController, {playerType: "platformer", tilemap: "Main", color: Lungo_Color.RED});
 
         this.player.setGroup("player");
 
@@ -452,8 +634,8 @@ export default class GameLevel extends Scene {
         this.shield.addAI(ShieldController, {playerType: "platformer", tilemap: "Main", player: this.player});
 
         this.shield.setGroup("shield");
-        this.shield.setTrigger("balloon", HW5_Events.SHIELD_HIT, null);
-        this.shield.setTrigger("player", HW5_Events.SHIELD_TRAMPOLINE_JUMP, null);
+        this.shield.setTrigger("balloon", Lungo_Events.SHIELD_HIT, null);
+        this.shield.setTrigger("player", Lungo_Events.SHIELD_TRAMPOLINE_JUMP, null);
     }
 
     /**
@@ -464,7 +646,7 @@ export default class GameLevel extends Scene {
         console.log(size);
         this.levelEndArea = <Rect>this.add.graphic(GraphicType.RECT, "primary", {position: startingTile.scale(32), size: size.scale(32)});
         this.levelEndArea.addPhysics(undefined, undefined, false, true);
-        this.levelEndArea.setTrigger("player", HW5_Events.PLAYER_ENTERED_LEVEL_END, null);
+        this.levelEndArea.setTrigger("player", Lungo_Events.PLAYER_ENTERED_LEVEL_END, null);
         this.levelEndArea.color = new Color(0, 0, 0, 0);
     }
 
@@ -488,50 +670,50 @@ export default class GameLevel extends Scene {
         balloon.addPhysics();
         balloon.addAI(BalloonController, aiOptions);
         balloon.setGroup("balloon");
-        balloon.setTrigger("player", HW5_Events.PLAYER_HIT_BALLOON, null);
+        balloon.setTrigger("player", Lungo_Events.PLAYER_HIT_BALLOON, null);
+
+        this.projectileList.push(balloon);
     }
 
-    // HOMEWORK 5 - TODO
-    /**
-     * You must implement this method.
-     * There are 3 types of collisions:
-     * 
-     * 1) Collisions with red balloons
-     * 
-     * 2) Collisions with blue balloons
-     * 
-     * 3) Collisions with green balloons
-     *  
-     * When the player collides with a balloon, you should check the suit color and the balloon color, 
-     * and if they are not the same, damage the player. Otherwise the player is unharmed.
-     * 
-     * In either case you'll also need to pop the balloon and set up elements for the particle system, 
-     * specifically changing the particle system color to the color of the balloon being popped. You'll also
-     * have to use the balloon popping sound you've created and play it here as well.
-     * 
-     * Note that node destruction is handled for you.
-     * 
-     * For those who are curious, there is actually a node.destroy() method.
-     * You no longer have to make the nodes invisible and pretend they don't exist.
-     * You don't have to use this yourself, but you can see examples
-     * of it in this class.
-     * 
-     */
+    protected addEnemy(spriteKey: string, tilePos: Vec2, aiOptions: Record<string, any>): void {
+        let enemy = this.add.animatedSprite(spriteKey, "primary");
+        enemy.position.set(tilePos.x*32, tilePos.y*32);
+        enemy.scale.set(2, 2);
+        enemy.addPhysics();
+        enemy.unfreeze();
+        enemy.addAI(BasicEnemyController, aiOptions);
+        enemy.setGroup("enemy");
+
+        this.enemyList.push(enemy);
+    }
+
+    protected addProjectile(spriteKey: string, tilePos: Vec2, aiOptions: Record<string, any>): void {
+        let projectile = this.add.animatedSprite(spriteKey, "primary");
+        projectile.position.set(tilePos.x, tilePos.y); // we don't multiply by 32 because the given pos is already scaled properly.
+        projectile.scale.set(2, 2);
+        projectile.addPhysics();
+        projectile.unfreeze();
+        projectile.addAI(BulletAI, aiOptions);
+        projectile.setGroup("projectile");
+
+        this.projectileList.push(projectile);
+    }
+
     protected handlePlayerBalloonCollision(player: AnimatedSprite, balloon: AnimatedSprite) {
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "pop", loop: false, holdReference: false});
         if(player === undefined || player === null) return;
         if(balloon === undefined || balloon === null) return;
         let pc = <PlayerController>player._ai;
         let bc = <BalloonController>balloon._ai;
-        if(pc.suitColor != bc.color){
-            console.log("Decreasing life count!", GameLevel.livesCount - 1);
-            this.incPlayerLife(-1);
-        }
+
+        console.log("Decreasing life count!", GameLevel.livesCount - 1);
+        this.incPlayerLife(-1);
+
         //Pop the balloon
-        this.emitter.fireEvent(HW5_Events.BALLOON_POPPED, {owner: balloon.id}); 
+        this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
     }
 
-    protected handleShieldBalloonCollision(player: AnimatedSprite, balloon: AnimatedSprite) {
+    protected handleShieldBalloonCollision(shield: AnimatedSprite, balloon: AnimatedSprite) {
         if (balloon === undefined) {
             return;
         }
@@ -542,6 +724,8 @@ export default class GameLevel extends Scene {
         if (balloonAI.reversed === true) {
             return;
         }
+
+        shield.animation.playIfNotAlready("REFLECT", false, "IDLE");
         console.log("balloon reversed");
         balloonAI.reversed = true;
         let oldDirection = balloonAI.direction;
@@ -570,7 +754,7 @@ export default class GameLevel extends Scene {
         }
         playerAI.velocity = new Vec2(playerAI.velocity.x, -600);
         //This will revert us back to the idle state
-        this.emitter.fireEvent(HW5_Events.SHIELD_TRAMPOLINE); 
+        this.emitter.fireEvent(Lungo_Events.SHIELD_TRAMPOLINE); 
 
     }
     
@@ -596,6 +780,7 @@ export default class GameLevel extends Scene {
      * Returns the player to spawn
      */
     protected respawnPlayer(): void {
+        clearInterval(this.levelTimer);
         GameLevel.livesCount = 3;
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
         this.sceneManager.changeToScene(MainMenu, {});

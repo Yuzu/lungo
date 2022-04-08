@@ -18,7 +18,7 @@ import Vec2 from "../Wolfie2D/DataTypes/Vec2";
  * 
  *  - Each particle should disappear over it's lifetime, moving from an alpha of 1 to 0.
  */
-export default class HW5_ParticleSystem extends ParticleSystem {
+export default class Lungo_ParticleSystem extends ParticleSystem {
 
     setParticleAnimation(particle: Particle) {
 

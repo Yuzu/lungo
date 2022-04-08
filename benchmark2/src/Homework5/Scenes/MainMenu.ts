@@ -26,9 +26,9 @@ export default class MainMenu extends Scene {
     
     loadScene(): void {
         // Load the menu song
-        this.load.audio("menu", "hw5_assets/music/menu.mp3");
+        this.load.audio("menu", "lungo_assets/music/menu.mp3");
 
-        this.load.image("background", "./hw5_assets/images/Lungo.png");
+        this.load.image("background", "./lungo_assets/images/Lungo.png");
     }
 
     startScene(){
@@ -43,7 +43,7 @@ export default class MainMenu extends Scene {
         this.addParallaxLayer("bg", new Vec2(0.5, 1), -1);
         let bg = this.add.sprite("background", "splashScreen");
         bg.position.set(center.x, center.y);
-
+        
         const prompt = <Label>this.add.uiElement(UIElementType.LABEL, "splashScreen", {position: new Vec2(center.x, center.y+300), text: "Click Anywhere To Continue"});
         prompt.font = "Verdana";
         prompt.textColor = Color.WHITE;
@@ -345,13 +345,15 @@ export default class MainMenu extends Scene {
 
                 let sceneOptions = {
                     physics: {
-                        groupNames: ["ground", "player", "balloon", "shield"],
+                        groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
                         collisions:
                         [
-                            [0, 1, 1, 0],
-                            [1, 0, 0, 1],
-                            [1, 0, 0, 0],
-                            [0, 1, 0, 0]
+                            [0, 1, 1, 0, 1, 1],
+                            [1, 0, 0, 1, 1, 1],
+                            [1, 0, 0, 0, 0, 0],
+                            [0, 1, 0, 0, 0, 1],
+                            [1, 1, 0, 0, 0, 0],
+                            [1, 1, 0, 1, 0, 0]
                         ]
                     }
                 }

@@ -1,7 +1,7 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Debug from "../../Wolfie2D/Debug/Debug";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-import { HW5_Color } from "../hw5_color";
+import { Lungo_Color } from "../Lungo_color";
 import GameLevel from "./GameLevel";
 
 export default class Level2 extends GameLevel {
@@ -13,8 +13,8 @@ export default class Level2 extends GameLevel {
      */
     loadScene(): void {
         // Load resources
-        this.load.tilemap("level2", "hw5_assets/tilemaps/level2.json");
-        this.load.spritesheet("green", "hw5_assets/spritesheets/greenBalloon.json");
+        this.load.tilemap("level2", "lungo_assets/tilemaps/level2.json");
+        this.load.spritesheet("green", "lungo_assets/spritesheets/greenBalloon.json");
 
     }
 
@@ -35,15 +35,15 @@ export default class Level2 extends GameLevel {
 
         // Add in our green balloons to the enemies
         for(let pos of [new Vec2(18, 8), new Vec2(25, 3), new Vec2(52, 5)]){
-            this.addBalloon("red", pos, {color: HW5_Color.RED});
+            this.addBalloon("red", pos, {color: Lungo_Color.RED});
         }
 
         for(let pos of [new Vec2(3, 4), new Vec2(33, 10)]){
-            this.addBalloon("green", pos, {color: HW5_Color.GREEN});
+            this.addBalloon("green", pos, {color: Lungo_Color.GREEN});
         }
 
         for(let pos of [new Vec2(20, 3), new Vec2(41,4)]){
-            this.addBalloon("blue", pos, {color: HW5_Color.BLUE});
+            this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
     }
 

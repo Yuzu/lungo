@@ -1,10 +1,10 @@
-import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import GameEvent from "../../Wolfie2D/Events/GameEvent";
-import AnimatedSprite from "../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
-import { HW5_Events } from "../hw5_enums";
+import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
+import GameEvent from "../../../Wolfie2D/Events/GameEvent";
+import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import { Lungo_Events } from "../../Lungo_enums";
 import BalloonState from "./BalloonState";
 import { BalloonStates } from "./BalloonController";
-import { HW5_Color } from "../hw5_color";
+import { Lungo_Color } from "../../Lungo_color";
 
 // HOMEWORK 5 - TODO
 /**
