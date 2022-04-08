@@ -17,7 +17,13 @@ export default abstract class BasicEnemyState extends State {
     constructor(parent: StateMachine, owner: GameNode){
 		super(parent);
 		this.owner = owner;
-		this.firingTimer = new Timer(250);
+		if (this.parent.firingCooldown) {
+			this.firingTimer = new Timer(this.parent.firingCooldown);
+		}
+		else {
+			this.firingTimer = new Timer(3000);
+		}
+		
         this.canFire = true;
 	}
 	update(deltaT: number): void {

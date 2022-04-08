@@ -345,14 +345,15 @@ export default class MainMenu extends Scene {
 
                 let sceneOptions = {
                     physics: {
-                        groupNames: ["ground", "player", "balloon", "shield", "enemy"],
+                        groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
                         collisions:
                         [
-                            [0, 1, 1, 0, 1],
-                            [1, 0, 0, 1, 1],
-                            [1, 0, 0, 0, 0],
-                            [0, 1, 0, 0, 0],
-                            [1, 1, 0, 0, 1]
+                            [0, 1, 1, 0, 1, 1],
+                            [1, 0, 0, 1, 1, 1],
+                            [1, 0, 0, 0, 0, 0],
+                            [0, 1, 0, 0, 0, 1],
+                            [1, 1, 0, 0, 1, 0],
+                            [1, 1, 0, 1, 0, 0]
                         ]
                     }
                 }

@@ -7,6 +7,7 @@ import Graphic from "../../../Wolfie2D/Nodes/Graphic";
 import AnimatedSprite from "../../../Wolfie2D/Nodes/Sprites/AnimatedSprite";
 import MathUtils from "../../../Wolfie2D/Utils/MathUtils";
 import { HW5_Events } from "../../hw5_enums";
+import GameNode from "../../../Wolfie2D/Nodes/GameNode";
 
 /**
  * This class controls our bullet behavior. Bullets will start out at a certain speed and then accelerate until they either
@@ -14,7 +15,7 @@ import { HW5_Events } from "../../hw5_enums";
  */
 export default class BulletBehavior implements AI {
     // The owner of this AI
-    private owner: Graphic;
+    private owner: GameNode;
 
     // The velocity
     private current_speed: number;
@@ -27,17 +28,18 @@ export default class BulletBehavior implements AI {
     reversed: boolean = false; //not sure if we need this
 
 
-    // An event emitter and receiver to hook into the event system
-    private receiver: Receiver
+    private weight: number;
+    private enemyPos: Vec2;
 
-    initializeAI(owner: Graphic, options: Record<string, any>): void {
+    initializeAI(owner: GameNode, options: Record<string, any>): void {
         this.owner = owner;
 
-        this.current_speed = options.speed;;
-        
-        this.receiver = new Receiver();
+        this.current_speed = options.startSpeed;
+        this.weight = options.weight;
+        this.enemyPos = options.enemyPos;
 
-        this.receiver.subscribe(HW5_Events.ENEMY_FIRES);
+        (<AnimatedSprite>this.owner).animation.play("IDLE", true);
+
     }
 
     activate(options: Record<string, any>): void {
@@ -53,19 +55,16 @@ export default class BulletBehavior implements AI {
         }
     }
 
-    update(deltaT: number): void {
-        while(this.receiver.hasNextEvent()){
-			this.handleEvent(this.receiver.getNextEvent());
-		}
-        
-        if(this.owner.visible){
-            //While this bullet is active, accelerate the bullet to a max speed over time. 
-            this.current_speed += deltaT * BulletBehavior.SPEED_INC;
-            this.current_speed = MathUtils.clamp(this.current_speed, this.start_speed, BulletBehavior.MAX_SPEED);
 
-            // Update the position
-            this.owner.position.add(Vec2.UP.scaled(deltaT * this.current_speed));
-        }
+    update(deltaT: number): void {
+
+        //While this bullet is active, accelerate the bullet to a max speed over time. 
+        this.current_speed += deltaT * BulletBehavior.SPEED_INC;
+        this.current_speed = MathUtils.clamp(this.current_speed, this.start_speed, BulletBehavior.MAX_SPEED);
+
+        // Update the position
+        //this.owner.position.add(Vec2.UP.scaled(deltaT * this.current_speed));
+
     }
 
     destroy(): void {

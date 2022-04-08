@@ -16,17 +16,9 @@ export default class Aggro extends BasicEnemyState {
 	update(deltaT: number): void {
 		super.update(deltaT);
 
-        //check to see if the enemy is able to fire
-        //console.log(this.firingTimer);
-        if(this.canFire){
-            this.emitter.fireEvent(HW5_Events.ENEMY_FIRES, {position: this.owner.position});
-            console.log("pew pew");
-            this.canFire = false;
-            this.firingTimer.start();
-        }
         this.parent.velocity.x = 0;
 
-		this.owner.move(this.parent.velocity.scaled(deltaT));
+		//this.owner.move(this.parent.velocity.scaled(deltaT));
         this.owner.animation.playIfNotAlready("IDLE", true);
 	}
 
@@ -35,7 +27,7 @@ export default class Aggro extends BasicEnemyState {
             // Determine if the enemy has a line of sight to the player, and if so, start shooting.
             let selfPos = this.owner.position;
             let enemyPos = event.data.get("position");
-
+            console.log(selfPos);
             let delta = enemyPos.sub(selfPos);
 
             // Iterate through the tilemap region until we find a collision
@@ -72,6 +64,24 @@ export default class Aggro extends BasicEnemyState {
                 }
             }
             console.log("I SEE YOU (in aggro)");
+            
+            //check to see if the enemy is able to fire
+            //console.log(this.firingTimer);
+            if(this.canFire){
+                // determine the velocity and direction this bullet needs to go to hit the player.
+                console.log(selfPos);
+                this.emitter.fireEvent(HW5_Events.ENEMY_FIRES,
+                                    {
+                                    selfPos: new Vec2(selfPos.x, selfPos.y), 
+                                    enemyPos: new Vec2(enemyPos.x, enemyPos.y),
+                                    startSpeed: this.parent.projectileStartSpeed,
+                                    weight: this.parent.projectileWeight
+                                });
+                
+                console.log("pew pew");
+                this.canFire = false;
+                this.firingTimer.start();
+            }
             return;
         }
 	}

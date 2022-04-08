@@ -24,6 +24,8 @@ import MainMenu from "./MainMenu";
 
 import BasicEnemyController from "../Enemies/BasicEnemy/BasicEnemyController";
 
+import BulletAI from "../Enemies/Projectiles/BulletAI";
+
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 
@@ -362,8 +364,16 @@ export default class GameLevel extends Scene {
                     {
                         this.respawnPlayer();
                     }
-
-
+                    break;
+                case HW5_Events.ENEMY_FIRES:
+                    {
+                        let selfPos = event.data.get("selfPos");
+                        let enemyPos = event.data.get("enemyPos");
+                        let startSpeed = event.data.get("startSpeed");
+                        let weight = event.data.get("weight");
+                        this.addProjectile("blue", selfPos, {enemyPos: enemyPos, startSpeed: startSpeed, weight: weight});
+                    }
+                    break;
             }
         }
 
@@ -437,7 +447,8 @@ export default class GameLevel extends Scene {
             HW5_Events.LEVEL_END,
             HW5_Events.PLAYER_KILLED,
             HW5_Events.SHIELD_HIT,
-            HW5_Events.SHIELD_TRAMPOLINE_JUMP
+            HW5_Events.SHIELD_TRAMPOLINE_JUMP,
+            HW5_Events.ENEMY_FIRES
         ]);
     }
 
@@ -505,7 +516,7 @@ export default class GameLevel extends Scene {
 
             this.projectileList.forEach((projectile) => {
                 projectile.unfreeze();
-                projectile.enablePhysics();
+                projectile.enablePhysics(); 
                 projectile.aiActive = true;
             });
 
@@ -681,6 +692,18 @@ export default class GameLevel extends Scene {
         enemy.setGroup("enemy");
 
         this.enemyList.push(enemy);
+    }
+
+    protected addProjectile(spriteKey: string, tilePos: Vec2, aiOptions: Record<string, any>): void {
+        let projectile = this.add.animatedSprite(spriteKey, "primary");
+        projectile.position.set(tilePos.x, tilePos.y); // we don't multiply by 32 because the given pos is already scaled properly.
+        projectile.scale.set(2, 2);
+        projectile.addPhysics();
+        projectile.unfreeze();
+        projectile.addAI(BulletAI, aiOptions);
+        projectile.setGroup("projectile");
+
+        this.projectileList.push(projectile);
     }
     // HOMEWORK 5 - TODO
     /**

@@ -7,6 +7,7 @@ import OrthogonalTilemap from "../../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilema
 import { EaseFunctionType } from "../../../Wolfie2D/Utils/EaseFunctions";
 import Debug from "../../../Wolfie2D/Debug/Debug";
 import Idle from "./BasicEnemyStates/Idle";
+import Aggro from "./BasicEnemyStates/Aggro";
 
 export enum BasicEnemyStates {
     IDLE = "idle",
@@ -23,6 +24,10 @@ export default class BasicEnemyController extends StateMachineAI {
     tilemap: OrthogonalTilemap;
     suitColor: HW5_Color;
 
+    firingCooldown: number;
+    projectileStartSpeed: number;
+    projectileWeight: number;
+
     initializeAI(owner: GameNode, options: Record<string, any>){
         this.owner = owner;
 
@@ -31,6 +36,10 @@ export default class BasicEnemyController extends StateMachineAI {
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         this.receiver.subscribe(HW5_Events.PLAYER_MOVE);
         
+        this.firingCooldown = options.firingCooldown;
+        this.projectileStartSpeed = options.projectileStartSpeed;
+        this.projectileWeight = options.projectileWeight;
+
         owner.tweens.add("death", {
             startDelay: 0,
             duration: 3000,
@@ -58,6 +67,8 @@ export default class BasicEnemyController extends StateMachineAI {
         let idle = new Idle(this, this.owner);
 		this.addState(BasicEnemyStates.IDLE, idle);
         
+        let aggro = new Aggro(this, this.owner);
+        this.addState(BasicEnemyStates.AGGRO, aggro);
         
         this.initialize(BasicEnemyStates.IDLE);
     }

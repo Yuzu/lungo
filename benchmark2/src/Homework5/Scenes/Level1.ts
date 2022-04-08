@@ -48,6 +48,7 @@ export default class Level1 extends GameLevel {
         this.load.keepSpritesheet("player");
         this.load.keepSpritesheet("red");
         this.load.keepSpritesheet("blue");
+        this.load.keepSpritesheet("green");
         this.load.keepAudio("jump");
         this.load.keepAudio("switch");
         this.load.keepAudio("player_death");
@@ -85,7 +86,7 @@ export default class Level1 extends GameLevel {
         }
 
         // Add enemies
-        this.addEnemy("basicEnemy", new Vec2(29, 29), {});
+        this.addEnemy("basicEnemy", new Vec2(29, 29), {firingCooldown: 2500, projectileStartSpeed:  200, projectileWeight: 2});
 
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
         
