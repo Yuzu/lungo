@@ -779,8 +779,9 @@ export default class GameLevel extends Scene {
     /**
      * Returns the player to spawn
      */
-    protected respawnPlayer(): void {
+     protected respawnPlayer(): void {
         clearInterval(this.levelTimer);
+        this.viewport.setZoomLevel(1);
         GameLevel.livesCount = 3;
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
         this.sceneManager.changeToScene(MainMenu, {});
