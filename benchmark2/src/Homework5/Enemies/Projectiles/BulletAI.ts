@@ -36,6 +36,10 @@ export default class BulletBehavior implements AI  {
     private enemyPos: Vec2;
     private playerPos: Vec2;
 
+//emitter to destroy bullet when contact with collidables
+    private emitter: Emitter;
+
+
     initializeAI(owner: GameNode, options: Record<string, any>): void {
 
         console.log(options);
@@ -50,6 +54,9 @@ export default class BulletBehavior implements AI  {
         let divisor = Math.abs(xValue) + Math.abs(yValue);
         this.direction = new Vec2(xValue/divisor, yValue/divisor);
         this.velocity = new Vec2(-1, 1);
+
+        this.emitter = new Emitter();
+
 
         (<AnimatedSprite>this.owner).animation.play("IDLE", true);
 
@@ -84,6 +91,10 @@ export default class BulletBehavior implements AI  {
 		this.owner.move(this.velocity.scaled(deltaT));
         // Update the position
         //this.owner.position.add(Vec2.UP.scaled(deltaT * this.current_speed));
+        if (this.owner.onCeiling || this.owner.onGround || this.owner.onWall) {
+            this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: this.owner.id}); 
+
+		}
 
     }
 

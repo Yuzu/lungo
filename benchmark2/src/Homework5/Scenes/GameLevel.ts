@@ -257,10 +257,11 @@ export default class GameLevel extends Scene {
                         let other = this.sceneGraph.getNode(event.data.get("other"));
                         
                         if(node === this.shield){
-                            // Node is player, other is balloon
+                            // Node is player, other is balloon or projectile
+                            
                             this.handleShieldBalloonCollision(<AnimatedSprite>node, <AnimatedSprite>other);
                         } else {
-                            // Other is player, node is balloon
+                            // Other is player, node is balloon or projectile
                             this.handleShieldBalloonCollision(<AnimatedSprite>other,<AnimatedSprite>node);
 
                         }
@@ -291,8 +292,8 @@ export default class GameLevel extends Scene {
                         // An balloon collided with the player, destroy it and use the particle system
                         this.balloonsPopped++;
                         let node = this.sceneGraph.getNode(event.data.get("owner"));
-                        
-                        node.destroy();
+                        if(node) //node would be null if the bullet collided with player (ig since lungo counts as a wall to the engine? (check bulletAI for bullet destruction implementation))
+                            node.destroy();
                     }
                     break;
                     
@@ -365,6 +366,12 @@ export default class GameLevel extends Scene {
                     {
                         this.respawnPlayer();
                     }
+                    break;
+
+                case Lungo_Events.ENEMY_DAMAGED:
+                     {
+                        console.log("enemy: ouch!")
+                     }
                     break;
                 case Lungo_Events.ENEMY_FIRES:
                     {
@@ -635,6 +642,7 @@ export default class GameLevel extends Scene {
 
         this.shield.setGroup("shield");
         this.shield.setTrigger("balloon", Lungo_Events.SHIELD_HIT, null);
+        this.shield.setTrigger("projectile", Lungo_Events.SHIELD_HIT, null);
         this.shield.setTrigger("player", Lungo_Events.SHIELD_TRAMPOLINE_JUMP, null);
     }
 
@@ -695,6 +703,9 @@ export default class GameLevel extends Scene {
         projectile.unfreeze();
         projectile.addAI(BulletAI, aiOptions);
         projectile.setGroup("projectile");
+        projectile.setTrigger("player", Lungo_Events.PLAYER_HIT_BALLOON, null);
+        projectile.setTrigger("enemy", Lungo_Events.ENEMY_DAMAGED, null  ); //not sure if right, pops balloon then damages enemy
+
 
         this.projectileList.push(projectile);
     }
@@ -717,6 +728,8 @@ export default class GameLevel extends Scene {
         if (balloon === undefined) {
             return;
         }
+        //console.log("is this a bullet?: ",balloon.ai instanceof BulletAI)
+        
         let balloonAI = (<BalloonController>balloon.ai);
         if (balloonAI === undefined) {
             return;
