@@ -18,7 +18,7 @@ export default class Aggro extends BasicEnemyState {
 
         this.parent.velocity.x = 0;
 
-		//this.owner.move(this.parent.velocity.scaled(deltaT));
+		this.owner.move(this.parent.velocity.scaled(deltaT));
         this.owner.animation.playIfNotAlready("IDLE", true);
 	}
 
@@ -27,8 +27,22 @@ export default class Aggro extends BasicEnemyState {
             // Determine if the enemy has a line of sight to the player, and if so, start shooting.
             let selfPos = this.owner.position;
             let enemyPos = event.data.get("position");
-            console.log(selfPos);
+            console.log(selfPos)
+            console.log(enemyPos)
             let delta = enemyPos.sub(selfPos);
+
+            if (selfPos.x/32 > enemyPos.x) {
+                // player is to our left
+                //console.log("face left")
+                this.owner.invertX = true;
+              }
+              else if (selfPos.x/32 < enemyPos.x) {
+                // else assume to the right
+                //console.log("face right")
+                this.owner.invertX = false;
+
+              }
+
 
             // Iterate through the tilemap region until we find a collision
             let minX = Math.min(selfPos.x, enemyPos.x);
@@ -79,6 +93,7 @@ export default class Aggro extends BasicEnemyState {
                                 });
                 
                 console.log("pew pew");
+                console.log(this.gravity)
                 this.canFire = false;
                 this.firingTimer.start();
             }

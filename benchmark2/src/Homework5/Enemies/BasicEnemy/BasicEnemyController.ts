@@ -19,6 +19,7 @@ export default class BasicEnemyController extends StateMachineAI {
     protected owner: GameNode;
     velocity: Vec2 = Vec2.ZERO;
 	speed: number = 200;
+    health: number = 3;
 	MIN_SPEED: number = 200;
     MAX_SPEED: number = 300;
     tilemap: OrthogonalTilemap;
