@@ -92,6 +92,7 @@ export default class BulletBehavior implements AI  {
         // Update the position
         //this.owner.position.add(Vec2.UP.scaled(deltaT * this.current_speed));
         if (this.owner.onCeiling || this.owner.onGround || this.owner.onWall) {
+           // console.log(this.owner.group)
             this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: this.owner.id}); 
 
 		}

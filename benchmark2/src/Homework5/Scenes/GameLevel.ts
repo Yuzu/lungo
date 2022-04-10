@@ -21,6 +21,8 @@ import Lungo_ParticleSystem from "../Lungo_ParticleSystem";
 import PlayerController from "../Player/PlayerController";
 import ShieldController from "../Player/ShieldController";
 import MainMenu from "./MainMenu";
+import CanvasNode from "../../Wolfie2D/Nodes/CanvasNode";
+
 
 import BasicEnemyController from "../Enemies/BasicEnemy/BasicEnemyController";
 
@@ -28,6 +30,7 @@ import BulletAI from "../Enemies/Projectiles/BulletAI";
 
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
+import BulletBehavior from "../Enemies/Projectiles/BulletAI";
 
 
 // HOMEWORK 5 - TODO
@@ -48,7 +51,7 @@ export default class GameLevel extends Scene {
 
 
     // Labels for the UI
-    protected static livesCount: number = 3;
+    protected static livesCount: number = 100;
     protected livesCountLabel: Label;
 
     // Stuff to end the level and go to the next level
@@ -218,6 +221,21 @@ export default class GameLevel extends Scene {
             this.isPaused = !this.isPaused;
         }
 
+        const viewportCenter = this.viewport.getCenter().clone();
+		const baseViewportSize = this.viewport.getHalfSize().scaled(2);
+
+
+
+		// Handle the despawing of all other objects that move offscreen
+		for(let projectile of this.projectileList){
+            if(projectile.ai instanceof BulletBehavior){
+                console.log(projectile.ai.reversed)
+            }
+			if(projectile.visible){
+				this.handleScreenDespawn(projectile, viewportCenter, baseViewportSize);
+			}
+		}
+
         // Handle events and update the UI if needed
         while(this.receiver.hasNextEvent()){
             let event = this.receiver.getNextEvent();
@@ -370,9 +388,32 @@ export default class GameLevel extends Scene {
 
                 case Lungo_Events.ENEMY_DAMAGED:
                      {
-                        console.log("enemy: ouch!")
+                        console.log("enemy balloon collision!")
+                        let node = this.sceneGraph.getNode(event.data.get("node"));
+                        let other = this.sceneGraph.getNode(event.data.get("other"));
+                        if(node === undefined || node === null) return; 
+                        if(other === undefined || other === null) return;  //crash fix after enemy died                      
+                       
+                        if(node.ai instanceof BasicEnemyController ){
+                            // Node is player, other is balloon
+                            //console.log("enemy is first node")
+                            this.handleEnemyBalloonCollision(<AnimatedSprite>node, <AnimatedSprite>other);
+                        } else {
+                            //console.log("enemy is second node")
+                            // Other is player, node is balloon
+                            this.handleEnemyBalloonCollision(<AnimatedSprite>other,<AnimatedSprite>node);
+
+                        }
                      }
                     break;
+                case Lungo_Events.ENEMY_KILLED:
+                    {
+                        console.log("enemy dieded :(")
+                        let node = this.sceneGraph.getNode(event.data.get("owner"));
+                        if(node) //node would be null if the bullet collided with player (ig since lungo counts as a wall to the engine? (check bulletAI for bullet destruction implementation))
+                            node.destroy();
+                    }
+                       break;
                 case Lungo_Events.ENEMY_FIRES:
                     {
                         let selfPos = event.data.get("selfPos");
@@ -434,9 +475,11 @@ export default class GameLevel extends Scene {
             Lungo_Events.LEVEL_START,
             Lungo_Events.LEVEL_END,
             Lungo_Events.PLAYER_KILLED,
+            Lungo_Events.ENEMY_KILLED,
             Lungo_Events.SHIELD_HIT,
             Lungo_Events.SHIELD_TRAMPOLINE_JUMP,
-            Lungo_Events.ENEMY_FIRES
+            Lungo_Events.ENEMY_FIRES,
+            Lungo_Events.ENEMY_DAMAGED
         ]);
     }
 
@@ -701,7 +744,7 @@ export default class GameLevel extends Scene {
         projectile.scale.set(2, 2);
         projectile.addPhysics();
         projectile.unfreeze();
-        projectile.addAI(BulletAI, aiOptions);
+        projectile.addAI(BulletBehavior, aiOptions);
         projectile.setGroup("projectile");
         projectile.setTrigger("player", Lungo_Events.PLAYER_HIT_BALLOON, null);
         projectile.setTrigger("enemy", Lungo_Events.ENEMY_DAMAGED, null  ); //not sure if right, pops balloon then damages enemy
@@ -724,20 +767,56 @@ export default class GameLevel extends Scene {
         this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
     }
 
+    protected handleEnemyBalloonCollision(enemy: AnimatedSprite, balloon: AnimatedSprite) {
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "pop", loop: false, holdReference: false});
+        if(enemy === undefined || enemy === null) return;
+        if(balloon === undefined || balloon === null) return;
+        let ec = <BasicEnemyController>enemy._ai;
+        let bc = <BulletBehavior>balloon._ai;
+        //console.log("enemy: ouch!")
+        //console.log("is balloon reversed: ",bc.reversed)
+        //only pop a projectile if it's reversed, so enemies don't kill themselves
+        if(bc.reversed){
+            console.log("Decreasing enemy life count!", ec.health-1);
+            ec.health -= 1;
+            //this.incPlayerLife(-1); where we would decrease enemy life
+            //if enemy life <= 0, kill enemy
+
+            if(ec.health <= 0){
+                this.emitter.fireEvent(Lungo_Events.ENEMY_KILLED, {owner: enemy.id});
+            }
+            else{
+                //Pop the balloon
+                this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
+            }
+    
+
+        }
+
+ 
+    }
+
     protected handleShieldBalloonCollision(shield: AnimatedSprite, balloon: AnimatedSprite) {
         if (balloon === undefined) {
             return;
         }
         //console.log("is this a bullet?: ",balloon.ai instanceof BulletAI)
         
-        let balloonAI = (<BalloonController>balloon.ai);
+        let balloonAI = null;
+
+        if(balloon.ai instanceof BalloonController){
+            balloonAI = <BalloonController>balloon.ai;
+        }
+        else{
+            balloonAI = <BulletBehavior>balloon.ai
+        }
         if (balloonAI === undefined) {
             return;
         }
         if (balloonAI.reversed === true) {
             return;
         }
-
+        
         shield.animation.playIfNotAlready("REFLECT", false, "IDLE");
         console.log("balloon reversed");
         balloonAI.reversed = true;
@@ -789,13 +868,34 @@ export default class GameLevel extends Scene {
         }
     }
 
+    //handles removal of bullets from projectile list
+    handleScreenDespawn(node: CanvasNode, viewportCenter: Vec2, baseViewportSize: Vec2): void {
+		// Your code goes here:
+		// Plan: Check left, right, top, and bottom (or take a look at the shape overlap function for inspiration)
+		// Check for isBullet
+			if(node.position.y < 0 || node.position.x < (viewportCenter.x - baseViewportSize.x) || node.position.x >(viewportCenter.x + baseViewportSize.x) ){
+
+                if(node.ai instanceof BulletBehavior){
+                    this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: node.id});
+                    console.log("bullet despawned!!!")
+                    //console.log((viewportCenter.x - baseViewportSize.x),(viewportCenter.x + baseViewportSize.x),node.position.y )
+
+
+                }
+			
+		}
+
+	}
+
+
+
     /**
      * Returns the player to spawn
      */
      protected respawnPlayer(): void {
         clearInterval(this.levelTimer);
         this.viewport.setZoomLevel(1);
-        GameLevel.livesCount = 3;
+        GameLevel.livesCount = 100;
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
         this.sceneManager.changeToScene(MainMenu, {});
         Input.enableInput();
