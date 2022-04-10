@@ -162,6 +162,15 @@ export default class MainMenu extends Scene {
         const pause = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y), text: "ESC: Pauses the game"});
         pause.textColor = Color.WHITE;
 
+        const sprint = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 50), text: "Shift: Hold to Sprint"});
+        sprint.textColor = Color.WHITE;
+
+        const shieldWall = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 100), text: "T: Shield Wall - Leave your shield stationary, leaving Lungo free to move around."});
+        shieldWall.textColor = Color.WHITE;
+
+        const shieldTrampoline = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 150), text: "F: Shield Trampoline - Allows for lungo to jump and propel himself using the shield."});
+        shieldTrampoline.textColor = Color.WHITE;
+
         const controlBackButton = <Button>this.add.uiElement(UIElementType.BUTTON, "controls", {position: new Vec2(center.x, center.y + 250), text: "Main Menu"});
         controlBackButton.backgroundColor = Color.ORANGE;
         controlBackButton.borderColor = Color.WHITE;
