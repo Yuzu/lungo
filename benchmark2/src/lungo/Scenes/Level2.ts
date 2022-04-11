@@ -13,8 +13,8 @@ export default class Level2 extends GameLevel {
      */
     loadScene(): void {
         // Load resources
-        this.load.tilemap("level2", "lungo_assets/tilemaps/level2.json");
-        this.load.spritesheet("green", "lungo_assets/spritesheets/greenBalloon.json");
+        this.load.tilemap("level2", "benchmark2/dist/lungo_assets/tilemaps/level2.json");
+        this.load.spritesheet("green", "benchmark2/dist/lungo_assets/spritesheets/greenBalloon.json");
 
     }
 

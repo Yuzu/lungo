@@ -15,19 +15,19 @@ export default class Level1 extends GameLevel {
      */
     loadScene(): void {
         // Load resources
-        this.load.tilemap("level1", "lungo_assets/tilemaps/level1.json");
-        this.load.spritesheet("player", "lungo_assets/spritesheets/lungo.json");
-        this.load.spritesheet("shield", "lungo_assets/spritesheets/shield.json");
-        this.load.spritesheet("red", "lungo_assets/spritesheets/redBalloon.json");
-        this.load.spritesheet("blue", "lungo_assets/spritesheets/blueBalloon.json");
-        this.load.spritesheet("basicEnemy", "lungo_assets/spritesheets/basicEnemy.json");
-        this.load.audio("jump", "lungo_assets/sounds/jump.wav");
-        this.load.audio("switch", "lungo_assets/sounds/switch.wav");
-        this.load.audio("player_death", "lungo_assets/sounds/player_death.wav");
-        this.load.audio("pop", "lungo_assets/sounds/pop.wav")
+        this.load.tilemap("level1", "benchmark2/dist/lungo_assets/tilemaps/level1.json");
+        this.load.spritesheet("player", "benchmark2/dist/lungo_assets/spritesheets/lungo.json");
+        this.load.spritesheet("shield", "benchmark2/dist/lungo_assets/spritesheets/shield.json");
+        this.load.spritesheet("red", "benchmark2/dist/lungo_assets/spritesheets/redBalloon.json");
+        this.load.spritesheet("blue", "benchmark2/dist/lungo_assets/spritesheets/blueBalloon.json");
+        this.load.spritesheet("basicEnemy", "benchmark2/dist/lungo_assets/spritesheets/basicEnemy.json");
+        this.load.audio("jump", "benchmark2/dist/lungo_assets/sounds/jump.wav");
+        this.load.audio("switch", "benchmark2/dist/lungo_assets/sounds/switch.wav");
+        this.load.audio("player_death", "benchmark2/dist/lungo_assets/sounds/player_death.wav");
+        this.load.audio("pop", "benchmark2/dist/lungo_assets/sounds/pop.wav")
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
-        this.load.audio("level_music", "lungo_assets/music/menu.mp3");
+        this.load.audio("level_music", "benchmark2/dist/lungo_assets/music/menu.mp3");
 
     }
 

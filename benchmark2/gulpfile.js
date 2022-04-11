@@ -8,6 +8,7 @@ var paths = {
     pages: ['src/*.html']
 };
 
+
 var watchedBrowserify = watchify(browserify({
     basedir: '.',
     debug: true,

@@ -26,9 +26,9 @@ export default class MainMenu extends Scene {
     
     loadScene(): void {
         // Load the menu song
-        this.load.audio("menu", "lungo_assets/music/menu.mp3");
+        this.load.audio("menu", "benchmark2/dist/lungo_assets/music/menu.mp3");
 
-        this.load.image("background", "./lungo_assets/images/Lungo.png");
+        this.load.image("background", "benchmark2/dist/lungo_assets/images/Lungo.png");
     }
 
     startScene(){

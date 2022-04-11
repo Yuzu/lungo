@@ -1,5 +1,5 @@
 import Game from "./Wolfie2D/Loop/Game";
-import MainMenu from "./Homework5/Scenes/MainMenu";
+import MainMenu from "./lungo/Scenes/MainMenu";
 
 // The main function is your entrypoint into Wolfie2D. Specify your first scene and any options here.
 (function main(){
