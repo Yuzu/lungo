@@ -4,10 +4,12 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { Lungo_Color } from "../Lungo_color";
 import GameLevel from "./GameLevel";
 import Level2 from "./Level2";
-
+import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 
 export default class Level1 extends GameLevel {
 
+    protected trampolineIcon: Sprite;
+    protected shieldIcon: Sprite;
 
     // HOMEWORK 5 - TODO
     /**
@@ -21,6 +23,8 @@ export default class Level1 extends GameLevel {
         this.load.spritesheet("red", "benchmark2/dist/lungo_assets/spritesheets/redBalloon.json");
         this.load.spritesheet("blue", "benchmark2/dist/lungo_assets/spritesheets/blueBalloon.json");
         this.load.spritesheet("basicEnemy", "benchmark2/dist/lungo_assets/spritesheets/basicEnemy.json");
+        this.load.image("trampolineIcon", "benchmark2/dist/lungo_assets/images/trampoline.png");
+        this.load.image("shieldIcon", "benchmark2/dist/lungo_assets/images/shield.png");
         this.load.audio("jump", "benchmark2/dist/lungo_assets/sounds/jump.wav");
         this.load.audio("switch", "benchmark2/dist/lungo_assets/sounds/switch.wav");
         this.load.audio("player_death", "benchmark2/dist/lungo_assets/sounds/player_death.wav");
@@ -54,6 +58,9 @@ export default class Level1 extends GameLevel {
         this.load.keepAudio("player_death");
         this.load.keepAudio("pop")
 
+        this.load.keepImage("trampolineIcon");
+        this.load.keepImage("shieldIcon");
+
         this.load.keepAudio("level_music");
     }
 
@@ -76,6 +83,12 @@ export default class Level1 extends GameLevel {
 
         this.nextLevel = Level2;
 
+        this.trampolineIcon = this.add.sprite("trampolineIcon", "UI");
+        this.trampolineIcon.position.set(250, 25);
+
+        this.shieldIcon = this.add.sprite("shieldIcon", "UI");
+        this.shieldIcon.position.set(300, 25);
+        
         // Add balloons of various types, just red and blue for the first level
         for(let pos of [new Vec2(18, 8), new Vec2(25, 3), new Vec2(52, 5)]){
             this.addBalloon("red", pos, {color: Lungo_Color.RED});
@@ -101,5 +114,20 @@ export default class Level1 extends GameLevel {
 
     updateScene(deltaT: number): void {
         super.updateScene(deltaT);
+
+        // TODO - this needs to be in every level. it feels like bad practice but shrug.
+        if (this.shieldTrampolineTimer.isStopped()) {
+            this.trampolineIcon.alpha = 1;
+        }
+        else {
+            this.trampolineIcon.alpha = 0.4;
+        }
+
+        if (this.shieldWallTimer.isStopped()) {
+            this.shieldIcon.alpha = 1;
+        }
+        else {
+            this.shieldIcon.alpha = 0.4;
+        }
     }
 }

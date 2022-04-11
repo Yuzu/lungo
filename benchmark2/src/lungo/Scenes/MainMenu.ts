@@ -8,6 +8,7 @@ import Scene from "../../Wolfie2D/Scene/Scene";
 import Color from "../../Wolfie2D/Utils/Color";
 import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Level1 from "./Level1";
+import Level2 from "./Level2";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import EaseFunctions, { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import Input from "../../Wolfie2D/Input/Input";
@@ -330,6 +331,34 @@ export default class MainMenu extends Scene {
 
             console.log(event);
 
+            /*
+            Init the next scene with physics collisions:
+                    ground  player  balloon, shield
+            ground    No      --      --     No
+            player    Yes      No      --    Yes
+            balloon   Yes      No      No    No
+            shield    No      Yes      No    No
+            Each layer becomes a number. In this case, 4 bits matter for each
+            ground:  self - 000, collisions - 011
+            player:  self - 001, collisions - 100
+            balloon: self - 010, collisions - 000
+            */
+
+            let sceneOptions = {
+                physics: {
+                    groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
+                    collisions:
+                    [
+                        [0, 1, 1, 0, 1, 1],
+                        [1, 0, 0, 1, 1, 1],
+                        [1, 0, 0, 0, 0, 0],
+                        [0, 1, 0, 0, 0, 1],
+                        [1, 1, 0, 0, 0, 0],
+                        [1, 1, 0, 1, 0, 0]
+                    ]
+                }
+            }
+
             if(event.type === "levelSelect"){
                 this.mainMenu.setHidden(true);
                 this.levelSelect.setHidden(false);
@@ -339,33 +368,6 @@ export default class MainMenu extends Scene {
             // TODO - disable clickable buttons above depending on player progress
             if (event.type === "play1") {
                 console.log("play 1");
-                /*
-                Init the next scene with physics collisions:
-                        ground  player  balloon, shield
-                ground    No      --      --     No
-                player    Yes      No      --    Yes
-                balloon   Yes      No      No    No
-                shield    No      Yes      No    No
-                Each layer becomes a number. In this case, 4 bits matter for each
-                ground:  self - 000, collisions - 011
-                player:  self - 001, collisions - 100
-                balloon: self - 010, collisions - 000
-                */
-
-                let sceneOptions = {
-                    physics: {
-                        groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
-                        collisions:
-                        [
-                            [0, 1, 1, 0, 1, 1],
-                            [1, 0, 0, 1, 1, 1],
-                            [1, 0, 0, 0, 0, 0],
-                            [0, 1, 0, 0, 0, 1],
-                            [1, 1, 0, 0, 0, 0],
-                            [1, 1, 0, 1, 0, 0]
-                        ]
-                    }
-                }
                 this.sceneManager.changeToScene(Level1, {}, sceneOptions);
 
                 // Scene has started, so start playing music
@@ -373,6 +375,10 @@ export default class MainMenu extends Scene {
             }
             if (event.type === "play2") {
                 console.log("play 2");
+                this.sceneManager.changeToScene(Level2, {}, sceneOptions);
+
+                // Scene has started, so start playing music
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play3") {
                 console.log("play 3");

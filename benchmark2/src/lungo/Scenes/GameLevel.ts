@@ -508,10 +508,14 @@ export default class GameLevel extends Scene {
         this.livesCountLabel.font = "PixelSimple";
 
         // TODO - fix this
+        /*
         this.enemyLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(50, 70), text: "Enemies Left: "});
+
 
         this.enemyLabel.textColor = Color.BLACK;
         this.enemyLabel.font = "PixelSimple";
+        */
+       
         // End of level label (start off screen)
         this.levelEndLabel = <Label>this.add.uiElement(UIElementType.LABEL, "UI", {position: new Vec2(-300, 200), text: "Level Complete"});
         this.levelEndLabel.size.set(1200, 60);
@@ -520,6 +524,7 @@ export default class GameLevel extends Scene {
         this.levelEndLabel.textColor = Color.WHITE;
         this.levelEndLabel.fontSize = 48;
         this.levelEndLabel.font = "PixelSimple";
+        
 
         const center = new Vec2(290, 350);
 
