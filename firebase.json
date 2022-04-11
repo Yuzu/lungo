@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "./",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -11,13 +11,22 @@
         "source": "/benchmark1",
         "destination": "/b1.html"
       },
-	  {
+      {
         "source": "/benchmark2",
-        "destination": "/b2.html"
+        "destination": "/benchmark2/src/index.html"
       },
-	  {
+      {
         "source": "/benchmark3",
         "destination": "/b3.html"
+      }
+    ],
+    "headers": [ 
+      {
+        "source": "*",
+        "headers": [ {
+          "key": "X-Content-Type-Options",
+          "value": ""
+        }]
       }
     ]
   }
