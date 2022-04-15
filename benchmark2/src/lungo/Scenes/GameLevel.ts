@@ -138,7 +138,7 @@ export default class GameLevel extends Scene {
         this.shieldWallTimer = new Timer(2000);
         
         //6 second cooldown for SHIELD TRAMPOLINE
-        this.shieldTrampolineTimer = new Timer(6000);
+        this.shieldTrampolineTimer = new Timer(4000);
 
         // Start the black screen fade out
         this.levelTransitionScreen.tweens.play("fadeOut");
