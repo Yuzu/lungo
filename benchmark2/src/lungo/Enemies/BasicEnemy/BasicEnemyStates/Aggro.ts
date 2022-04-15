@@ -24,6 +24,7 @@ export default class Aggro extends BasicEnemyState {
 
     handleInput(event: GameEvent): void {
         if (event.type == Lungo_Events.PLAYER_MOVE) {
+            console.log("Player move received in aggro!");
             // Determine if the enemy has a line of sight to the player, and if so, start shooting.
             let selfPos = this.owner.position;
             let enemyPos = event.data.get("position");
