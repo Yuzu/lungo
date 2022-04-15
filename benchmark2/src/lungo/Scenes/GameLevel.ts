@@ -744,6 +744,7 @@ export default class GameLevel extends Scene {
     }
 
     protected addProjectile(spriteKey: string, tilePos: Vec2, aiOptions: Record<string, any>): void {
+        console.log("Adding projectile!");
         let projectile = this.add.animatedSprite(spriteKey, "primary");
         projectile.position.set(tilePos.x, tilePos.y); // we don't multiply by 32 because the given pos is already scaled properly.
         projectile.scale.set(2, 2);

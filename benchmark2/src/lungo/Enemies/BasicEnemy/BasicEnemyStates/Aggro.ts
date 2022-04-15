@@ -77,7 +77,7 @@ export default class Aggro extends BasicEnemyState {
                     }
                 }
             }
-            console.log("I SEE YOU (in aggro)");
+            console.log("I SEE YOU (in aggro)", this.canFire, selfPos.x);
             
             //check to see if the enemy is able to fire
             //console.log(this.firingTimer);
@@ -97,6 +97,7 @@ export default class Aggro extends BasicEnemyState {
                 this.canFire = false;
                 this.firingTimer.start();
             }
+            this.finished(BasicEnemyStates.IDLE);
             return;
         }
 	}

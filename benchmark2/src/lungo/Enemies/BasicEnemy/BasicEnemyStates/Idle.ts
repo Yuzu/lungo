@@ -28,6 +28,13 @@ export default class Idle extends BasicEnemyState {
             let selfPos = this.owner.position;
             let enemyPos = event.data.get("position");
 
+            //If they're too far away, abort this to save processing power
+            let d = (selfPos.x - enemyPos.x) * (selfPos.x - enemyPos.x) + (selfPos.y - enemyPos.y) + (selfPos.y - enemyPos.y);
+            //MAYBE SWITCH THIS TO AN ENEMY RANGE VALUE?
+            if(Math.sqrt(d) > 350){
+                return;
+            }
+
             let delta = enemyPos.sub(selfPos);
 
             // Iterate through the tilemap region until we find a collision
