@@ -74,7 +74,7 @@ export default class BasicEnemyController extends StateMachineAI {
     }
 
     changeState(stateName: string): void {
-        console.log("changing state " + stateName);
+        //console.log("changing state " + stateName);
         super.changeState(stateName);
     }
 

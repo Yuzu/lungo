@@ -229,7 +229,7 @@ export default class GameLevel extends Scene {
 		// Handle the despawing of all other objects that move offscreen
 		for(let projectile of this.projectileList){
             if(projectile.ai instanceof BulletBehavior){
-                console.log(projectile.ai.reversed)
+                //console.log(projectile.ai.reversed)
             }
 			if(projectile.visible){
 				this.handleScreenDespawn(projectile, viewportCenter, baseViewportSize);
@@ -388,7 +388,7 @@ export default class GameLevel extends Scene {
 
                 case Lungo_Events.ENEMY_DAMAGED:
                      {
-                        console.log("enemy balloon collision!")
+                        //console.log("enemy balloon collision!")
                         let node = this.sceneGraph.getNode(event.data.get("node"));
                         let other = this.sceneGraph.getNode(event.data.get("other"));
                         if(node === undefined || node === null) return; 
