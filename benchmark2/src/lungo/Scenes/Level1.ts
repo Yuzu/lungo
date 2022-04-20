@@ -100,6 +100,7 @@ export default class Level1 extends GameLevel {
 
         // Add enemies
         this.addEnemy("basicEnemy", new Vec2(29, 29), {firingCooldown: 2500, projectileStartSpeed:  200, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(35, 29), {firingCooldown: 2500, projectileStartSpeed:  200, projectileWeight: 2});
 
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
         

@@ -15,7 +15,7 @@ export default class Idle extends BasicEnemyState {
 
 	update(deltaT: number): void {
 		super.update(deltaT);
-
+        
         this.parent.velocity.x = 0;
 
 		this.owner.move(this.parent.velocity.scaled(deltaT));
@@ -23,18 +23,31 @@ export default class Idle extends BasicEnemyState {
 	}
 
     handleInput(event: GameEvent): void {
+        
         if (event.type == Lungo_Events.PLAYER_MOVE) {
             // Determine if the enemy has a line of sight to the player, and if so, start shooting.
             let selfPos = this.owner.position;
             let enemyPos = event.data.get("position");
 
-            let delta = enemyPos.sub(selfPos);
+            
+            //If they're too far away, abort this to save processing power
+            let d = (selfPos.x - enemyPos.x) * (selfPos.x - enemyPos.x) + (selfPos.y - enemyPos.y) * (selfPos.y - enemyPos.y);
+            
+            //MAYBE SWITCH THIS TO AN ENEMY RANGE VALUE?
+            if(Math.sqrt(d) > 350){
+                return;
+            }
+
+            let enemyPosCopy = new Vec2(enemyPos.x, enemyPos.y);
+            let selfPosCopy = new Vec2(selfPos.x, selfPos.y);
+
+            let delta = enemyPosCopy.sub(selfPosCopy); // fuck this bug why is this engine like this
 
             // Iterate through the tilemap region until we find a collision
-            let minX = Math.min(selfPos.x, enemyPos.x);
-            let maxX = Math.max(selfPos.x, enemyPos.x);
-            let minY = Math.min(selfPos.y, enemyPos.y);
-            let maxY = Math.max(selfPos.y, enemyPos.y);
+            let minX = Math.min(selfPosCopy.x, enemyPosCopy.x);
+            let maxX = Math.max(selfPosCopy.x, enemyPosCopy.x);
+            let minY = Math.min(selfPosCopy.y, enemyPosCopy.y);
+            let maxY = Math.max(selfPosCopy.y, enemyPosCopy.y);
 
             // Get the wall tilemap
             let walls = <OrthogonalTilemap>this.owner.getScene().getLayer("Walls").getItems()[0];
@@ -53,20 +66,22 @@ export default class Idle extends BasicEnemyState {
                         // Create a collider for this tile
                         let collider = new AABB(tilePos, tileSize.scaled(1 / 2));
     
-                        let hit = collider.intersectSegment(selfPos, delta, Vec2.ZERO);
+                        let hit = collider.intersectSegment(selfPosCopy, delta, Vec2.ZERO);
     
-                        if (hit !== null && selfPos.distanceSqTo(hit.pos) < selfPos.distanceSqTo(enemyPos)) {
+                        if (hit !== null && selfPosCopy.distanceSqTo(hit.pos) < selfPosCopy.distanceSqTo(enemyPosCopy)) {
                             // We hit a wall, we can't see the player
-                            console.log("I don't see you :(");
+                            //console.log("I don't see you :(");
                             return;
                         }
                     }
                 }
             }
-            console.log("I SEE YOU");
+            console.log("updating", this.owner.position.x);
+            //console.log("I SEE YOU");
+            console.log("I SEE YOU (in aggro)", this.canFire, selfPos.x);
             //change state to aggro state
             this.finished(BasicEnemyStates.AGGRO);
-            console.log(this.owner);
+            //console.log(this.owner);
 
 
         }

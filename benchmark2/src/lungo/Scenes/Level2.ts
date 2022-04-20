@@ -4,6 +4,7 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { Lungo_Color } from "../Lungo_color";
 import GameLevel from "./GameLevel";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import Level3 from "./Level3";
 
 export default class Level2 extends GameLevel {
     // HOMEWORK 5 - TODO
@@ -56,6 +57,8 @@ export default class Level2 extends GameLevel {
         this.shieldIcon.position.set(300, 25);
 
         this.addLevelEnd(new Vec2(60, 12), new Vec2(2, 2));
+
+        this.nextLevel = Level3;
 
         // Add in our green balloons to the enemies
         for(let pos of [new Vec2(18, 8), new Vec2(25, 3), new Vec2(52, 5)]){
