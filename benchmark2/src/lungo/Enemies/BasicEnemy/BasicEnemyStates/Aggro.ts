@@ -24,19 +24,24 @@ export default class Aggro extends BasicEnemyState {
 
     handleInput(event: GameEvent): void {
         if (event.type == Lungo_Events.PLAYER_MOVE) {
+            //console.log("Player move received in aggro!");
             // Determine if the enemy has a line of sight to the player, and if so, start shooting.
             let selfPos = this.owner.position;
             let enemyPos = event.data.get("position");
-            console.log(selfPos)
-            console.log(enemyPos)
-            let delta = enemyPos.sub(selfPos);
+            //console.log(selfPos)
+            //console.log(enemyPos)
 
-            if (selfPos.x/32 > enemyPos.x) {
+            let enemyPosCopy = new Vec2(enemyPos.x, enemyPos.y);
+            let selfPosCopy = new Vec2(selfPos.x, selfPos.y);
+
+            let delta = enemyPosCopy.sub(selfPosCopy);
+
+            if (selfPosCopy.x/32 > enemyPosCopy.x) {
                 // player is to our left
                 //console.log("face left")
                 this.owner.invertX = true;
               }
-              else if (selfPos.x/32 < enemyPos.x) {
+              else if (selfPosCopy.x/32 < enemyPosCopy.x) {
                 // else assume to the right
                 //console.log("face right")
                 this.owner.invertX = false;
@@ -45,10 +50,10 @@ export default class Aggro extends BasicEnemyState {
 
 
             // Iterate through the tilemap region until we find a collision
-            let minX = Math.min(selfPos.x, enemyPos.x);
-            let maxX = Math.max(selfPos.x, enemyPos.x);
-            let minY = Math.min(selfPos.y, enemyPos.y);
-            let maxY = Math.max(selfPos.y, enemyPos.y);
+            let minX = Math.min(selfPosCopy.x, enemyPosCopy.x);
+            let maxX = Math.max(selfPosCopy.x, enemyPosCopy.x);
+            let minY = Math.min(selfPosCopy.y, enemyPosCopy.y);
+            let maxY = Math.max(selfPosCopy.y, enemyPosCopy.y);
 
             // Get the wall tilemap
             let walls = <OrthogonalTilemap>this.owner.getScene().getLayer("Walls").getItems()[0];
@@ -67,9 +72,9 @@ export default class Aggro extends BasicEnemyState {
                         // Create a collider for this tile
                         let collider = new AABB(tilePos, tileSize.scaled(1 / 2));
     
-                        let hit = collider.intersectSegment(selfPos, delta, Vec2.ZERO);
+                        let hit = collider.intersectSegment(selfPosCopy, delta, Vec2.ZERO);
     
-                        if (hit !== null && selfPos.distanceSqTo(hit.pos) < selfPos.distanceSqTo(enemyPos)) {
+                        if (hit !== null && selfPosCopy.distanceSqTo(hit.pos) < selfPosCopy.distanceSqTo(enemyPosCopy)) {
                             // We hit a wall, we can't see the player
                             console.log("I don't see you :( (in aggro)");
                             this.finished(BasicEnemyStates.IDLE);
@@ -77,26 +82,28 @@ export default class Aggro extends BasicEnemyState {
                     }
                 }
             }
-            console.log("I SEE YOU (in aggro)");
+            console.log("I SEE YOU (in aggro)", this.canFire, selfPos.x);
             
             //check to see if the enemy is able to fire
-            //console.log(this.firingTimer);
+            console.log(this.firingTimer);
             if(this.canFire){
+                
                 // determine the velocity and direction this bullet needs to go to hit the player.
                 console.log(selfPos);
                 this.emitter.fireEvent(Lungo_Events.ENEMY_FIRES,
                                     {
-                                    selfPos: new Vec2(selfPos.x, selfPos.y), 
-                                    enemyPos: new Vec2(enemyPos.x, enemyPos.y),
+                                    selfPos: new Vec2(selfPosCopy.x, selfPosCopy.y), 
+                                    enemyPos: new Vec2(enemyPosCopy.x, enemyPosCopy.y),
                                     startSpeed: this.parent.projectileStartSpeed,
                                     weight: this.parent.projectileWeight
                                 });
                 
                 console.log("pew pew");
-                console.log(this.gravity)
+                //console.log(this.gravity)
                 this.canFire = false;
                 this.firingTimer.start();
             }
+            this.finished(BasicEnemyStates.IDLE);
             return;
         }
 	}

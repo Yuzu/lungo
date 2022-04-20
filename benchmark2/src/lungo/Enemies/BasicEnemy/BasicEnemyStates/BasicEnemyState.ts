@@ -16,6 +16,7 @@ export default abstract class BasicEnemyState extends State {
 
     constructor(parent: StateMachine, owner: GameNode){
 		super(parent);
+		console.log("Constructor called for basic enemy state");
 		this.owner = owner;
 		if (this.parent.firingCooldown) {
 			this.firingTimer = new Timer(this.parent.firingCooldown);
