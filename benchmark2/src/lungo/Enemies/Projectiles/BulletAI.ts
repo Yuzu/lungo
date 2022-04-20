@@ -42,7 +42,7 @@ export default class BulletBehavior implements AI  {
 
     initializeAI(owner: GameNode, options: Record<string, any>): void {
 
-        console.log(options);
+        //console.log(options);
         this.owner = owner;
         this.current_speed = options.startSpeed;
         this.weight = options.weight;

@@ -15,6 +15,9 @@ export default class ShieldTrampoline extends ShieldState {
 
 
 	update(deltaT: number): void {
+		if (!this.owner.animation.isPlaying("REFLECT")) {
+			this.owner.animation.playIfNotAlready("TRAMPOLINE", true);
+		}
 	}
 
 	onExit(): Record<string, any> {

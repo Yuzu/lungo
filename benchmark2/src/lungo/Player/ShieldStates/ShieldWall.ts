@@ -25,7 +25,9 @@ export default class ShieldWall extends ShieldState {
 
 
 	update(deltaT: number): void {
-		this.owner.animation.playIfNotAlready("IDLE", true);
+		if (!this.owner.animation.isPlaying("REFLECT")) {
+			this.owner.animation.playIfNotAlready("WALL", true);
+		}
 	}
 
 	onExit(): Record<string, any> {

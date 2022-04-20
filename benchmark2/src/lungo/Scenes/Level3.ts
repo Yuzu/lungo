@@ -4,9 +4,8 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { Lungo_Color } from "../Lungo_color";
 import GameLevel from "./GameLevel";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
-import Level3 from "./Level3";
 
-export default class Level2 extends GameLevel {
+export default class Level3 extends GameLevel {
     // HOMEWORK 5 - TODO
     /**
      * Decide which resource to keep and which to cull.
@@ -19,8 +18,7 @@ export default class Level2 extends GameLevel {
 
     loadScene(): void {
         // Load resources
-        this.load.tilemap("level2", "lungo_assets/tilemaps/level2.json");
-        this.load.tilemap("level1", "lungo_assets/tilemaps/level1.json");
+        this.load.tilemap("level3", "lungo_assets/tilemaps/level3.json");
         this.load.spritesheet("player", "lungo_assets/spritesheets/lungo.json");
         this.load.spritesheet("shield", "lungo_assets/spritesheets/shield.json");
         this.load.spritesheet("red", "lungo_assets/spritesheets/redBalloon.json");
@@ -41,10 +39,10 @@ export default class Level2 extends GameLevel {
 
     startScene(): void {
         // Add the level 2 tilemap
-        this.add.tilemap("level2", new Vec2(2, 2));
-        this.viewport.setBounds(0, 0, 96*32, 48*32);
+        this.add.tilemap("level3", new Vec2(2, 2));
+        this.viewport.setBounds(0, 0, 64*32, 96*32);
 
-        this.playerSpawn = new Vec2(3*32, 23*32);
+        this.playerSpawn = new Vec2(3*32, 90*32);
         this.shieldSpawn = this.playerSpawn;
 
         // Do generic setup for a GameLevel
@@ -56,9 +54,7 @@ export default class Level2 extends GameLevel {
         this.shieldIcon = this.add.sprite("shieldIcon", "UI");
         this.shieldIcon.position.set(300, 25);
 
-        this.addLevelEnd(new Vec2(60, 12), new Vec2(2, 2));
-
-        this.nextLevel = Level3;
+        this.addLevelEnd(new Vec2(0, 29), new Vec2(5, 5));
 
         // Add in our green balloons to the enemies
         for(let pos of [new Vec2(18, 8), new Vec2(25, 3), new Vec2(52, 5)]){
@@ -72,6 +68,27 @@ export default class Level2 extends GameLevel {
         for(let pos of [new Vec2(20, 3), new Vec2(41,4)]){
             this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
+
+        // Add enemies
+        this.addEnemy("basicEnemy", new Vec2(8, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(16, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(27, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(38, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(41, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(62, 86), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(58, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(62, 72), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(62, 66), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(50, 60), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(62, 51), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(62, 48), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(52, 37), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+
+        this.addEnemy("basicEnemy", new Vec2(38, 31), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(21, 30), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(6, 8), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(1, 13), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(19, 30), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
     }
 
     updateScene(deltaT: number): void {
