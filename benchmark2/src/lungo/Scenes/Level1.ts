@@ -31,7 +31,7 @@ export default class Level1 extends GameLevel {
         this.load.audio("pop", "lungo_assets/sounds/pop.wav")
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
-        this.load.audio("level_music", "lungo_assets/music/menu.mp3");
+        this.load.audio("level_music", "lungo_assets/music/cowbell.mp3");
 
     }
 
@@ -60,8 +60,9 @@ export default class Level1 extends GameLevel {
 
         this.load.keepImage("trampolineIcon");
         this.load.keepImage("shieldIcon");
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
 
-        this.load.keepAudio("level_music");
+        //this.load.keepAudio("level_music");
     }
 
     startScene(): void {
