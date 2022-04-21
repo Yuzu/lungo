@@ -327,38 +327,37 @@ export default class MainMenu extends Scene {
             this.mainMenu.setHidden(false);
             clearInterval(this.tweenInterval);
         }
+                /*
+        Init the next scene with physics collisions:
+                ground  player  balloon, shield
+        ground    No      --      --     No
+        player    Yes      No      --    Yes
+        balloon   Yes      No      No    No
+        shield    No      Yes      No    No
+        Each layer becomes a number. In this case, 4 bits matter for each
+        ground:  self - 000, collisions - 011
+        player:  self - 001, collisions - 100
+        balloon: self - 010, collisions - 000
+        */
+
+        let sceneOptions = {
+            physics: {
+                groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
+                collisions:
+                [
+                    [0, 1, 1, 0, 1, 1],
+                    [1, 0, 0, 1, 1, 1],
+                    [1, 0, 0, 0, 0, 0],
+                    [0, 1, 0, 0, 0, 1],
+                    [1, 1, 0, 0, 0, 0],
+                    [1, 1, 0, 1, 0, 0]
+                ]
+            }
+        }
         while(this.receiver.hasNextEvent()){
             let event = this.receiver.getNextEvent();
 
             console.log(event);
-
-            /*
-            Init the next scene with physics collisions:
-                    ground  player  balloon, shield
-            ground    No      --      --     No
-            player    Yes      No      --    Yes
-            balloon   Yes      No      No    No
-            shield    No      Yes      No    No
-            Each layer becomes a number. In this case, 4 bits matter for each
-            ground:  self - 000, collisions - 011
-            player:  self - 001, collisions - 100
-            balloon: self - 010, collisions - 000
-            */
-
-            let sceneOptions = {
-                physics: {
-                    groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
-                    collisions:
-                    [
-                        [0, 1, 1, 0, 1, 1],
-                        [1, 0, 0, 1, 1, 1],
-                        [1, 0, 0, 0, 0, 0],
-                        [0, 1, 0, 0, 0, 1],
-                        [1, 1, 0, 0, 0, 0],
-                        [1, 1, 0, 1, 0, 0]
-                    ]
-                }
-            }
 
             if(event.type === "levelSelect"){
                 this.mainMenu.setHidden(true);
@@ -414,6 +413,21 @@ export default class MainMenu extends Scene {
                 this.controls.setHidden(false);
             }
 
+        }
+        if(Input.isKeyPressed("1")){
+            this.sceneManager.changeToScene(Level1, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("2")){ 
+            this.sceneManager.changeToScene(Level2, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("3")){
+            this.sceneManager.changeToScene(Level3, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
     }
 

@@ -31,9 +31,6 @@ import BulletAI from "../Enemies/Projectiles/BulletAI";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import BulletBehavior from "../Enemies/Projectiles/BulletAI";
-import Level1 from "./Level1";
-import Level2 from "./Level2";
-import Level3 from "./Level3";
 
 
 // HOMEWORK 5 - TODO
@@ -470,24 +467,6 @@ export default class GameLevel extends Scene {
                     [1, 1, 0, 1, 0, 0]
                 ]
             }
-        }
-        if(Input.isKeyPressed("1")){
-            GameLevel.livesCount = 10;
-            this.sceneManager.changeToScene(Level1, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
-        }
-        else if(Input.isKeyPressed("2")){
-            GameLevel.livesCount = 10; 
-            this.sceneManager.changeToScene(Level2, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
-        }
-        else if(Input.isKeyPressed("3")){
-            GameLevel.livesCount = 10; 
-            this.sceneManager.changeToScene(Level3, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
 
     }
