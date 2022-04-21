@@ -74,6 +74,7 @@ export default class Level2 extends GameLevel {
         for(let pos of [new Vec2(20, 3), new Vec2(41,4)]){
             this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
+        this.levelLabel.text = "Level: 2";
     }
 
     updateScene(deltaT: number): void {

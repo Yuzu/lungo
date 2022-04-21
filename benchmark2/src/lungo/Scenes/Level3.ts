@@ -92,6 +92,8 @@ export default class Level3 extends GameLevel {
         this.addEnemy("basicEnemy", new Vec2(6, 8), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(1, 13), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(19, 30), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+
+        this.levelLabel.text = "Level: 3";
     }
 
     updateScene(deltaT: number): void {
