@@ -435,37 +435,26 @@ export default class GameLevel extends Scene {
         //Update our shield state by firing the event
         //See main.ts for the controls
         if(this.shieldWallTimer.isStopped()){
-            if(Input.isPressed("shield wall")){
+            if(Input.isPressed("shield wall") || Input.isMouseJustPressed(2)){
                 this.shieldJump = false;
                 this.emitter.fireEvent(Lungo_Events.SHIELD_WALL);
                 this.shieldWallTimer.start();
+                return;
             }
         }
         if(this.shieldTrampolineTimer.isStopped()){
-            if(Input.isPressed("shield trampoline")){
+            if(Input.isPressed("shield trampoline") || Input.isMouseJustPressed(0)){
                 this.emitter.fireEvent(Lungo_Events.SHIELD_TRAMPOLINE);
                 this.shieldTrampolineTimer.start();
                 this.shieldJump = true;
+                return;
             }
         }
         if(this.invincibleTimer.isStopped()){
             if(Input.isPressed("invincible")){
                 this.invincible = !this.invincible;
                 this.invincibleTimer.start();
-            }
-        }
-        let sceneOptions = {
-            physics: {
-                groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
-                collisions:
-                [
-                    [0, 1, 1, 0, 1, 1],
-                    [1, 0, 0, 1, 1, 1],
-                    [1, 0, 0, 0, 0, 0],
-                    [0, 1, 0, 0, 0, 1],
-                    [1, 1, 0, 0, 0, 0],
-                    [1, 1, 0, 1, 0, 0]
-                ]
+                return;
             }
         }
 
