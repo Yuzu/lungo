@@ -51,7 +51,7 @@ export default class GameLevel extends Scene {
 
 
     // Labels for the UI
-    protected static livesCount: number = 100;
+    protected static livesCount: number = 10;
     protected livesCountLabel: Label;
 
     // Stuff to end the level and go to the next level
@@ -76,6 +76,10 @@ export default class GameLevel extends Scene {
     //As shield-player collisions can happen multiple times, but we only want it to 
     // happen once
     protected shieldJump: Boolean;
+
+    //CHEAT STUFF
+    protected invincible: Boolean = false;
+    protected invincibleTimer: Timer;
 
     // Total ballons and amount currently popped
     protected totalBalloons: number;
@@ -140,6 +144,8 @@ export default class GameLevel extends Scene {
         //6 second cooldown for SHIELD TRAMPOLINE
         this.shieldTrampolineTimer = new Timer(4000);
 
+        //SET A SMALL TIMER FOR INVINCIBILITY TO PREVENT DOUBLE CLICKS
+        this.invincibleTimer = new Timer(150);
         // Start the black screen fade out
         this.levelTransitionScreen.tweens.play("fadeOut");
 
@@ -440,6 +446,12 @@ export default class GameLevel extends Scene {
                 this.emitter.fireEvent(Lungo_Events.SHIELD_TRAMPOLINE);
                 this.shieldTrampolineTimer.start();
                 this.shieldJump = true;
+            }
+        }
+        if(this.invincibleTimer.isStopped()){
+            if(Input.isPressed("invincible")){
+                this.invincible = !this.invincible;
+                this.invincibleTimer.start();
             }
         }
 
@@ -767,7 +779,9 @@ export default class GameLevel extends Scene {
         let bc = <BalloonController>balloon._ai;
 
         console.log("Decreasing life count!", GameLevel.livesCount - 1);
-        this.incPlayerLife(-1);
+        if(!this.invincible){
+            this.incPlayerLife(-1);
+        }
 
         //Pop the balloon
         this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
@@ -901,7 +915,7 @@ export default class GameLevel extends Scene {
      protected respawnPlayer(): void {
         clearInterval(this.levelTimer);
         this.viewport.setZoomLevel(1);
-        GameLevel.livesCount = 100;
+        GameLevel.livesCount = 10;
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
         this.sceneManager.changeToScene(MainMenu, {});
         Input.enableInput();
