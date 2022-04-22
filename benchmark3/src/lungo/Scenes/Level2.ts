@@ -58,7 +58,7 @@ export default class Level2 extends GameLevel {
         this.shieldIcon = this.add.sprite("shieldIcon", "UI");
         this.shieldIcon.position.set(300, 25);
 
-        this.addLevelEnd(new Vec2(60, 12), new Vec2(2, 2));
+        this.addLevelEnd(new Vec2(90, 39), new Vec2(5, 5));
 
         this.nextLevel = Level3;
 

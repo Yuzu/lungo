@@ -109,7 +109,7 @@ export default class GameLevel extends Scene {
     startScene(): void {
         this.balloonsPopped = 0;
         this.switchesPressed = 0;
-
+        GameLevel.livesCount = 10;
         // Do the game level standard initializations
         this.initLayers();
         this.initViewport();
@@ -452,6 +452,7 @@ export default class GameLevel extends Scene {
         }
         if(this.invincibleTimer.isStopped()){
             if(Input.isPressed("invincible")){
+                console.log("Player is now: " + (this.invincible ? "NOT invincible" : "invincible"));
                 this.invincible = !this.invincible;
                 this.invincibleTimer.start();
                 return;
@@ -593,7 +594,6 @@ export default class GameLevel extends Scene {
 
             this.isPaused = false;
         }
-        console.log(resumeButton);
 
 
          // Add resume button, and give it an event to emit on press
@@ -713,8 +713,8 @@ export default class GameLevel extends Scene {
      * Initializes the level end area
      */
     protected addLevelEnd(startingTile: Vec2, size: Vec2): void {
-        console.log(startingTile);
-        console.log(size);
+        //console.log(startingTile);
+        //console.log(size);
         this.levelEndArea = <Rect>this.add.graphic(GraphicType.RECT, "primary", {position: startingTile.scale(32), size: size.scale(32)});
         this.levelEndArea.addPhysics(undefined, undefined, false, true);
         this.levelEndArea.setTrigger("player", Lungo_Events.PLAYER_ENTERED_LEVEL_END, null);
@@ -781,8 +781,9 @@ export default class GameLevel extends Scene {
         let pc = <PlayerController>player._ai;
         let bc = <BalloonController>balloon._ai;
 
-        console.log("Decreasing life count!", GameLevel.livesCount - 1);
+        
         if(!this.invincible){
+            console.log("Decreasing life count!", GameLevel.livesCount - 1);
             this.incPlayerLife(-1);
         }
 

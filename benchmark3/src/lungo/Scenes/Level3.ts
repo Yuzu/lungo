@@ -93,6 +93,12 @@ export default class Level3 extends GameLevel {
         this.addEnemy("basicEnemy", new Vec2(1, 13), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(19, 30), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
 
+
+        let currentBest = localStorage.getItem("level3_best");
+        if (currentBest) {
+            let currentBest_int = parseInt(currentBest);
+            this.bestTime.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
+        }
         this.levelLabel.text = "Level: 3";
     }
 

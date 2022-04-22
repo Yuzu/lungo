@@ -76,9 +76,9 @@ export default class Idle extends BasicEnemyState {
                     }
                 }
             }
-            console.log("updating", this.owner.position.x);
+            //console.log("updating", this.owner.position.x);
             //console.log("I SEE YOU");
-            console.log("I SEE YOU (in aggro)", this.canFire, selfPos.x);
+            //console.log("I SEE YOU (in aggro)", this.canFire, selfPos.x);
             //change state to aggro state
             this.finished(BasicEnemyStates.AGGRO);
             //console.log(this.owner);

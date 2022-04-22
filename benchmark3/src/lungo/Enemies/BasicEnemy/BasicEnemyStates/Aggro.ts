@@ -82,14 +82,14 @@ export default class Aggro extends BasicEnemyState {
                     }
                 }
             }
-            console.log("I SEE YOU (in aggro)", this.canFire, selfPos.x);
+            //console.log("I SEE YOU (in aggro)", this.canFire, selfPos.x);
             
             //check to see if the enemy is able to fire
-            console.log(this.firingTimer);
+            //console.log(this.firingTimer);
             if(this.canFire){
                 
                 // determine the velocity and direction this bullet needs to go to hit the player.
-                console.log(selfPos);
+                //console.log(selfPos);
                 this.emitter.fireEvent(Lungo_Events.ENEMY_FIRES,
                                     {
                                     selfPos: new Vec2(selfPosCopy.x, selfPosCopy.y), 
