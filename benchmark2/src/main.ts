@@ -16,7 +16,8 @@ import MainMenu from "./lungo/Scenes/MainMenu";
             {name: "jump", keys: ["w", "space"]},
             {name: "run", keys: ["shift"]},
             {name: "shield wall", keys: ["t"]},
-            {name: "shield trampoline", keys: ["f"]}
+            {name: "shield trampoline", keys: ["f"]},
+            {name: "invincible", keys: ["i"]}
         ],
         useWebGL: false,                        // Tell the game we want to use webgl
         showDebug: false                       // Whether to show debug messages. You can change this to true if you want
