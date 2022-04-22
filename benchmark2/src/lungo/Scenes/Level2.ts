@@ -74,7 +74,6 @@ export default class Level2 extends GameLevel {
         for(let pos of [new Vec2(20, 3), new Vec2(41,4)]){
             this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
-        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
         let currentBest = localStorage.getItem("level2_best");
         if (currentBest) {
             let currentBest_int = parseInt(currentBest);
