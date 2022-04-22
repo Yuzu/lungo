@@ -9,6 +9,7 @@ import MathUtils from "../../../Wolfie2D/Utils/MathUtils";
 import { Lungo_Events } from "../../Lungo_enums";
 import GameNode from "../../../Wolfie2D/Nodes/GameNode";
 import StateMachineAI from "../../../Wolfie2D/AI/StateMachineAI";
+import Timer from "../../../Wolfie2D/Timing/Timer";
 
 /**
  * This class controls our bullet behavior. Bullets will start out at a certain speed and then accelerate until they either
@@ -36,6 +37,8 @@ export default class BulletBehavior implements AI  {
     private enemyPos: Vec2;
     private playerPos: Vec2;
 
+    private age: Timer;
+
 //emitter to destroy bullet when contact with collidables
     private emitter: Emitter;
 
@@ -48,7 +51,6 @@ export default class BulletBehavior implements AI  {
         this.weight = options.weight;
         this.playerPos = options.enemyPos;
 
-
         let xValue = this.playerPos.x;
         let yValue = this.playerPos.y;
         let divisor = Math.abs(xValue) + Math.abs(yValue);
@@ -57,6 +59,8 @@ export default class BulletBehavior implements AI  {
 
         this.emitter = new Emitter();
 
+        this.age = new Timer(1000);
+        this.age.start();
 
         (<AnimatedSprite>this.owner).animation.play("IDLE", true);
 
@@ -91,9 +95,9 @@ export default class BulletBehavior implements AI  {
 		this.owner.move(this.velocity.scaled(deltaT));
         // Update the position
         //this.owner.position.add(Vec2.UP.scaled(deltaT * this.current_speed));
-        if (this.owner.onCeiling || this.owner.onGround || this.owner.onWall) {
+        if ((this.owner.onCeiling || this.owner.onGround || this.owner.onWall) && (this.reversed || this.age.hasRun())) {
            // console.log(this.owner.group)
-            this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: this.owner.id}); 
+            this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: this.owner.id});
 
 		}
 

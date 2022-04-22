@@ -372,13 +372,15 @@ export default class GameLevel extends Scene {
                         if(this.nextLevel){
                             let sceneOptions = {
                                 physics: {
-                                    groupNames: ["ground", "player", "balloon", "shield"],
+                                    groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
                                     collisions:
                                     [
-                                        [0, 1, 1, 0],
-                                        [1, 0, 0, 1],
-                                        [1, 0, 0, 0],
-                                        [0, 1, 0, 0]
+                                        [0, 1, 1, 0, 1, 1],
+                                        [1, 0, 0, 1, 1, 1],
+                                        [1, 0, 0, 0, 0, 0],
+                                        [0, 1, 0, 0, 0, 1],
+                                        [1, 1, 0, 0, 0, 0],
+                                        [1, 1, 0, 1, 0, 0]
                                     ]
                                 }
                             }
@@ -684,6 +686,8 @@ export default class GameLevel extends Scene {
 
         this.player.setGroup("player");
 
+        this.player.setTrigger("projectile", Lungo_Events.PLAYER_HIT_BALLOON, null);
+
         this.viewport.follow(this.player);
     }
 
@@ -806,11 +810,14 @@ export default class GameLevel extends Scene {
             //this.incPlayerLife(-1); where we would decrease enemy life
             //if enemy life <= 0, kill enemy
 
+            // kill enemy and pop balloon
             if(ec.health <= 0){
                 this.emitter.fireEvent(Lungo_Events.ENEMY_KILLED, {owner: enemy.id});
+                this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
             }
+            // enemny lives, just Pop the balloon
             else{
-                //Pop the balloon
+                
                 this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
             }
     

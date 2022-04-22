@@ -74,6 +74,17 @@ export default class Level2 extends GameLevel {
         for(let pos of [new Vec2(20, 3), new Vec2(41,4)]){
             this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
+
+        this.addEnemy("basicEnemy", new Vec2(17, 16), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(19, 23), {firingCooldown: 2500, projectileStartSpeed:  500, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(33, 23), {firingCooldown: 1000, projectileStartSpeed:  300, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(41, 22), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(47, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(74, 20), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(86, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(81, 39), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+
+
         let currentBest = localStorage.getItem("level2_best");
         if (currentBest) {
             let currentBest_int = parseInt(currentBest);
