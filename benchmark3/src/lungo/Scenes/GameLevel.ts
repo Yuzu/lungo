@@ -109,7 +109,7 @@ export default class GameLevel extends Scene {
     startScene(): void {
         this.balloonsPopped = 0;
         this.switchesPressed = 0;
-
+        GameLevel.livesCount = 10;
         // Do the game level standard initializations
         this.initLayers();
         this.initViewport();
@@ -372,13 +372,15 @@ export default class GameLevel extends Scene {
                         if(this.nextLevel){
                             let sceneOptions = {
                                 physics: {
-                                    groupNames: ["ground", "player", "balloon", "shield"],
+                                    groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
                                     collisions:
                                     [
-                                        [0, 1, 1, 0],
-                                        [1, 0, 0, 1],
-                                        [1, 0, 0, 0],
-                                        [0, 1, 0, 0]
+                                        [0, 1, 1, 0, 1, 1],
+                                        [1, 0, 0, 1, 1, 1],
+                                        [1, 0, 0, 0, 0, 0],
+                                        [0, 1, 0, 0, 0, 1],
+                                        [1, 1, 0, 0, 0, 0],
+                                        [1, 1, 0, 1, 0, 0]
                                     ]
                                 }
                             }
@@ -452,6 +454,7 @@ export default class GameLevel extends Scene {
         }
         if(this.invincibleTimer.isStopped()){
             if(Input.isPressed("invincible")){
+                console.log("Player is now: " + (this.invincible ? "NOT invincible" : "invincible"));
                 this.invincible = !this.invincible;
                 this.invincibleTimer.start();
                 return;
@@ -593,7 +596,6 @@ export default class GameLevel extends Scene {
 
             this.isPaused = false;
         }
-        console.log(resumeButton);
 
 
          // Add resume button, and give it an event to emit on press
@@ -684,6 +686,8 @@ export default class GameLevel extends Scene {
 
         this.player.setGroup("player");
 
+        this.player.setTrigger("projectile", Lungo_Events.PLAYER_HIT_BALLOON, null);
+
         this.viewport.follow(this.player);
     }
 
@@ -713,8 +717,8 @@ export default class GameLevel extends Scene {
      * Initializes the level end area
      */
     protected addLevelEnd(startingTile: Vec2, size: Vec2): void {
-        console.log(startingTile);
-        console.log(size);
+        //console.log(startingTile);
+        //console.log(size);
         this.levelEndArea = <Rect>this.add.graphic(GraphicType.RECT, "primary", {position: startingTile.scale(32), size: size.scale(32)});
         this.levelEndArea.addPhysics(undefined, undefined, false, true);
         this.levelEndArea.setTrigger("player", Lungo_Events.PLAYER_ENTERED_LEVEL_END, null);
@@ -781,8 +785,9 @@ export default class GameLevel extends Scene {
         let pc = <PlayerController>player._ai;
         let bc = <BalloonController>balloon._ai;
 
-        console.log("Decreasing life count!", GameLevel.livesCount - 1);
+        
         if(!this.invincible){
+            console.log("Decreasing life count!", GameLevel.livesCount - 1);
             this.incPlayerLife(-1);
         }
 
@@ -805,11 +810,14 @@ export default class GameLevel extends Scene {
             //this.incPlayerLife(-1); where we would decrease enemy life
             //if enemy life <= 0, kill enemy
 
+            // kill enemy and pop balloon
             if(ec.health <= 0){
                 this.emitter.fireEvent(Lungo_Events.ENEMY_KILLED, {owner: enemy.id});
+                this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
             }
+            // enemny lives, just Pop the balloon
             else{
-                //Pop the balloon
+                
                 this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
             }
     
