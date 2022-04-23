@@ -141,7 +141,7 @@ export default class GameLevel extends Scene {
         //2 second cooldown for SHIELD WALL
         this.shieldWallTimer = new Timer(2000);
         
-        //6 second cooldown for SHIELD TRAMPOLINE
+        //4 second cooldown for SHIELD TRAMPOLINE
         this.shieldTrampolineTimer = new Timer(4000);
 
         //SET A SMALL TIMER FOR INVINCIBILITY TO PREVENT DOUBLE CLICKS
@@ -796,7 +796,7 @@ export default class GameLevel extends Scene {
     }
 
     protected handleEnemyBalloonCollision(enemy: AnimatedSprite, balloon: AnimatedSprite) {
-        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "pop", loop: false, holdReference: false});
+        
         if(enemy === undefined || enemy === null) return;
         if(balloon === undefined || balloon === null) return;
         let ec = <BasicEnemyController>enemy._ai;
@@ -809,7 +809,7 @@ export default class GameLevel extends Scene {
             ec.health -= 1;
             //this.incPlayerLife(-1); where we would decrease enemy life
             //if enemy life <= 0, kill enemy
-
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "pop", loop: false, holdReference: false});
             // kill enemy and pop balloon
             if(ec.health <= 0){
                 this.emitter.fireEvent(Lungo_Events.ENEMY_KILLED, {owner: enemy.id});
