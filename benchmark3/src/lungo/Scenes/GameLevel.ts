@@ -386,6 +386,10 @@ export default class GameLevel extends Scene {
                             }
                             this.sceneManager.changeToScene(this.nextLevel, {}, sceneOptions);
                         }
+                        else {
+                            // last level, go to main menu
+                            this.respawnPlayer();
+                        }
                     }
                     break;
                 case Lungo_Events.PLAYER_KILLED:

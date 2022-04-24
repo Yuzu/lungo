@@ -10,6 +10,7 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Level1 from "./Level1";
 import Level2 from "./Level2";
 import Level3 from "./Level3";
+import Level6 from "./Level6";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import EaseFunctions, { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import Input from "../../Wolfie2D/Input/Input";
@@ -260,10 +261,9 @@ export default class MainMenu extends Scene {
         levelSelectHeader.textColor = Color.WHITE;
         levelSelectHeader.fontSize = 45;
 
-        // TODO - disable clickable buttons depending on player progress. We can prob just keep this in local storage or smth
-        // use local storage best time to determine if player has cleared/unlocked the level.
         let currentProgress = 1;
-        for (let i = 1; i <= 6; i++) {
+        // going up to <= 7 may sound like an OBOE but if currentProgress = 7, that means the player has cleared everything.
+        for (let i = 1; i <= 7; i++) {
             let currentBest = localStorage.getItem("level" + i + "_best");
             if (!currentBest) {
                 // when we find a level best time that DOESN'T exist, that means this is the latest level the user is on.
@@ -271,7 +271,7 @@ export default class MainMenu extends Scene {
                 break;
             }
         }
-
+        console.log("current progress", currentProgress);
         const play1 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x - 400, center.y - 150), text: "     "});
         play1.size = new Vec2(75, 75);
         if (1 === currentProgress) {
@@ -458,8 +458,6 @@ export default class MainMenu extends Scene {
                 this.levelSelect.setHidden(false);
             }
 
-
-            // TODO - disable clickable buttons above depending on player progress
             if (event.type === "play1") {
                 console.log("play 1");
                 this.sceneManager.changeToScene(Level1, {}, sceneOptions);
@@ -489,6 +487,10 @@ export default class MainMenu extends Scene {
             }
             if (event.type === "play6") {
                 console.log("play 6");
+                this.sceneManager.changeToScene(Level6, {}, sceneOptions);
+
+                // Scene has started, so start playing music
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
 
             if(event.type === "help"){
@@ -520,6 +522,12 @@ export default class MainMenu extends Scene {
         }
         else if(Input.isKeyPressed("3")){
             this.sceneManager.changeToScene(Level3, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+
+        else if(Input.isKeyPressed("6")){
+            this.sceneManager.changeToScene(Level6, {}, sceneOptions);
             // Scene has started, so start playing music
             this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
