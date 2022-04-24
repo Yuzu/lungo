@@ -93,6 +93,15 @@ export default class Level2 extends GameLevel {
             this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
 
+        this.addEnemy("basicEnemy", new Vec2(17, 16), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(19, 23), {firingCooldown: 2500, projectileStartSpeed:  500, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(33, 23), {firingCooldown: 1000, projectileStartSpeed:  300, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(41, 22), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(47, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(74, 20), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(86, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(81, 39), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
         let currentBest = localStorage.getItem("level2_best");
         if (currentBest) {
