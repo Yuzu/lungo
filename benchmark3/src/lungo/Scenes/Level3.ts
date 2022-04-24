@@ -7,6 +7,9 @@ import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Input from "../../Wolfie2D/Input/Input";
 import Level1 from "./Level1";
 import Level2 from "./Level2";
+import Level4 from "./Level4";
+import Level5 from "./Level5";
+import Level6 from "./Level6";
 
 export default class Level3 extends GameLevel {
     // HOMEWORK 5 - TODO
@@ -145,6 +148,21 @@ export default class Level3 extends GameLevel {
         }
         else if(Input.isKeyPressed("3")){
             this.sceneManager.changeToScene(Level3, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("4")){
+            this.sceneManager.changeToScene(Level4, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("5")){
+            this.sceneManager.changeToScene(Level5, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("6")){
+            this.sceneManager.changeToScene(Level6, {}, sceneOptions);
             // Scene has started, so start playing music
             this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }

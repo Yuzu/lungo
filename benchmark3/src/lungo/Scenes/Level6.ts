@@ -9,6 +9,8 @@ import Input from "../../Wolfie2D/Input/Input";
 import Level1 from "./Level1";
 import Level2 from "./Level2";
 import Level3 from "./Level3";
+import Level4 from "./Level4";
+import Level5 from "./Level5";
 
 export default class Level6 extends GameLevel {
 
@@ -143,6 +145,21 @@ export default class Level6 extends GameLevel {
         }
         else if(Input.isKeyPressed("3")){
             this.sceneManager.changeToScene(Level3, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("4")){
+            this.sceneManager.changeToScene(Level4, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("5")){
+            this.sceneManager.changeToScene(Level5, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("6")){
+            this.sceneManager.changeToScene(Level6, {}, sceneOptions);
             // Scene has started, so start playing music
             this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
