@@ -94,6 +94,13 @@ export default class Level4 extends GameLevel {
         this.addEnemy("basicEnemy", new Vec2(94, 5), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(80, 24), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
 
+        let currentBest = localStorage.getItem("level4_best");
+        if (currentBest) {
+            let currentBest_int = parseInt(currentBest);
+            this.bestTime.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
+        }
+        this.levelLabel.text = "Level: 4";
+        
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
 
     }
