@@ -36,7 +36,7 @@ export default class Level3 extends GameLevel {
         this.load.audio("pop", "lungo_assets/sounds/pop.wav")
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
-        this.load.audio("level_music", "lungo_assets/music/menu.mp3");
+        this.load.audio("level_music", "lungo_assets/music/bingbongdingdong.mp3");
 
     }
 
@@ -94,12 +94,10 @@ export default class Level3 extends GameLevel {
         this.addEnemy("basicEnemy", new Vec2(19, 30), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
 
 
-        let currentBest = localStorage.getItem("level3_best");
-        if (currentBest) {
-            let currentBest_int = parseInt(currentBest);
-            this.bestTime.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
-        }
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
+
         this.levelLabel.text = "Level: 3";
+
     }
 
     updateScene(deltaT: number): void {

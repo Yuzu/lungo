@@ -37,8 +37,38 @@ export default class Level2 extends GameLevel {
         this.load.audio("pop", "lungo_assets/sounds/pop.wav")
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
-        this.load.audio("level_music", "lungo_assets/music/menu.mp3");
+        this.load.audio("level_music", "lungo_assets/music/siita.mp3");
 
+    }
+
+        // HOMEWORK 5 - TODO
+    /**
+     * Decide which resource to keep and which to cull.
+     * 
+     * Check out the resource manager class.
+     * 
+     * Figure out how to save resources from being unloaded, and save the ones that are needed
+     * for level 2.
+     * 
+     * This will let us cut down on load time for the game (although there is admittedly
+     * not a lot of load time for such a small project).
+     */
+     unloadScene(){
+        // Keep resources - this is up to you
+        this.load.keepSpritesheet("player");
+        this.load.keepSpritesheet("red");
+        this.load.keepSpritesheet("blue");
+        this.load.keepSpritesheet("green");
+        this.load.keepAudio("jump");
+        this.load.keepAudio("switch");
+        this.load.keepAudio("player_death");
+        this.load.keepAudio("pop")
+
+        this.load.keepImage("trampolineIcon");
+        this.load.keepImage("shieldIcon");
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
+
+        //this.load.keepAudio("level_music");
     }
 
     startScene(): void {
@@ -58,7 +88,7 @@ export default class Level2 extends GameLevel {
         this.shieldIcon = this.add.sprite("shieldIcon", "UI");
         this.shieldIcon.position.set(300, 25);
 
-        this.addLevelEnd(new Vec2(90, 39), new Vec2(5, 5));
+        this.addLevelEnd(new Vec2(90, 39), new Vec2(5, 2));
 
         this.nextLevel = Level3;
 
@@ -75,22 +105,14 @@ export default class Level2 extends GameLevel {
             this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
 
-        this.addEnemy("basicEnemy", new Vec2(17, 16), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(19, 23), {firingCooldown: 2500, projectileStartSpeed:  500, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(33, 23), {firingCooldown: 1000, projectileStartSpeed:  300, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(41, 22), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(47, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(74, 20), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(86, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(81, 39), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-
-
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
         let currentBest = localStorage.getItem("level2_best");
         if (currentBest) {
             let currentBest_int = parseInt(currentBest);
             this.bestTime.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
         }
         this.levelLabel.text = "Level: 2";
+
     }
 
     updateScene(deltaT: number): void {
