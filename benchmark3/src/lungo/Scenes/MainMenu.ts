@@ -11,6 +11,7 @@ import Level1 from "./Level1";
 import Level2 from "./Level2";
 import Level3 from "./Level3";
 import Level4 from "./Level4";
+import Level5 from "./Level5";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import EaseFunctions, { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import Input from "../../Wolfie2D/Input/Input";
@@ -298,7 +299,7 @@ export default class MainMenu extends Scene {
 
         const play5 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x, center.y + 75), text: "     "});
         play5.size = new Vec2(75, 75);
-        play5.backgroundColor = Color.RED; // TODO - conditional rendering
+        play5.backgroundColor = Color.YELLOW; // TODO - conditional rendering
         play5.onClickEventId = "play5"; // TODO - conditional event emitting based on unlocks
         const label5 = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {position: new Vec2(center.x, center.y +150), text: "Level 5"});
         label5.textColor = Color.WHITE;
@@ -398,6 +399,10 @@ export default class MainMenu extends Scene {
             }
             if (event.type === "play5") {
                 console.log("play 5");
+                this.sceneManager.changeToScene(Level5, {}, sceneOptions);
+
+                // Scene has started, so start playing music
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play6") {
                 console.log("play 6");
