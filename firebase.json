@@ -13,11 +13,11 @@
       },
       {
         "source": "/benchmark2",
-        "destination": "/benchmark2/src/index.html"
+        "destination": "/benchmark2/dist/index.html"
       },
       {
         "source": "/benchmark3",
-        "destination": "/benchmark3/src/index.html"
+        "destination": "/benchmark3/dist/index.html"
       }
     ],
     "headers": [ 
