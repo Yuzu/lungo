@@ -332,6 +332,7 @@ export default class MainMenu extends Scene {
         levelSelectBack.font = "PixelSimple";
         levelSelectBack.textColor = Color.YELLOW;
         levelSelectBack.onClickEventId = "menu";
+        
     }
 
     
@@ -340,6 +341,7 @@ export default class MainMenu extends Scene {
             this.splashScreen.setHidden(true);
             this.mainMenu.setHidden(false);
             clearInterval(this.tweenInterval);
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
                 /*
         Init the next scene with physics collisions:
