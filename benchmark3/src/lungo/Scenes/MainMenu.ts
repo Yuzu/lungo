@@ -32,7 +32,7 @@ export default class MainMenu extends Scene {
     
     loadScene(): void {
         // Load the menu song
-        this.load.audio("menu", "lungo_assets/music/menu.mp3");
+        this.load.audio("menu", "lungo_assets/music/drive.mp3");
 
         this.load.image("background", "./lungo_assets/images/Lungo.png");
     }
@@ -332,6 +332,7 @@ export default class MainMenu extends Scene {
         levelSelectBack.font = "PixelSimple";
         levelSelectBack.textColor = Color.YELLOW;
         levelSelectBack.onClickEventId = "menu";
+        
     }
 
     
@@ -340,6 +341,7 @@ export default class MainMenu extends Scene {
             this.splashScreen.setHidden(true);
             this.mainMenu.setHidden(false);
             clearInterval(this.tweenInterval);
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
                 /*
         Init the next scene with physics collisions:
@@ -381,44 +383,26 @@ export default class MainMenu extends Scene {
             if (event.type === "play1") {
                 console.log("play 1");
                 this.sceneManager.changeToScene(Level1, {}, sceneOptions);
-
-                // Scene has started, so start playing music
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play2") {
                 console.log("play 2");
                 this.sceneManager.changeToScene(Level2, {}, sceneOptions);
-
-                // Scene has started, so start playing music
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play3") {
                 console.log("play 3");
                 this.sceneManager.changeToScene(Level3, {}, sceneOptions);
-
-                // Scene has started, so start playing music
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play4") {
                 console.log("play 4");
                 this.sceneManager.changeToScene(Level4, {}, sceneOptions);
-
-                // Scene has started, so start playing music
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play5") {
                 console.log("play 5");
                 this.sceneManager.changeToScene(Level5, {}, sceneOptions);
-
-                // Scene has started, so start playing music
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play6") {
                 console.log("play 6");
                 this.sceneManager.changeToScene(Level6, {}, sceneOptions);
-
-                // Scene has started, so start playing music
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
 
             if(event.type === "help"){
@@ -437,27 +421,6 @@ export default class MainMenu extends Scene {
                 this.controls.setHidden(false);
             }
 
-        }
-        if(Input.isKeyPressed("1")){
-            this.sceneManager.changeToScene(Level1, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
-        }
-        else if(Input.isKeyPressed("2")){ 
-            this.sceneManager.changeToScene(Level2, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
-        }
-        else if(Input.isKeyPressed("3")){
-            this.sceneManager.changeToScene(Level3, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
-        }
-
-        else if(Input.isKeyPressed("6")){
-            this.sceneManager.changeToScene(Level6, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
     }
 

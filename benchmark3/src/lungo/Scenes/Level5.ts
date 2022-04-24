@@ -4,6 +4,12 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { Lungo_Color } from "../Lungo_color";
 import GameLevel from "./GameLevel";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import Input from "../../Wolfie2D/Input/Input";
+import Level1 from "./Level1";
+import Level2 from "./Level2";
+import Level3 from "./Level3";
+import Level4 from "./Level4";
+import Level6 from "./Level6";
 
 export default class Level5 extends GameLevel {
     // HOMEWORK 5 - TODO
@@ -36,6 +42,9 @@ export default class Level5 extends GameLevel {
         this.load.audio("level_music", "lungo_assets/music/electricmambo.mp3");
 
     }
+    unloadScene(){
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
+    }
 
     startScene(): void {
         // Add the level 2 tilemap
@@ -54,8 +63,7 @@ export default class Level5 extends GameLevel {
         this.shieldIcon = this.add.sprite("shieldIcon", "UI");
         this.shieldIcon.position.set(300, 25);
 
-        this.addLevelEnd(new Vec2(0, 29), new Vec2(5, 5));
-
+        this.addLevelEnd(new Vec2(57, 3), new Vec2(5, 5));
         // Add in our green balloons to the enemies
         for(let pos of [new Vec2(18, 8), new Vec2(25, 3), new Vec2(52, 5)]){
             this.addBalloon("red", pos, {color: Lungo_Color.RED});
@@ -70,29 +78,26 @@ export default class Level5 extends GameLevel {
         }
 
         // Add enemies
-       /*  this.addEnemy("basicEnemy", new Vec2(8, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(16, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(27, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(38, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(41, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(62, 86), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(58, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(62, 72), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(62, 66), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(50, 60), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(62, 51), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(62, 48), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(52, 37), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
 
-        this.addEnemy("basicEnemy", new Vec2(38, 31), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(21, 30), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(6, 8), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(1, 13), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(19, 30), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-
+        this.addEnemy("basicEnemy", new Vec2(13, 75), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(10, 68), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(7, 56), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(10, 36), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(3, 28), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(17, 20), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(9, 15), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(31, 60), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(46, 84), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(48, 61), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(55, 57), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(50, 53), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(48, 41), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(59, 36), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(40, 28), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(56, 21), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("basicEnemy", new Vec2(48, 8), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+      
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
-
-        */
     }
 
     updateScene(deltaT: number): void {
@@ -111,6 +116,40 @@ export default class Level5 extends GameLevel {
         }
         else {
             this.shieldIcon.alpha = 0.4;
+        }
+
+
+        let sceneOptions = {
+            physics: {
+                groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
+                collisions:
+                [
+                    [0, 1, 1, 0, 1, 1],
+                    [1, 0, 0, 1, 1, 1],
+                    [1, 0, 0, 0, 0, 0],
+                    [0, 1, 0, 0, 0, 1],
+                    [1, 1, 0, 0, 0, 0],
+                    [1, 1, 0, 1, 0, 0]
+                ]
+            }
+        }
+        if(Input.isKeyPressed("1")){
+            this.sceneManager.changeToScene(Level1, {}, sceneOptions);
+        }
+        else if(Input.isKeyPressed("2")){ 
+            this.sceneManager.changeToScene(Level2, {}, sceneOptions);
+        }
+        else if(Input.isKeyPressed("3")){
+            this.sceneManager.changeToScene(Level3, {}, sceneOptions);
+        }
+        else if(Input.isKeyPressed("4")){
+            this.sceneManager.changeToScene(Level4, {}, sceneOptions);
+        }
+        else if(Input.isKeyPressed("5")){
+            this.sceneManager.changeToScene(Level5, {}, sceneOptions);
+        }
+        else if(Input.isKeyPressed("6")){
+            this.sceneManager.changeToScene(Level6, {}, sceneOptions);
         }
     }
 }
