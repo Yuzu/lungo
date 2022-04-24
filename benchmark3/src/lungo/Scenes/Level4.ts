@@ -42,6 +42,9 @@ export default class Level4 extends GameLevel {
         this.load.audio("level_music", "lungo_assets/music/wunglewoogie.mp3");
 
     }
+    unloadScene(){
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
+    }
 
     startScene(): void {
         // Add the level 4 tilemap
@@ -139,33 +142,21 @@ export default class Level4 extends GameLevel {
 
         if(Input.isKeyPressed("1")){
             this.sceneManager.changeToScene(Level1, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("2")){ 
             this.sceneManager.changeToScene(Level2, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("3")){
             this.sceneManager.changeToScene(Level3, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("4")){
             this.sceneManager.changeToScene(Level4, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("5")){
             this.sceneManager.changeToScene(Level5, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("6")){
             this.sceneManager.changeToScene(Level6, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
     }
 }

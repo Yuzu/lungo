@@ -27,13 +27,15 @@ export default class Level1 extends GameLevel {
         this.load.spritesheet("shield", "lungo_assets/spritesheets/shield.json");
         this.load.spritesheet("red", "lungo_assets/spritesheets/redBalloon.json");
         this.load.spritesheet("blue", "lungo_assets/spritesheets/blueBalloon.json");
+        this.load.spritesheet("green", "lungo_assets/spritesheets/greenBalloon.json");
         this.load.spritesheet("basicEnemy", "lungo_assets/spritesheets/basicEnemy.json");
         this.load.image("trampolineIcon", "lungo_assets/images/trampoline.png");
         this.load.image("shieldIcon", "lungo_assets/images/shield.png");
         this.load.audio("jump", "lungo_assets/sounds/jump.wav");
         this.load.audio("switch", "lungo_assets/sounds/switch.wav");
         this.load.audio("player_death", "lungo_assets/sounds/player_death.wav");
-        this.load.audio("pop", "lungo_assets/sounds/pop.wav")
+        this.load.audio("pop", "lungo_assets/sounds/pop.wav");
+        
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
         this.load.audio("level_music", "lungo_assets/music/cowbell.mp3");
@@ -53,21 +55,7 @@ export default class Level1 extends GameLevel {
      * not a lot of load time for such a small project).
      */
     unloadScene(){
-        // Keep resources - this is up to you
-        this.load.keepSpritesheet("player");
-        this.load.keepSpritesheet("red");
-        this.load.keepSpritesheet("blue");
-        this.load.keepSpritesheet("green");
-        this.load.keepAudio("jump");
-        this.load.keepAudio("switch");
-        this.load.keepAudio("player_death");
-        this.load.keepAudio("pop")
-
-        this.load.keepImage("trampolineIcon");
-        this.load.keepImage("shieldIcon");
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
-
-        //this.load.keepAudio("level_music");
     }
 
     startScene(): void {
@@ -152,33 +140,21 @@ export default class Level1 extends GameLevel {
 
         if(Input.isKeyPressed("1")){
             this.sceneManager.changeToScene(Level1, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("2")){ 
             this.sceneManager.changeToScene(Level2, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("3")){
             this.sceneManager.changeToScene(Level3, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("4")){
             this.sceneManager.changeToScene(Level4, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("5")){
             this.sceneManager.changeToScene(Level5, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
         else if(Input.isKeyPressed("6")){
             this.sceneManager.changeToScene(Level6, {}, sceneOptions);
-            // Scene has started, so start playing music
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
     }
 }
