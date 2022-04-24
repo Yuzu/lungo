@@ -19,7 +19,10 @@ export default class Aggro extends BasicEnemyState {
         this.parent.velocity.x = 0;
 
 		this.owner.move(this.parent.velocity.scaled(deltaT));
+
         this.owner.animation.playIfNotAlready("IDLE", true);
+
+
 	}
 
     handleInput(event: GameEvent): void {
