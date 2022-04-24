@@ -10,6 +10,8 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Level1 from "./Level1";
 import Level2 from "./Level2";
 import Level3 from "./Level3";
+import Level4 from "./Level4";
+import Level5 from "./Level5";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import EaseFunctions, { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import Input from "../../Wolfie2D/Input/Input";
@@ -167,10 +169,10 @@ export default class MainMenu extends Scene {
         const sprint = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 50), text: "Shift: Hold to Sprint"});
         sprint.textColor = Color.WHITE;
 
-        const shieldWall = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 100), text: "T: Shield Wall - Leave your shield stationary, leaving Lungo free to move around."});
+        const shieldWall = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 100), text: "T / Right Click: Shield Wall - Leave your shield stationary"});
         shieldWall.textColor = Color.WHITE;
 
-        const shieldTrampoline = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 150), text: "F: Shield Trampoline - Allows for lungo to jump and propel himself using the shield."});
+        const shieldTrampoline = <Label>this.add.uiElement(UIElementType.LABEL, "controls", {position: new Vec2(center.x, center.y + 150), text: "F / Left Click: Shield Trampoline - Propels Lungo on contact"});
         shieldTrampoline.textColor = Color.WHITE;
 
         const controlBackButton = <Button>this.add.uiElement(UIElementType.BUTTON, "controls", {position: new Vec2(center.x, center.y + 250), text: "Main Menu"});
@@ -230,17 +232,17 @@ export default class MainMenu extends Scene {
         line8.textColor = Color.WHITE;
         line8.fontSize = 16;
 
-        const text9 = `Ctrl+x+y+z = Unlocks all levels.`;
+        const text9 = `1|2|3|4|5|6 = Switches to level 1|2|3|4|5|6.`;
         const line9 = <Label>this.add.uiElement(UIElementType.LABEL, "help", {position: new Vec2(center.x, center.y +25), text: text9});
         line9.textColor = Color.WHITE;
         line9.fontSize = 16;
 
-        const text10 = `Ctrl+g+o+d = Makes Lungo Invincible.`;
+        const text10 = `i = Makes Lungo Invincible.`;
         const line10 = <Label>this.add.uiElement(UIElementType.LABEL, "help", {position: new Vec2(center.x, center.y + 50), text: text10});
         line10.textColor = Color.WHITE;
         line10.fontSize = 16;
 
-        const text11 = `Ctrl+b = Shows hit boxes (tilemap, enemies, etc).`;
+        const text11 = `g = Shows hit boxes (tilemap, enemies, etc).`;
         const line11 = <Label>this.add.uiElement(UIElementType.LABEL, "help", {position: new Vec2(center.x, center.y + 75), text: text11});
         line11.textColor = Color.WHITE;
         line11.fontSize = 16;
@@ -290,14 +292,14 @@ export default class MainMenu extends Scene {
 
         const play4 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x - 400, center.y + 75), text: "     "});
         play4.size = new Vec2(75, 75);
-        play4.backgroundColor = Color.RED; // TODO - conditional rendering
+        play4.backgroundColor = Color.YELLOW; // TODO - conditional rendering
         play4.onClickEventId = "play4"; // TODO - conditional event emitting based on unlocks
         const label4 = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {position: new Vec2(center.x - 400, center.y +150), text: "Level 4"});
         label4.textColor = Color.WHITE;
 
         const play5 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x, center.y + 75), text: "     "});
         play5.size = new Vec2(75, 75);
-        play5.backgroundColor = Color.RED; // TODO - conditional rendering
+        play5.backgroundColor = Color.YELLOW; // TODO - conditional rendering
         play5.onClickEventId = "play5"; // TODO - conditional event emitting based on unlocks
         const label5 = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {position: new Vec2(center.x, center.y +150), text: "Level 5"});
         label5.textColor = Color.WHITE;
@@ -327,38 +329,37 @@ export default class MainMenu extends Scene {
             this.mainMenu.setHidden(false);
             clearInterval(this.tweenInterval);
         }
+                /*
+        Init the next scene with physics collisions:
+                ground  player  balloon, shield
+        ground    No      --      --     No
+        player    Yes      No      --    Yes
+        balloon   Yes      No      No    No
+        shield    No      Yes      No    No
+        Each layer becomes a number. In this case, 4 bits matter for each
+        ground:  self - 000, collisions - 011
+        player:  self - 001, collisions - 100
+        balloon: self - 010, collisions - 000
+        */
+
+        let sceneOptions = {
+            physics: {
+                groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
+                collisions:
+                [
+                    [0, 1, 1, 0, 1, 1],
+                    [1, 0, 0, 1, 1, 1],
+                    [1, 0, 0, 0, 0, 0],
+                    [0, 1, 0, 0, 0, 1],
+                    [1, 1, 0, 0, 0, 0],
+                    [1, 1, 0, 1, 0, 0]
+                ]
+            }
+        }
         while(this.receiver.hasNextEvent()){
             let event = this.receiver.getNextEvent();
 
             console.log(event);
-
-            /*
-            Init the next scene with physics collisions:
-                    ground  player  balloon, shield
-            ground    No      --      --     No
-            player    Yes      No      --    Yes
-            balloon   Yes      No      No    No
-            shield    No      Yes      No    No
-            Each layer becomes a number. In this case, 4 bits matter for each
-            ground:  self - 000, collisions - 011
-            player:  self - 001, collisions - 100
-            balloon: self - 010, collisions - 000
-            */
-
-            let sceneOptions = {
-                physics: {
-                    groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
-                    collisions:
-                    [
-                        [0, 1, 1, 0, 1, 1],
-                        [1, 0, 0, 1, 1, 1],
-                        [1, 0, 0, 0, 0, 0],
-                        [0, 1, 0, 0, 0, 1],
-                        [1, 1, 0, 0, 0, 0],
-                        [1, 1, 0, 1, 0, 0]
-                    ]
-                }
-            }
 
             if(event.type === "levelSelect"){
                 this.mainMenu.setHidden(true);
@@ -390,9 +391,17 @@ export default class MainMenu extends Scene {
             }
             if (event.type === "play4") {
                 console.log("play 4");
+                this.sceneManager.changeToScene(Level4, {}, sceneOptions);
+
+                // Scene has started, so start playing music
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play5") {
                 console.log("play 5");
+                this.sceneManager.changeToScene(Level5, {}, sceneOptions);
+
+                // Scene has started, so start playing music
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play6") {
                 console.log("play 6");
@@ -414,6 +423,21 @@ export default class MainMenu extends Scene {
                 this.controls.setHidden(false);
             }
 
+        }
+        if(Input.isKeyPressed("1")){
+            this.sceneManager.changeToScene(Level1, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("2")){ 
+            this.sceneManager.changeToScene(Level2, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("3")){
+            this.sceneManager.changeToScene(Level3, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
     }
 

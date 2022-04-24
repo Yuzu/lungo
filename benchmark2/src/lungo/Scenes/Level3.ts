@@ -4,6 +4,9 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import { Lungo_Color } from "../Lungo_color";
 import GameLevel from "./GameLevel";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import Input from "../../Wolfie2D/Input/Input";
+import Level1 from "./Level1";
+import Level2 from "./Level2";
 
 export default class Level3 extends GameLevel {
     // HOMEWORK 5 - TODO
@@ -33,7 +36,7 @@ export default class Level3 extends GameLevel {
         this.load.audio("pop", "benchmark2/dist/lungo_assets/sounds/pop.wav")
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
-        this.load.audio("level_music", "benchmark2/dist/lungo_assets/music/menu.mp3");
+        this.load.audio("level_music", "lungo_assets/music/bingbongdingdong.mp3");
 
     }
 
@@ -89,6 +92,12 @@ export default class Level3 extends GameLevel {
         this.addEnemy("basicEnemy", new Vec2(6, 8), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(1, 13), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(19, 30), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+
+
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
+
+        this.levelLabel.text = "Level: 3";
+
     }
 
     updateScene(deltaT: number): void {
@@ -107,6 +116,37 @@ export default class Level3 extends GameLevel {
         }
         else {
             this.shieldIcon.alpha = 0.4;
+        }
+
+        let sceneOptions = {
+            physics: {
+                groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
+                collisions:
+                [
+                    [0, 1, 1, 0, 1, 1],
+                    [1, 0, 0, 1, 1, 1],
+                    [1, 0, 0, 0, 0, 0],
+                    [0, 1, 0, 0, 0, 1],
+                    [1, 1, 0, 0, 0, 0],
+                    [1, 1, 0, 1, 0, 0]
+                ]
+            }
+        }
+
+        if(Input.isKeyPressed("1")){
+            this.sceneManager.changeToScene(Level1, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("2")){ 
+            this.sceneManager.changeToScene(Level2, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("3")){
+            this.sceneManager.changeToScene(Level3, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
     }
 }
