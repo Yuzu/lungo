@@ -10,6 +10,8 @@ import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import Level1 from "./Level1";
 import Level2 from "./Level2";
 import Level3 from "./Level3";
+import Level4 from "./Level4";
+import Level5 from "./Level5";
 import { TweenableProperties } from "../../Wolfie2D/Nodes/GameNode";
 import EaseFunctions, { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import Input from "../../Wolfie2D/Input/Input";
@@ -261,78 +263,27 @@ export default class MainMenu extends Scene {
         levelSelectHeader.fontSize = 45;
 
         // TODO - disable clickable buttons depending on player progress. We can prob just keep this in local storage or smth
-        // use local storage best time to determine if player has cleared/unlocked the level.
-        let currentProgress = 1;
-        for (let i = 1; i <= 6; i++) {
-            let currentBest = localStorage.getItem("level" + i + "_best");
-            if (!currentBest) {
-                // when we find a level best time that DOESN'T exist, that means this is the latest level the user is on.
-                currentProgress = i;
-                break;
-            }
-        }
 
         const play1 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x - 400, center.y - 150), text: "     "});
         play1.size = new Vec2(75, 75);
-        if (1 === currentProgress) {
-            // current newest level
-            play1.backgroundColor = Color.YELLOW;
-            play1.onClickEventId = "play1";
-        }
-        else if (1 < currentProgress) {
-            // unlocked previously
-            play1.backgroundColor = Color.GREEN;
-            play1.onClickEventId = "play1";
-        }
-        else {
-            // locked
-            play1.backgroundColor = Color.RED;
-            play1.onClickEventId = "";
-        }
+        play1.backgroundColor = Color.GREEN; // TODO - conditional rendering
+        play1.onClickEventId = "play1"; // TODO - conditional event emitting based on unlocks
         const label1 = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {position: new Vec2(center.x - 400, center.y - 75), text: "Level 1"});
         label1.textColor = Color.WHITE;
         
 
-
         const play2 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x, center.y - 150), text: "     "});
         play2.size = new Vec2(75, 75);
-        if (2 === currentProgress) {
-            // current newest level
-            play2.backgroundColor = Color.YELLOW;
-            play2.onClickEventId = "play2";
-        }
-        else if (2 < currentProgress) {
-            // unlocked previously
-            play2.backgroundColor = Color.GREEN;
-            play2.onClickEventId = "play2";
-        }
-        else {
-            // locked
-            play2.backgroundColor = Color.RED;
-            play2.onClickEventId = "";
-        }
+        play2.backgroundColor = Color.YELLOW; // TODO - conditional rendering
+        play2.onClickEventId = "play2"; // TODO - conditional event emitting based on unlocks
         const label2 = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {position: new Vec2(center.x, center.y - 75), text: "Level 2"});
         label2.textColor = Color.WHITE;
 
 
-
         const play3 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x + 400, center.y - 150), text: "     "});
         play3.size = new Vec2(75, 75);
-        if (3 === currentProgress) {
-            // current newest level
-            play3.backgroundColor = Color.YELLOW;
-            play3.onClickEventId = "play3";
-        }
-        else if (3 < currentProgress) {
-            // unlocked previously
-            play3.backgroundColor = Color.GREEN;
-            play3.onClickEventId = "play3";
-        }
-        else {
-            // locked
-            play3.backgroundColor = Color.RED;
-            play3.onClickEventId = "";
-        }
+        play3.backgroundColor = Color.YELLOW; // TODO - conditional rendering
+        play3.onClickEventId = "play3"; // TODO - conditional event emitting based on unlocks
         const label3 = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {position: new Vec2(center.x + 400, center.y - 75), text: "Level 3"});
         label3.textColor = Color.WHITE;
 
@@ -341,65 +292,22 @@ export default class MainMenu extends Scene {
 
         const play4 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x - 400, center.y + 75), text: "     "});
         play4.size = new Vec2(75, 75);
-        if (4 === currentProgress) {
-            // current newest level
-            play4.backgroundColor = Color.YELLOW;
-            play4.onClickEventId = "play4";
-        }
-        else if (4 < currentProgress) {
-            // unlocked previously
-            play4.backgroundColor = Color.GREEN;
-            play4.onClickEventId = "play4";
-        }
-        else {
-            // locked
-            play4.backgroundColor = Color.RED;
-            play4.onClickEventId = "";
-        }
+        play4.backgroundColor = Color.YELLOW; // TODO - conditional rendering
+        play4.onClickEventId = "play4"; // TODO - conditional event emitting based on unlocks
         const label4 = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {position: new Vec2(center.x - 400, center.y +150), text: "Level 4"});
         label4.textColor = Color.WHITE;
 
-
-
         const play5 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x, center.y + 75), text: "     "});
         play5.size = new Vec2(75, 75);
-        if (5 === currentProgress) {
-            // current newest level
-            play5.backgroundColor = Color.YELLOW;
-            play5.onClickEventId = "play5";
-        }
-        else if (5 < currentProgress) {
-            // unlocked previously
-            play5.backgroundColor = Color.GREEN;
-            play5.onClickEventId = "play5";
-        }
-        else {
-            // locked
-            play5.backgroundColor = Color.RED;
-            play5.onClickEventId = "";
-        }
+        play5.backgroundColor = Color.YELLOW; // TODO - conditional rendering
+        play5.onClickEventId = "play5"; // TODO - conditional event emitting based on unlocks
         const label5 = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {position: new Vec2(center.x, center.y +150), text: "Level 5"});
         label5.textColor = Color.WHITE;
 
-
-
         const play6 = <Button>this.add.uiElement(UIElementType.BUTTON, "levelSelect", {position: new Vec2(center.x + 400, center.y + 75), text: "     "});
         play6.size = new Vec2(75, 75);
-        if (6 === currentProgress) {
-            // current newest level
-            play6.backgroundColor = Color.YELLOW;
-            play6.onClickEventId = "play6";
-        }
-        else if (6 < currentProgress) {
-            // unlocked previously
-            play6.backgroundColor = Color.GREEN;
-            play6.onClickEventId = "play6";
-        }
-        else {
-            // locked
-            play6.backgroundColor = Color.RED;
-            play6.onClickEventId = "";
-        }
+        play6.backgroundColor = Color.RED; // TODO - conditional rendering
+        play6.onClickEventId = "play4"; // TODO - conditional event emitting based on unlocks
         const label6 = <Label>this.add.uiElement(UIElementType.LABEL, "levelSelect", {position: new Vec2(center.x + 400, center.y +150), text: "Level 6"});
         label6.textColor = Color.WHITE;
 
@@ -483,9 +391,17 @@ export default class MainMenu extends Scene {
             }
             if (event.type === "play4") {
                 console.log("play 4");
+                this.sceneManager.changeToScene(Level4, {}, sceneOptions);
+
+                // Scene has started, so start playing music
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play5") {
                 console.log("play 5");
+                this.sceneManager.changeToScene(Level5, {}, sceneOptions);
+
+                // Scene has started, so start playing music
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
             }
             if (event.type === "play6") {
                 console.log("play 6");
