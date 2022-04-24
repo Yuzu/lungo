@@ -46,8 +46,8 @@ export default class Level6 extends GameLevel {
         this.add.tilemap("level6", new Vec2(2, 2));
         this.viewport.setBounds(0, 0, 64*32, 128*32);
 
-        //this.playerSpawn = new Vec2(3*32, 123*32); // normal spawn
-        this.playerSpawn = new Vec2(30*32, 9*32); // spawn at top (cheat/testing purposes)
+        this.playerSpawn = new Vec2(3*32, 123*32); // normal spawn
+        //this.playerSpawn = new Vec2(30*32, 9*32); // spawn at top (cheat/testing purposes)
         this.shieldSpawn = this.playerSpawn;
 
         // Do generic setup for a GameLevel
