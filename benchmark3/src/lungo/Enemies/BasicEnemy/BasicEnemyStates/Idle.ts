@@ -19,7 +19,9 @@ export default class Idle extends BasicEnemyState {
         this.parent.velocity.x = 0;
 
 		this.owner.move(this.parent.velocity.scaled(deltaT));
-        this.owner.animation.playIfNotAlready("IDLE", true);
+        if (!this.owner.animation.isPlaying("ATTACK")) {
+            this.owner.animation.playIfNotAlready("IDLE", true);
+        }
 	}
 
     handleInput(event: GameEvent): void {

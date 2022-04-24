@@ -19,7 +19,9 @@ export default class Aggro extends BasicEnemyState {
         this.parent.velocity.x = 0;
 
 		this.owner.move(this.parent.velocity.scaled(deltaT));
-        this.owner.animation.playIfNotAlready("IDLE", true);
+        if (!this.owner.animation.isPlaying("ATTACK")) {
+            this.owner.animation.playIfNotAlready("IDLE", true);
+        }
 	}
 
     handleInput(event: GameEvent): void {
@@ -87,7 +89,7 @@ export default class Aggro extends BasicEnemyState {
             //check to see if the enemy is able to fire
             //console.log(this.firingTimer);
             if(this.canFire){
-                
+                this.owner.animation.playIfNotAlready("ATTACK", true);
                 // determine the velocity and direction this bullet needs to go to hit the player.
                 //console.log(selfPos);
                 this.emitter.fireEvent(Lungo_Events.ENEMY_FIRES,
