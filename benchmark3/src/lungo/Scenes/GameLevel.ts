@@ -110,6 +110,7 @@ export default class GameLevel extends Scene {
         this.balloonsPopped = 0;
         this.switchesPressed = 0;
 
+        GameLevel.livesCount = 10;
         // Do the game level standard initializations
         this.initLayers();
         this.initViewport();
