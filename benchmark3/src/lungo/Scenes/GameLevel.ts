@@ -372,13 +372,15 @@ export default class GameLevel extends Scene {
                         if(this.nextLevel){
                             let sceneOptions = {
                                 physics: {
-                                    groupNames: ["ground", "player", "balloon", "shield"],
+                                    groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
                                     collisions:
                                     [
-                                        [0, 1, 1, 0],
-                                        [1, 0, 0, 1],
-                                        [1, 0, 0, 0],
-                                        [0, 1, 0, 0]
+                                        [0, 1, 1, 0, 1, 1],
+                                        [1, 0, 0, 1, 1, 1],
+                                        [1, 0, 0, 0, 0, 0],
+                                        [0, 1, 0, 0, 0, 1],
+                                        [1, 1, 0, 0, 0, 0],
+                                        [1, 1, 0, 1, 0, 0]
                                     ]
                                 }
                             }
