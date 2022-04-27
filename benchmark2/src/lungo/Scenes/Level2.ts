@@ -5,6 +5,8 @@ import { Lungo_Color } from "../Lungo_color";
 import GameLevel from "./GameLevel";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Level3 from "./Level3";
+import Input from "../../Wolfie2D/Input/Input";
+import Level1 from "./Level1";
 
 export default class Level2 extends GameLevel {
     // HOMEWORK 5 - TODO
@@ -104,6 +106,12 @@ export default class Level2 extends GameLevel {
         }
 
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
+        let currentBest = localStorage.getItem("level2_best");
+        if (currentBest) {
+            let currentBest_int = parseInt(currentBest);
+            this.bestTime.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
+        }
+        this.levelLabel.text = "Level: 2";
 
     }
 
@@ -123,6 +131,37 @@ export default class Level2 extends GameLevel {
         }
         else {
             this.shieldIcon.alpha = 0.4;
+        }
+
+        let sceneOptions = {
+            physics: {
+                groupNames: ["ground", "player", "balloon", "shield", "enemy", "projectile"],
+                collisions:
+                [
+                    [0, 1, 1, 0, 1, 1],
+                    [1, 0, 0, 1, 1, 1],
+                    [1, 0, 0, 0, 0, 0],
+                    [0, 1, 0, 0, 0, 1],
+                    [1, 1, 0, 0, 0, 0],
+                    [1, 1, 0, 1, 0, 0]
+                ]
+            }
+        }
+
+        if(Input.isKeyPressed("1")){
+            this.sceneManager.changeToScene(Level1, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("2")){ 
+            this.sceneManager.changeToScene(Level2, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
+        }
+        else if(Input.isKeyPressed("3")){
+            this.sceneManager.changeToScene(Level3, {}, sceneOptions);
+            // Scene has started, so start playing music
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "menu", loop: true, holdReference: true});
         }
     }
 }

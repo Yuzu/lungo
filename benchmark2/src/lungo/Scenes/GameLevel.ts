@@ -51,7 +51,7 @@ export default class GameLevel extends Scene {
 
 
     // Labels for the UI
-    protected static livesCount: number = 100;
+    protected static livesCount: number = 10;
     protected livesCountLabel: Label;
 
     // Stuff to end the level and go to the next level
@@ -76,6 +76,10 @@ export default class GameLevel extends Scene {
     //As shield-player collisions can happen multiple times, but we only want it to 
     // happen once
     protected shieldJump: Boolean;
+
+    //CHEAT STUFF
+    protected invincible: Boolean = false;
+    protected invincibleTimer: Timer;
 
     // Total ballons and amount currently popped
     protected totalBalloons: number;
@@ -140,6 +144,8 @@ export default class GameLevel extends Scene {
         //6 second cooldown for SHIELD TRAMPOLINE
         this.shieldTrampolineTimer = new Timer(4000);
 
+        //SET A SMALL TIMER FOR INVINCIBILITY TO PREVENT DOUBLE CLICKS
+        this.invincibleTimer = new Timer(150);
         // Start the black screen fade out
         this.levelTransitionScreen.tweens.play("fadeOut");
 
@@ -229,7 +235,7 @@ export default class GameLevel extends Scene {
 		// Handle the despawing of all other objects that move offscreen
 		for(let projectile of this.projectileList){
             if(projectile.ai instanceof BulletBehavior){
-                console.log(projectile.ai.reversed)
+                //console.log(projectile.ai.reversed)
             }
 			if(projectile.visible){
 				this.handleScreenDespawn(projectile, viewportCenter, baseViewportSize);
@@ -388,7 +394,7 @@ export default class GameLevel extends Scene {
 
                 case Lungo_Events.ENEMY_DAMAGED:
                      {
-                        console.log("enemy balloon collision!")
+                        //console.log("enemy balloon collision!")
                         let node = this.sceneGraph.getNode(event.data.get("node"));
                         let other = this.sceneGraph.getNode(event.data.get("other"));
                         if(node === undefined || node === null) return; 
@@ -429,17 +435,26 @@ export default class GameLevel extends Scene {
         //Update our shield state by firing the event
         //See main.ts for the controls
         if(this.shieldWallTimer.isStopped()){
-            if(Input.isPressed("shield wall")){
+            if(Input.isPressed("shield wall") || Input.isMouseJustPressed(2)){
                 this.shieldJump = false;
                 this.emitter.fireEvent(Lungo_Events.SHIELD_WALL);
                 this.shieldWallTimer.start();
+                return;
             }
         }
         if(this.shieldTrampolineTimer.isStopped()){
-            if(Input.isPressed("shield trampoline")){
+            if(Input.isPressed("shield trampoline") || Input.isMouseJustPressed(0)){
                 this.emitter.fireEvent(Lungo_Events.SHIELD_TRAMPOLINE);
                 this.shieldTrampolineTimer.start();
                 this.shieldJump = true;
+                return;
+            }
+        }
+        if(this.invincibleTimer.isStopped()){
+            if(Input.isPressed("invincible")){
+                this.invincible = !this.invincible;
+                this.invincibleTimer.start();
+                return;
             }
         }
 
@@ -767,7 +782,9 @@ export default class GameLevel extends Scene {
         let bc = <BalloonController>balloon._ai;
 
         console.log("Decreasing life count!", GameLevel.livesCount - 1);
-        this.incPlayerLife(-1);
+        if(!this.invincible){
+            this.incPlayerLife(-1);
+        }
 
         //Pop the balloon
         this.emitter.fireEvent(Lungo_Events.BALLOON_POPPED, {owner: balloon.id}); 
@@ -901,7 +918,7 @@ export default class GameLevel extends Scene {
      protected respawnPlayer(): void {
         clearInterval(this.levelTimer);
         this.viewport.setZoomLevel(1);
-        GameLevel.livesCount = 100;
+        GameLevel.livesCount = 10;
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: "level_music"});
         this.sceneManager.changeToScene(MainMenu, {});
         Input.enableInput();
