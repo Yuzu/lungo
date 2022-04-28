@@ -434,7 +434,6 @@ export default class GameLevel extends Scene {
                         let startSpeed = event.data.get("startSpeed");
                         let weight = event.data.get("weight");
                         let primary = event.data.get("owner").imageId;
-                        //console.log("Node: ", primary);
                         if(primary === "axeEnemy"){
                             this.addProjectile("axe", selfPos, {enemyPos: enemyPos, startSpeed: startSpeed, weight: weight});
                         }
@@ -775,10 +774,6 @@ export default class GameLevel extends Scene {
     protected addProjectile(spriteKey: string, tilePos: Vec2, aiOptions: Record<string, any>): void {
         console.log("Adding projectile!");
         let projectile = this.add.animatedSprite(spriteKey, "primary");
-        //TODO, ADD AN AXE ROTATION
-        if(spriteKey=="axe"){
-            //projectile.animation.playIfNotAlready("ROTATE", true)
-        }
         projectile.position.set(tilePos.x, tilePos.y); // we don't multiply by 32 because the given pos is already scaled properly.
         projectile.scale.set(2, 2);
         projectile.addPhysics();
