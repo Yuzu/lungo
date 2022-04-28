@@ -97,7 +97,8 @@ export default class Aggro extends BasicEnemyState {
                                     selfPos: new Vec2(selfPosCopy.x, selfPosCopy.y), 
                                     enemyPos: new Vec2(enemyPosCopy.x, enemyPosCopy.y),
                                     startSpeed: this.parent.projectileStartSpeed,
-                                    weight: this.parent.projectileWeight
+                                    weight: this.parent.projectileWeight,
+                                    owner: this.owner
                                 });
                 
                 console.log("pew pew");
