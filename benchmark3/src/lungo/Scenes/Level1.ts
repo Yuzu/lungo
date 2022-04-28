@@ -29,6 +29,8 @@ export default class Level1 extends GameLevel {
         this.load.spritesheet("blue", "lungo_assets/spritesheets/blueBalloon.json");
         this.load.spritesheet("green", "lungo_assets/spritesheets/greenBalloon.json");
         this.load.spritesheet("basicEnemy", "lungo_assets/spritesheets/basicEnemy.json");
+        this.load.spritesheet("axeEnemy", "lungo_assets/spritesheets/axeEnemy.json");
+        this.load.spritesheet("axe", "lungo_assets/spritesheets/axe.json");
         this.load.image("trampolineIcon", "lungo_assets/images/trampoline.png");
         this.load.image("shieldIcon", "lungo_assets/images/shield.png");
         this.load.audio("jump", "lungo_assets/sounds/jump.wav");
@@ -93,7 +95,7 @@ export default class Level1 extends GameLevel {
 
         // Add enemies
         this.addEnemy("basicEnemy", new Vec2(29, 29), {firingCooldown: 2500, projectileStartSpeed:  200, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(35, 29), {firingCooldown: 2500, projectileStartSpeed:  200, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(35, 29), {firingCooldown: 2500, projectileStartSpeed:  300, projectileWeight: 2});
 
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
         
