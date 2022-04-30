@@ -20,7 +20,7 @@
         "destination": "/benchmark3/dist/index.html"
       },
       {
-        "source": "*",
+        "source": "/.*",
         "destination": "/final_build/dist/index.html"
       }
     ],

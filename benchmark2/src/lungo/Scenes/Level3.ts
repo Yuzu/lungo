@@ -36,7 +36,7 @@ export default class Level3 extends GameLevel {
         this.load.audio("pop", "benchmark2/dist/lungo_assets/sounds/pop.wav")
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
-        this.load.audio("level_music", "lungo_assets/music/bingbongdingdong.mp3");
+        this.load.audio("level_music", "benchmark2/dist/lungo_assets/music/bingbongdingdong.mp3");
 
     }
 
