@@ -1,0 +1,14 @@
+{
+    "name": "arrow",
+    "spriteSheetImage": "arrow.png",
+    "spriteWidth": 16,
+    "spriteHeight": 16,
+    "columns": 1,
+    "rows": 1,
+    "animations": [
+        { 
+            "name": "IDLE",
+            "frames": [ {"index": 0, "duration": 10} ]
+        }
+    ]
+}
