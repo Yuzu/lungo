@@ -19,24 +19,24 @@ export default class Level6 extends GameLevel {
 
     loadScene(): void {
         // Load resources
-        this.load.tilemap("level6", "lungo_assets/tilemaps/level6.json");
+        this.load.tilemap("level6", "benchmark3/dist/lungo_assets/tilemaps/level6.json");
 
-        this.load.spritesheet("player", "lungo_assets/spritesheets/lungo.json");
-        this.load.spritesheet("shield", "lungo_assets/spritesheets/shield.json");
-        this.load.spritesheet("red", "lungo_assets/spritesheets/redBalloon.json");
-        this.load.spritesheet("blue", "lungo_assets/spritesheets/blueBalloon.json");
-        this.load.spritesheet("green", "lungo_assets/spritesheets/greenBalloon.json");
-        this.load.spritesheet("basicEnemy", "lungo_assets/spritesheets/basicEnemy.json");
-        this.load.image("trampolineIcon", "lungo_assets/images/trampoline.png");
-        this.load.image("shieldIcon", "lungo_assets/images/shield.png");
-        this.load.audio("jump", "lungo_assets/sounds/jump.wav");
-        this.load.audio("switch", "lungo_assets/sounds/switch.wav");
-        this.load.audio("player_death", "lungo_assets/sounds/player_death.wav");
-        this.load.audio("pop", "lungo_assets/sounds/pop.wav");
-        this.load.spritesheet("axeEnemy", "lungo_assets/spritesheets/axeEnemy.json");
-        this.load.spritesheet("axe", "lungo_assets/spritesheets/axe.json");
+        this.load.spritesheet("player", "benchmark3/dist/lungo_assets/spritesheets/lungo.json");
+        this.load.spritesheet("shield", "benchmark3/dist/lungo_assets/spritesheets/shield.json");
+        this.load.spritesheet("red", "benchmark3/dist/lungo_assets/spritesheets/redBalloon.json");
+        this.load.spritesheet("blue", "benchmark3/dist/lungo_assets/spritesheets/blueBalloon.json");
+        this.load.spritesheet("green", "benchmark3/dist/lungo_assets/spritesheets/greenBalloon.json");
+        this.load.spritesheet("basicEnemy", "benchmark3/dist/lungo_assets/spritesheets/basicEnemy.json");
+        this.load.image("trampolineIcon", "benchmark3/dist/lungo_assets/images/trampoline.png");
+        this.load.image("shieldIcon", "benchmark3/dist/lungo_assets/images/shield.png");
+        this.load.audio("jump", "benchmark3/dist/lungo_assets/sounds/jump.wav");
+        this.load.audio("switch", "benchmark3/dist/lungo_assets/sounds/switch.wav");
+        this.load.audio("player_death", "benchmark3/dist/lungo_assets/sounds/player_death.wav");
+        this.load.audio("pop", "benchmark3/dist/lungo_assets/sounds/pop.wav");
+        this.load.spritesheet("axeEnemy", "benchmark3/dist/lungo_assets/spritesheets/axeEnemy.json");
+        this.load.spritesheet("axe", "benchmark3/dist/lungo_assets/spritesheets/axe.json");
 
-        this.load.audio("level_music", "lungo_assets/music/fuggaloopwav.mp3");
+        this.load.audio("level_music", "benchmark3/dist/lungo_assets/music/fuggaloopwav.mp3");
 
     }
     unloadScene(){

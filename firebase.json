@@ -18,6 +18,10 @@
       {
         "source": "/benchmark3",
         "destination": "/benchmark3/dist/index.html"
+      },
+      {
+        "source": "/",
+        "destination": "/final_build/dist/index.html"
       }
     ],
     "headers": [ 
