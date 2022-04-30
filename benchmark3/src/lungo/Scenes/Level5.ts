@@ -24,19 +24,21 @@ export default class Level5 extends GameLevel {
 
     loadScene(): void {
         // Load resources
-        this.load.tilemap("level5", "benchmark3/dist/lungo_assets/tilemaps/level5.json");
-        this.load.spritesheet("player", "benchmark3/dist/lungo_assets/spritesheets/lungo.json");
-        this.load.spritesheet("shield", "benchmark3/dist/lungo_assets/spritesheets/shield.json");
-        this.load.spritesheet("red", "benchmark3/dist/lungo_assets/spritesheets/redBalloon.json");
-        this.load.spritesheet("blue", "benchmark3/dist/lungo_assets/spritesheets/blueBalloon.json");
-        this.load.spritesheet("green", "benchmark3/dist/lungo_assets/spritesheets/greenBalloon.json");
-        this.load.spritesheet("basicEnemy", "benchmark3/dist/lungo_assets/spritesheets/basicEnemy.json");
-        this.load.image("trampolineIcon", "benchmark3/dist/lungo_assets/images/trampoline.png");
-        this.load.image("shieldIcon", "benchmark3/dist/lungo_assets/images/shield.png");
-        this.load.audio("jump", "benchmark3/dist/lungo_assets/sounds/jump.wav");
-        this.load.audio("switch", "benchmark3/dist/lungo_assets/sounds/switch.wav");
-        this.load.audio("player_death", "benchmark3/dist/lungo_assets/sounds/player_death.wav");
-        this.load.audio("pop", "benchmark3/dist/lungo_assets/sounds/pop.wav")
+        this.load.tilemap("level5", "lungo_assets/tilemaps/level5.json");
+        this.load.spritesheet("player", "lungo_assets/spritesheets/lungo.json");
+        this.load.spritesheet("shield", "lungo_assets/spritesheets/shield.json");
+        this.load.spritesheet("red", "lungo_assets/spritesheets/redBalloon.json");
+        this.load.spritesheet("blue", "lungo_assets/spritesheets/blueBalloon.json");
+        this.load.spritesheet("green", "lungo_assets/spritesheets/greenBalloon.json");
+        this.load.spritesheet("basicEnemy", "lungo_assets/spritesheets/basicEnemy.json");
+        this.load.image("trampolineIcon", "lungo_assets/images/trampoline.png");
+        this.load.image("shieldIcon", "lungo_assets/images/shield.png");
+        this.load.audio("jump", "lungo_assets/sounds/jump.wav");
+        this.load.audio("switch", "lungo_assets/sounds/switch.wav");
+        this.load.audio("player_death", "lungo_assets/sounds/player_death.wav");
+        this.load.audio("pop", "lungo_assets/sounds/pop.wav");
+        this.load.spritesheet("axeEnemy", "lungo_assets/spritesheets/axeEnemy.json");
+        this.load.spritesheet("axe", "lungo_assets/spritesheets/axe.json");
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
         this.load.audio("level_music", "benchmark3/dist/lungo_assets/music/electricmambo.mp3");
@@ -77,22 +79,29 @@ export default class Level5 extends GameLevel {
             this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
 
+        let currentBest = localStorage.getItem("level5_best");
+        if (currentBest) {
+            let currentBest_int = parseInt(currentBest);
+            this.bestTime.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
+        }
+        this.levelLabel.text = "Level: 5";
+        
         // Add enemies
 
         this.addEnemy("basicEnemy", new Vec2(13, 75), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(10, 68), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(7, 56), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(7, 56), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(10, 36), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(3, 28), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(17, 20), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(17, 20), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(9, 15), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(31, 60), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(46, 84), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(48, 61), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(55, 57), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(55, 57), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(50, 53), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(48, 41), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(59, 36), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(59, 36), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(40, 28), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(56, 21), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(48, 8), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});

@@ -22,19 +22,21 @@ export default class Level1 extends GameLevel {
      */
     loadScene(): void {
         // Load resources
-        this.load.tilemap("level1", "benchmark3/dist/lungo_assets/tilemaps/level1.json");
-        this.load.spritesheet("player", "benchmark3/dist/lungo_assets/spritesheets/lungo.json");
-        this.load.spritesheet("shield", "benchmark3/dist/lungo_assets/spritesheets/shield.json");
-        this.load.spritesheet("red", "benchmark3/dist/lungo_assets/spritesheets/redBalloon.json");
-        this.load.spritesheet("blue", "benchmark3/dist/lungo_assets/spritesheets/blueBalloon.json");
-        this.load.spritesheet("green", "benchmark3/dist/lungo_assets/spritesheets/greenBalloon.json");
-        this.load.spritesheet("basicEnemy", "benchmark3/dist/lungo_assets/spritesheets/basicEnemy.json");
-        this.load.image("trampolineIcon", "benchmark3/dist/lungo_assets/images/trampoline.png");
-        this.load.image("shieldIcon", "benchmark3/dist/lungo_assets/images/shield.png");
-        this.load.audio("jump", "benchmark3/dist/lungo_assets/sounds/jump.wav");
-        this.load.audio("switch", "benchmark3/dist/lungo_assets/sounds/switch.wav");
-        this.load.audio("player_death", "benchmark3/dist/lungo_assets/sounds/player_death.wav");
-        this.load.audio("pop", "benchmark3/dist/lungo_assets/sounds/pop.wav");
+        this.load.tilemap("level1", "lungo_assets/tilemaps/level1.json");
+        this.load.spritesheet("player", "lungo_assets/spritesheets/lungo.json");
+        this.load.spritesheet("shield", "lungo_assets/spritesheets/shield.json");
+        this.load.spritesheet("red", "lungo_assets/spritesheets/redBalloon.json");
+        this.load.spritesheet("blue", "lungo_assets/spritesheets/blueBalloon.json");
+        this.load.spritesheet("green", "lungo_assets/spritesheets/greenBalloon.json");
+        this.load.spritesheet("basicEnemy", "lungo_assets/spritesheets/basicEnemy.json");
+        this.load.spritesheet("axeEnemy", "lungo_assets/spritesheets/axeEnemy.json");
+        this.load.spritesheet("axe", "lungo_assets/spritesheets/axe.json");
+        this.load.image("trampolineIcon", "lungo_assets/images/trampoline.png");
+        this.load.image("shieldIcon", "lungo_assets/images/shield.png");
+        this.load.audio("jump", "lungo_assets/sounds/jump.wav");
+        this.load.audio("switch", "lungo_assets/sounds/switch.wav");
+        this.load.audio("player_death", "lungo_assets/sounds/player_death.wav");
+        this.load.audio("pop", "lungo_assets/sounds/pop.wav");
         
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
@@ -93,7 +95,7 @@ export default class Level1 extends GameLevel {
 
         // Add enemies
         this.addEnemy("basicEnemy", new Vec2(29, 29), {firingCooldown: 2500, projectileStartSpeed:  200, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(35, 29), {firingCooldown: 2500, projectileStartSpeed:  200, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(35, 29), {firingCooldown: 2500, projectileStartSpeed:  300, projectileWeight: 2});
 
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
         
