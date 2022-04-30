@@ -24,21 +24,6 @@ export default class Level2 extends GameLevel {
 
     loadScene(): void {
         // Load resources
-<<<<<<< HEAD
-        this.load.tilemap("level2", "benchmark3/dist/lungo_assets/tilemaps/level2.json");
-        this.load.spritesheet("player", "benchmark3/dist/lungo_assets/spritesheets/lungo.json");
-        this.load.spritesheet("shield", "benchmark3/dist/lungo_assets/spritesheets/shield.json");
-        this.load.spritesheet("red", "benchmark3/dist/lungo_assets/spritesheets/redBalloon.json");
-        this.load.spritesheet("blue", "benchmark3/dist/lungo_assets/spritesheets/blueBalloon.json");
-        this.load.spritesheet("green", "benchmark3/dist/lungo_assets/spritesheets/greenBalloon.json");
-        this.load.spritesheet("basicEnemy", "benchmark3/dist/lungo_assets/spritesheets/basicEnemy.json");
-        this.load.image("trampolineIcon", "benchmark3/dist/lungo_assets/images/trampoline.png");
-        this.load.image("shieldIcon", "benchmark3/dist/lungo_assets/images/shield.png");
-        this.load.audio("jump", "benchmark3/dist/lungo_assets/sounds/jump.wav");
-        this.load.audio("switch", "benchmark3/dist/lungo_assets/sounds/switch.wav");
-        this.load.audio("player_death", "benchmark3/dist/lungo_assets/sounds/player_death.wav");
-        this.load.audio("pop", "benchmark3/dist/lungo_assets/sounds/pop.wav")
-=======
         this.load.tilemap("level2", "lungo_assets/tilemaps/level2.json");
         this.load.spritesheet("player", "lungo_assets/spritesheets/lungo.json");
         this.load.spritesheet("shield", "lungo_assets/spritesheets/shield.json");
@@ -54,7 +39,6 @@ export default class Level2 extends GameLevel {
         this.load.audio("pop", "lungo_assets/sounds/pop.wav");
         this.load.spritesheet("axeEnemy", "lungo_assets/spritesheets/axeEnemy.json");
         this.load.spritesheet("axe", "lungo_assets/spritesheets/axe.json");
->>>>>>> master
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
         this.load.audio("level_music", "benchmark3/dist/lungo_assets/music/siita.mp3");
@@ -110,16 +94,6 @@ export default class Level2 extends GameLevel {
         for(let pos of [new Vec2(20, 3), new Vec2(41,4)]){
             this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
-<<<<<<< HEAD
-        this.addEnemy("basicEnemy", new Vec2(17, 16), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(19, 23), {firingCooldown: 2500, projectileStartSpeed:  500, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(33, 23), {firingCooldown: 1000, projectileStartSpeed:  300, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(41, 22), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(47, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(74, 20), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(86, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(81, 39), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-=======
 
         this.addEnemy("basicEnemy", new Vec2(17, 16), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(19, 23), {firingCooldown: 2500, projectileStartSpeed:  500, projectileWeight: 2});
@@ -130,7 +104,6 @@ export default class Level2 extends GameLevel {
         this.addEnemy("axeEnemy", new Vec2(86, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("axeEnemy", new Vec2(81, 39), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         
->>>>>>> master
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
         let currentBest = localStorage.getItem("level2_best");
         if (currentBest) {

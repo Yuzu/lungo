@@ -79,12 +79,6 @@ export default class Level5 extends GameLevel {
             this.addBalloon("blue", pos, {color: Lungo_Color.BLUE});
         }
 
-        let currentBest = localStorage.getItem("level5_best");
-        if (currentBest) {
-            let currentBest_int = parseInt(currentBest);
-            this.bestTime.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
-        }
-        this.levelLabel.text = "Level: 5";
         
         // Add enemies
 

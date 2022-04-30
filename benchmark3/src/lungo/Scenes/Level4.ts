@@ -111,10 +111,7 @@ export default class Level4 extends GameLevel {
             this.bestTime.text = "Current Best Time: " + Math.floor(currentBest_int / 60) + ":" + ((currentBest_int % 60) < 10 ? "0" + (currentBest_int % 60) : currentBest_int % 60);
         }
         this.levelLabel.text = "Level: 4";
-<<<<<<< HEAD
-=======
         
->>>>>>> master
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});
 
     }
