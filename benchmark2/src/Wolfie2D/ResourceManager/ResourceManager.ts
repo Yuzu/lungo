@@ -647,7 +647,7 @@ export default class ResourceManager {
                 // Finish loading sound
                 this.finishLoadingAudio(callbackIfLast);
             }, (error) =>{
-                throw "Error loading sound";
+                throw error;
             });
         }
         request.send();

@@ -41,7 +41,7 @@ export default class Level5 extends GameLevel {
         this.load.spritesheet("axe", "benchmark3/dist/lungo_assets/spritesheets/axe.json");
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
-        this.load.audio("level_music", "benchmark3/dist/benchmark3/dist/lungo_assets/music/electricmambo.mp3");
+        this.load.audio("level_music", "benchmark3/dist/lungo_assets/music/electricmambo.mp3");
 
     }
     unloadScene(){
