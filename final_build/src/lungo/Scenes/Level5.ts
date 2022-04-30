@@ -39,6 +39,8 @@ export default class Level5 extends GameLevel {
         this.load.audio("pop", "lungo_assets/sounds/pop.wav");
         this.load.spritesheet("axeEnemy", "lungo_assets/spritesheets/axeEnemy.json");
         this.load.spritesheet("axe", "lungo_assets/spritesheets/axe.json");
+        this.load.spritesheet("bowEnemy", "lungo_assets/spritesheets/bowEnemy.json");
+        this.load.spritesheet("arrow", "lungo_assets/spritesheets/arrow.json");
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
         this.load.audio("level_music", "lungo_assets/music/electricmambo.mp3");
@@ -99,11 +101,11 @@ export default class Level5 extends GameLevel {
         this.addEnemy("basicEnemy", new Vec2(46, 84), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(48, 61), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("axeEnemy", new Vec2(55, 57), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(50, 53), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("bowEnemy", new Vec2(50, 53), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(48, 41), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("axeEnemy", new Vec2(59, 36), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(40, 28), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(56, 21), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("bowEnemy", new Vec2(40, 28), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("bowEnemy", new Vec2(56, 21), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(48, 8), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
       
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "level_music", loop: true, holdReference: true});

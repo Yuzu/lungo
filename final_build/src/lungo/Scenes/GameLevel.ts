@@ -437,6 +437,9 @@ export default class GameLevel extends Scene {
                         if(primary === "axeEnemy"){
                             this.addProjectile("axe", selfPos, {enemyPos: enemyPos, startSpeed: startSpeed, weight: weight});
                         }
+                        else if (primary === "bowEnemy") {
+                            this.addProjectile("arrow", selfPos, {enemyPos: enemyPos, startSpeed: startSpeed, weight: weight});
+                        }
                         else{
                             this.addProjectile("blue", selfPos, {enemyPos: enemyPos, startSpeed: startSpeed, weight: weight});
                         }

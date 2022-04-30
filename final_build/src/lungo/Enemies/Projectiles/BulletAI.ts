@@ -63,7 +63,6 @@ export default class BulletBehavior implements AI  {
         this.age.start();
 
         (<AnimatedSprite>this.owner).animation.play("IDLE", true);
-
     }
 
     activate(options: Record<string, any>): void {
@@ -84,7 +83,17 @@ export default class BulletBehavior implements AI  {
         //console.log(this.enemyPos.x);
         //this.direction = new Vec2(Math.atan(this.enemyPos.x - this.owner.position.x), Math.atan(this.enemyPos.y - this.owner.position.y));
 
-
+        // face the arrow the correct way depending on the direction
+        if ((<AnimatedSprite>this.owner).imageId === "arrow") {
+            if (this.direction.x < 0) {
+                // going left
+                this.owner.rotation = 0;
+            }
+            else {
+                // going right
+                this.owner.rotation = Math.PI;
+            }
+        }
         //While this bullet is active, accelerate the bullet to a max speed over time. 
         this.current_speed += deltaT * BulletBehavior.SPEED_INC;
         this.current_speed = MathUtils.clamp(this.current_speed, this.start_speed, BulletBehavior.MAX_SPEED);

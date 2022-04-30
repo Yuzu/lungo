@@ -204,12 +204,12 @@ export default class MainMenu extends Scene {
         line2.textColor = Color.WHITE;
         line2.fontSize = 16;
 
-        const text3 = `The continent's beauty, Lorissa, takes notice of Lungo and marries him for his kind and unique nature. The chieftain of his village, Fred, detests Lungo for this. `;
+        const text3 = `The chieftain of his village, Fred, conscripts Lungo into his personal army, despite the fact that fighting goes against everything Lungo stands for.`;
         const line3 = <Label>this.add.uiElement(UIElementType.LABEL, "help", {position: new Vec2(center.x, center.y - 175), text: text3});
         line3.textColor = Color.WHITE;
         line3.fontSize = 16;
 
-        const text4 = `Fred orders his goons to kidnap Lorissa. To save his wife, Lungo must defeat the various obstacles set out by Fred…`;
+        const text4 = `Fred orders his goons to kidnap Lungo, declaring that if he is to avoid conscription, he must survive Fred's death course with nothing more than a shield.`;
         const line4 = <Label>this.add.uiElement(UIElementType.LABEL, "help", {position: new Vec2(center.x, center.y - 150), text: text4});
         line4.textColor = Color.WHITE;
         line4.fontSize = 16;
@@ -219,18 +219,13 @@ export default class MainMenu extends Scene {
         line5.textColor = Color.WHITE;
         line5.fontSize = 16;
         
-        const text6 = `Lungo: Protagonist. Must save his wife.`;
+        const text6 = `Lungo: Protagonist. Must survive Fred's death course to avoid being conscripted into Fred's bloody warmongering plans.`;
         const line6 = <Label>this.add.uiElement(UIElementType.LABEL, "help", {position: new Vec2(center.x, center.y - 75), text: text6});
         line6.textColor = Color.WHITE;
         line6.fontSize = 16;
 
-        const text7 = `Lorissa: Lungo’s wife, kidnapped by Fred.`;
-        const line7 = <Label>this.add.uiElement(UIElementType.LABEL, "help", {position: new Vec2(center.x, center.y - 50), text: text7});
-        line7.textColor = Color.WHITE;
-        line7.fontSize = 16;
-
-        const text8 = `Fred: Local chieftan. Hates Lungo. Stole Lorissa.`;
-        const line8 = <Label>this.add.uiElement(UIElementType.LABEL, "help", {position: new Vec2(center.x, center.y - 25), text: text8});
+        const text8 = `Fred: Local warmongering chieftan. Enjoys the suffering of others.`;
+        const line8 = <Label>this.add.uiElement(UIElementType.LABEL, "help", {position: new Vec2(center.x, center.y - 50), text: text8});
         line8.textColor = Color.WHITE;
         line8.fontSize = 16;
 

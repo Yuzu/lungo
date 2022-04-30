@@ -39,6 +39,8 @@ export default class Level2 extends GameLevel {
         this.load.audio("pop", "lungo_assets/sounds/pop.wav");
         this.load.spritesheet("axeEnemy", "lungo_assets/spritesheets/axeEnemy.json");
         this.load.spritesheet("axe", "lungo_assets/spritesheets/axe.json");
+        this.load.spritesheet("bowEnemy", "lungo_assets/spritesheets/bowEnemy.json");
+        this.load.spritesheet("arrow", "lungo_assets/spritesheets/arrow.json");
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
         this.load.audio("level_music", "lungo_assets/music/siita.mp3");
@@ -97,8 +99,8 @@ export default class Level2 extends GameLevel {
 
         this.addEnemy("basicEnemy", new Vec2(17, 16), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(19, 23), {firingCooldown: 2500, projectileStartSpeed:  500, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(33, 23), {firingCooldown: 1000, projectileStartSpeed:  300, projectileWeight: 2});
-        this.addEnemy("axeEnemy", new Vec2(41, 22), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("bowEnemy", new Vec2(33, 23), {firingCooldown: 1000, projectileStartSpeed:  300, projectileWeight: 2});
+        this.addEnemy("bowEnemy", new Vec2(41, 22), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("axeEnemy", new Vec2(47, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("axeEnemy", new Vec2(74, 20), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("axeEnemy", new Vec2(86, 23), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
