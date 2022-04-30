@@ -36,7 +36,9 @@ export default class Level4 extends GameLevel {
         this.load.audio("jump", "lungo_assets/sounds/jump.wav");
         this.load.audio("switch", "lungo_assets/sounds/switch.wav");
         this.load.audio("player_death", "lungo_assets/sounds/player_death.wav");
-        this.load.audio("pop", "lungo_assets/sounds/pop.wav")
+        this.load.audio("pop", "lungo_assets/sounds/pop.wav");
+        this.load.spritesheet("axeEnemy", "lungo_assets/spritesheets/axeEnemy.json");
+        this.load.spritesheet("axe", "lungo_assets/spritesheets/axe.json");
         // HOMEWORK 5 - TODO
         // You'll want to change this to your level music
         this.load.audio("level_music", "lungo_assets/music/wunglewoogie.mp3");
@@ -82,24 +84,24 @@ export default class Level4 extends GameLevel {
         this.addEnemy("basicEnemy", new Vec2(33, 17), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(35, 17), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(26, 8), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(38, 81), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(38, 81), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(12, 8), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(5, 34), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(93, 36), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(79, 37), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(79, 37), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(84, 41), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(75, 40), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(75, 40), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(57, 41), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(50, 41), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(50, 41), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(27, 41), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
 
         this.addEnemy("basicEnemy", new Vec2(33, 43), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(19, 45), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(12, 25), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(5, 20), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(8, 12), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(5, 20), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(8, 12), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(92, 16), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
-        this.addEnemy("basicEnemy", new Vec2(89, 6), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
+        this.addEnemy("axeEnemy", new Vec2(89, 6), {firingCooldown: 2500, projectileStartSpeed:  700, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(94, 5), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
         this.addEnemy("basicEnemy", new Vec2(80, 24), {firingCooldown: 2500, projectileStartSpeed:  400, projectileWeight: 2});
 

@@ -433,7 +433,13 @@ export default class GameLevel extends Scene {
                         let enemyPos = event.data.get("enemyPos");
                         let startSpeed = event.data.get("startSpeed");
                         let weight = event.data.get("weight");
-                        this.addProjectile("blue", selfPos, {enemyPos: enemyPos, startSpeed: startSpeed, weight: weight});
+                        let primary = event.data.get("owner").imageId;
+                        if(primary === "axeEnemy"){
+                            this.addProjectile("axe", selfPos, {enemyPos: enemyPos, startSpeed: startSpeed, weight: weight});
+                        }
+                        else{
+                            this.addProjectile("blue", selfPos, {enemyPos: enemyPos, startSpeed: startSpeed, weight: weight});
+                        }
                     }
                     break;
             }
