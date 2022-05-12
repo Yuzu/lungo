@@ -68,6 +68,7 @@ export default class Level5 extends GameLevel {
         this.shieldIcon.position.set(300, 25);
 
         this.addLevelEnd(new Vec2(57, 3), new Vec2(5, 5));
+        this.nextLevel = Level6;
         // Add in our green balloons to the enemies
         for(let pos of [new Vec2(18, 8), new Vec2(25, 3), new Vec2(52, 5)]){
             this.addBalloon("red", pos, {color: Lungo_Color.RED});
